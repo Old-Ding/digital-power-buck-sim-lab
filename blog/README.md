@@ -1,0 +1,47 @@
+# CSDN 教学系列目录
+
+系列名称暂定：
+
+```text
+MATLAB + PLECS 数字电源仿真入门
+```
+
+## 系列定位
+
+这个系列按“教学 + 项目实战 + 问题复盘”组织，不再写成单纯项目说明。
+
+每篇文章尽量满足三个要求：
+
+```text
+1. 能让读者知道这一篇要解决什么问题
+2. 能解释为什么这样设计
+3. 能对应到 GitHub 里的模型、代码或文档
+```
+
+## 文章规划
+
+| 序号 | 文件 | 主题 |
+| --- | --- | --- |
+| 01 | 01-project-overview.md | 为什么从 Buck 开始做 MATLAB + PLECS 仿真 |
+| 02 | 02-open-loop-buck.md | 搭建开环 Buck，验证固定占空比下的输出 |
+| 03 | 03-discrete-pi-control.md | 加入离散 PI 电压环 |
+| 04 | 04-soft-start.md | 软启动设计 |
+| 05 | 05-protection-state-machine.md | 保护逻辑和状态机 |
+| 06 | 06-load-transient.md | 负载突变测试和波形分析 |
+| 07 | 07-adc-noise-duty-jitter.md | ADC 噪声和 duty 抖动 |
+| 08 | 08-controller-to-c.md | 从仿真控制器整理到 C 风格代码 |
+
+## 单篇结构
+
+```text
+前言
+目录
+这一篇解决什么问题
+前置知识
+模型或代码怎么搭
+关键变量怎么看
+结果怎么判断
+常见问题
+小结
+下一篇预告
+```
