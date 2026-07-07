@@ -1,78 +1,97 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="720" viewBox="0 0 1400 720">
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900">
   <defs>
-    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
-      <path d="M0,0 L0,6 L8,3 z" fill="#333"/>
+    <marker id="arrow-blue" markerWidth="12" markerHeight="12" refX="10" refY="4" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,8 L11,4 z" fill="#2563eb"/>
+    </marker>
+    <marker id="arrow-green" markerWidth="12" markerHeight="12" refX="10" refY="4" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,8 L11,4 z" fill="#059669"/>
     </marker>
     <style>
-      .wire{stroke:#222;stroke-width:5;fill:none;stroke-linecap:round;stroke-linejoin:round}
-      .sense{stroke:#555;stroke-width:3;fill:none;stroke-linecap:round;stroke-linejoin:round;marker-end:url(#arrow)}
-      .box{fill:#f7fbff;stroke:#2563eb;stroke-width:3;rx:14}
-      .power{fill:#fff7ed;stroke:#ea580c;stroke-width:3;rx:14}
-      .title{font-family:"Microsoft YaHei",Arial,sans-serif;font-size:32px;font-weight:600;fill:#111}
-      .label{font-family:"Microsoft YaHei",Arial,sans-serif;font-size:26px;fill:#222}
-      .small{font-family:"Microsoft YaHei",Arial,sans-serif;font-size:21px;fill:#444}
-      .note{font-family:"Microsoft YaHei",Arial,sans-serif;font-size:20px;fill:#666}
-      .node{fill:#222}
+      .bg{fill:#f5f7fb}
+      .card{fill:#fff;stroke:#dfe5ee;stroke-width:2;rx:28}
+      .zone{fill:#f8fafc;stroke:#e2e8f0;stroke-width:1.5;rx:20}
+      .powerBlock{fill:#fff7ed;stroke:#f97316;stroke-width:3;rx:18}
+      .switchBlock{fill:#eff6ff;stroke:#2563eb;stroke-width:3;rx:18}
+      .senseBlock{fill:#ecfdf5;stroke:#059669;stroke-width:3;rx:18}
+      .wire{stroke:#1f2937;stroke-width:6;fill:none;stroke-linecap:round;stroke-linejoin:round}
+      .powerWire{stroke:#2563eb;stroke-width:7;fill:none;stroke-linecap:round;stroke-linejoin:round}
+      .signalWire{stroke:#059669;stroke-width:3.5;fill:none;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:10 8;marker-end:url(#arrow-green)}
+      .component{stroke:#1f2937;stroke-width:5;fill:none;stroke-linecap:round;stroke-linejoin:round}
+      .node{fill:#111827}
+      .title{font-family:"Microsoft YaHei",Arial,sans-serif;font-size:38px;font-weight:700;fill:#0f172a}
+      .subtitle{font-family:"Microsoft YaHei",Arial,sans-serif;font-size:23px;fill:#64748b}
+      .label{font-family:"Microsoft YaHei",Arial,sans-serif;font-size:27px;font-weight:600;fill:#111827}
+      .small{font-family:"Microsoft YaHei",Arial,sans-serif;font-size:21px;fill:#334155}
+      .muted{font-family:"Microsoft YaHei",Arial,sans-serif;font-size:19px;fill:#64748b}
+      .tag{font-family:"Microsoft YaHei",Arial,sans-serif;font-size:18px;font-weight:600;fill:#475569}
     </style>
   </defs>
 
-  <rect x="30" y="30" width="1340" height="660" fill="#fff" stroke="#e5e7eb" stroke-width="2" rx="18"/>
-  <text x="60" y="82" class="title">Buck 降压电源基本拓扑</text>
-  <text x="60" y="118" class="note">输入直流电压经过开关管、电感和输出电容后，得到稳定的低压直流输出。</text>
+  <rect width="1600" height="900" class="bg"/>
+  <rect x="46" y="42" width="1508" height="816" class="card"/>
 
-  <rect x="78" y="252" width="150" height="110" class="power"/>
-  <text x="122" y="296" class="label">Vin</text>
-  <text x="108" y="330" class="small">18V-30V</text>
-  <text x="94" y="397" class="small">输入电源</text>
+  <text x="86" y="104" class="title">Buck 降压电源基本拓扑</text>
+  <text x="86" y="142" class="subtitle">第一阶段只说明功率级主回路：输入电源、开关管、续流器件、电感、输出电容和负载。</text>
 
-  <line x1="153" y1="222" x2="153" y2="252" class="wire"/>
-  <line x1="153" y1="362" x2="153" y2="470" class="wire"/>
-  <line x1="153" y1="222" x2="330" y2="222" class="wire"/>
+  <rect x="86" y="304" width="170" height="126" class="powerBlock"/>
+  <text x="132" y="354" class="label">Vin</text>
+  <text x="118" y="388" class="small">18V-30V</text>
+  <text x="106" y="466" class="muted">输入直流电源</text>
 
-  <rect x="330" y="174" width="160" height="96" class="box"/>
-  <text x="362" y="214" class="label">MOSFET</text>
-  <text x="370" y="246" class="small">开关管</text>
-  <line x1="410" y1="138" x2="410" y2="174" class="sense"/>
-  <text x="438" y="154" class="small">PWM duty</text>
+  <rect x="374" y="286" width="196" height="116" class="switchBlock"/>
+  <text x="415" y="335" class="label">MOSFET</text>
+  <text x="420" y="370" class="small">高边开关管</text>
 
-  <line x1="490" y1="222" x2="585" y2="222" class="wire"/>
-  <circle cx="585" cy="222" r="7" class="node"/>
-  <text x="540" y="186" class="small">SW 节点</text>
+  <rect x="386" y="616" width="220" height="92" class="switchBlock"/>
+  <text x="428" y="656" class="label">续流器件</text>
+  <text x="420" y="688" class="small">二极管 / 同步 MOSFET</text>
 
-  <path d="M585 222 C608 172, 650 272, 673 222 C696 172, 738 272, 761 222 C784 172, 826 272, 849 222" class="wire"/>
-  <text x="680" y="170" class="label">电感 L</text>
+  <rect x="1130" y="286" width="176" height="116" class="powerBlock"/>
+  <text x="1176" y="335" class="label">Load</text>
+  <text x="1182" y="370" class="small">负载</text>
 
-  <line x1="849" y1="222" x2="1000" y2="222" class="wire"/>
-  <circle cx="1000" cy="222" r="7" class="node"/>
-  <text x="970" y="186" class="small">Vout</text>
+  <rect x="1270" y="112" width="190" height="88" class="senseBlock"/>
+  <text x="1318" y="160" class="label">ADC</text>
+  <text x="1306" y="188" class="small">采样 Vout</text>
 
-  <line x1="585" y1="222" x2="585" y2="288" class="wire"/>
-  <line x1="548" y1="288" x2="622" y2="288" class="wire"/>
-  <path d="M548 378 L622 378 L585 298 Z" fill="#ffffff" stroke="#222" stroke-width="4" stroke-linejoin="round"/>
-  <line x1="585" y1="378" x2="585" y2="470" class="wire"/>
-  <text x="460" y="418" class="small">续流二极管</text>
-  <text x="450" y="448" class="small">或同步 MOSFET</text>
+  <rect x="368" y="186" width="206" height="80" class="senseBlock"/>
+  <text x="404" y="234" class="label">PWM duty</text>
 
-  <line x1="1000" y1="222" x2="1000" y2="305" class="wire"/>
-  <line x1="954" y1="305" x2="1046" y2="305" class="wire"/>
-  <line x1="954" y1="340" x2="1046" y2="340" class="wire"/>
-  <line x1="1000" y1="340" x2="1000" y2="470" class="wire"/>
-  <text x="1058" y="333" class="small">输出电容 C</text>
+  <line x1="171" y1="278" x2="171" y2="304" class="wire"/>
+  <line x1="171" y1="430" x2="171" y2="604" class="wire"/>
+  <path d="M171 278 L374 278" class="powerWire"/>
 
-  <rect x="1115" y="174" width="150" height="96" class="power"/>
-  <text x="1156" y="214" class="label">Load</text>
-  <text x="1165" y="246" class="small">负载</text>
-  <line x1="1000" y1="222" x2="1115" y2="222" class="wire"/>
-  <line x1="1265" y1="222" x2="1305" y2="222" class="wire"/>
-  <line x1="1305" y1="222" x2="1305" y2="470" class="wire"/>
+  <line x1="472" y1="266" x2="472" y2="286" class="signalWire"/>
+  <path d="M570 344 L662 344" class="powerWire"/>
+  <circle cx="662" cy="344" r="8" class="node"/>
+  <text x="630" y="308" class="small">SW 节点</text>
 
-  <line x1="153" y1="470" x2="1305" y2="470" class="wire"/>
-  <text x="690" y="520" class="label">GND</text>
+  <path d="M662 344 C694 278, 748 410, 780 344 C812 278, 866 410, 898 344 C930 278, 984 410, 1016 344" class="wire"/>
+  <text x="792" y="284" class="label">电感 L</text>
 
-  <path d="M1000 222 L1000 118 L1188 118" class="sense"/>
-  <rect x="1188" y="82" width="150" height="74" class="box"/>
-  <text x="1220" y="127" class="small">ADC 采样</text>
-  <text x="1020" y="108" class="small">电压采样 Vout</text>
+  <path d="M1016 344 L1130 344" class="powerWire"/>
+  <circle cx="1048" cy="344" r="8" class="node"/>
+  <text x="1016" y="306" class="small">Vout</text>
 
-  <text x="70" y="628" class="note">说明：本图用于说明第一阶段功率级拓扑，保护检测和状态机会在控制链路中单独说明。</text>
+  <path d="M1306 344 L1376 344 L1376 604" class="wire"/>
+  <path d="M1048 344 L1048 450" class="wire"/>
+  <line x1="990" y1="450" x2="1106" y2="450" class="component"/>
+  <line x1="990" y1="500" x2="1106" y2="500" class="component"/>
+  <path d="M1048 500 L1048 604" class="wire"/>
+  <text x="1120" y="490" class="small">输出电容 C</text>
+
+  <path d="M662 344 L662 442" class="wire"/>
+  <line x1="612" y1="442" x2="712" y2="442" class="component"/>
+  <path d="M662 454 L612 548 L712 548 Z" fill="#fff" stroke="#1f2937" stroke-width="5" stroke-linejoin="round"/>
+  <path d="M662 548 L662 604" class="wire"/>
+  <path d="M496 616 L610 548" class="signalWire"/>
+
+  <path d="M171 604 L1376 604" class="wire"/>
+  <text x="760" y="664" class="label">GND</text>
+
+  <path d="M1048 344 L1048 156 L1270 156" class="signalWire"/>
+  <text x="1084" y="140" class="small">电压反馈采样</text>
+
+  <rect x="86" y="742" width="1428" height="70" class="zone"/>
+  <text x="118" y="786" class="muted">说明：本图只承担“功率级拓扑”职责。保护检测、状态机和控制算法在后续控制链路图中单独说明。</text>
 </svg>

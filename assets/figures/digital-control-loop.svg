@@ -1,65 +1,89 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="1400" height="720" viewBox="0 0 1400 720">
+<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="900" viewBox="0 0 1600 900">
   <defs>
-    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
-      <path d="M0,0 L0,6 L8,3 z" fill="#333"/>
+    <marker id="arrow-dark" markerWidth="12" markerHeight="12" refX="10" refY="4" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,8 L11,4 z" fill="#1f2937"/>
+    </marker>
+    <marker id="arrow-green" markerWidth="12" markerHeight="12" refX="10" refY="4" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,8 L11,4 z" fill="#059669"/>
+    </marker>
+    <marker id="arrow-red" markerWidth="12" markerHeight="12" refX="10" refY="4" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,8 L11,4 z" fill="#e11d48"/>
     </marker>
     <style>
-      .box{fill:#f7fbff;stroke:#2563eb;stroke-width:3;rx:14}
-      .plant{fill:#fff7ed;stroke:#ea580c;stroke-width:3;rx:14}
-      .protect{fill:#fff1f2;stroke:#e11d48;stroke-width:3;rx:14}
-      .line{stroke:#222;stroke-width:4;fill:none;marker-end:url(#arrow);stroke-linecap:round;stroke-linejoin:round}
-      .feedback{stroke:#555;stroke-width:3;fill:none;marker-end:url(#arrow);stroke-dasharray:10 7;stroke-linecap:round;stroke-linejoin:round}
-      .title{font-family:"Microsoft YaHei",Arial,sans-serif;font-size:32px;font-weight:600;fill:#111}
-      .label{font-family:"Microsoft YaHei",Arial,sans-serif;font-size:27px;fill:#222}
-      .small{font-family:"Microsoft YaHei",Arial,sans-serif;font-size:21px;fill:#444}
-      .note{font-family:"Microsoft YaHei",Arial,sans-serif;font-size:20px;fill:#666}
+      .bg{fill:#f5f7fb}
+      .card{fill:#fff;stroke:#dfe5ee;stroke-width:2;rx:28}
+      .stage{fill:#f8fafc;stroke:#e2e8f0;stroke-width:1.5;rx:22}
+      .control{fill:#eff6ff;stroke:#2563eb;stroke-width:3;rx:18}
+      .plant{fill:#fff7ed;stroke:#f97316;stroke-width:3;rx:18}
+      .sample{fill:#ecfdf5;stroke:#059669;stroke-width:3;rx:18}
+      .protect{fill:#fff1f2;stroke:#e11d48;stroke-width:3;rx:18}
+      .line{stroke:#1f2937;stroke-width:5;fill:none;stroke-linecap:round;stroke-linejoin:round;marker-end:url(#arrow-dark)}
+      .feedback{stroke:#059669;stroke-width:4;fill:none;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:12 9;marker-end:url(#arrow-green)}
+      .faultline{stroke:#e11d48;stroke-width:4;fill:none;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:12 9;marker-end:url(#arrow-red)}
+      .title{font-family:"Microsoft YaHei",Arial,sans-serif;font-size:38px;font-weight:700;fill:#0f172a}
+      .subtitle{font-family:"Microsoft YaHei",Arial,sans-serif;font-size:23px;fill:#64748b}
+      .label{font-family:"Microsoft YaHei",Arial,sans-serif;font-size:27px;font-weight:600;fill:#111827}
+      .small{font-family:"Microsoft YaHei",Arial,sans-serif;font-size:21px;fill:#334155}
+      .muted{font-family:"Microsoft YaHei",Arial,sans-serif;font-size:19px;fill:#64748b}
+      .tag{font-family:"Microsoft YaHei",Arial,sans-serif;font-size:18px;font-weight:600;fill:#475569}
     </style>
   </defs>
 
-  <rect x="30" y="30" width="1340" height="660" fill="#fff" stroke="#e5e7eb" stroke-width="2" rx="18"/>
-  <text x="60" y="82" class="title">数字 Buck 电源闭环控制链路</text>
-  <text x="60" y="118" class="note">控制器周期性采样输出电压，根据误差更新 PWM 占空比。</text>
+  <rect width="1600" height="900" class="bg"/>
+  <rect x="46" y="42" width="1508" height="816" class="card"/>
+  <text x="86" y="104" class="title">数字 Buck 电源闭环控制链路</text>
+  <text x="86" y="142" class="subtitle">控制器周期性采样输出电压，根据误差计算占空比，再通过 PWM 驱动 Buck 功率级。</text>
 
-  <rect x="80" y="286" width="150" height="96" class="box"/>
-  <text x="122" y="328" class="label">Vref</text>
-  <text x="112" y="358" class="small">目标 12V</text>
+  <rect x="92" y="218" width="1416" height="430" class="stage"/>
 
-  <rect x="300" y="286" width="170" height="96" class="box"/>
-  <text x="358" y="326" class="label">误差</text>
-  <text x="326" y="358" class="small">e=Vref-Vout</text>
+  <rect x="120" y="358" width="154" height="112" class="control"/>
+  <text x="164" y="406" class="label">Vref</text>
+  <text x="150" y="440" class="small">目标 12V</text>
 
-  <rect x="540" y="286" width="180" height="96" class="box"/>
-  <text x="586" y="326" class="label">PI 控制</text>
-  <text x="574" y="358" class="small">限幅/抗饱和</text>
+  <rect x="342" y="358" width="178" height="112" class="control"/>
+  <text x="404" y="404" class="label">误差</text>
+  <text x="374" y="438" class="small">e=Vref-Vout</text>
 
-  <rect x="790" y="286" width="170" height="96" class="box"/>
-  <text x="836" y="326" class="label">PWM</text>
-  <text x="828" y="358" class="small">更新 duty</text>
+  <rect x="588" y="358" width="186" height="112" class="control"/>
+  <text x="634" y="404" class="label">PI 控制</text>
+  <text x="626" y="438" class="small">Kp / Ki / 积分</text>
 
-  <rect x="1030" y="268" width="210" height="132" class="plant"/>
-  <text x="1090" y="322" class="label">Buck</text>
-  <text x="1070" y="356" class="small">功率级响应</text>
+  <rect x="842" y="358" width="188" height="112" class="control"/>
+  <text x="890" y="404" class="label">限幅</text>
+  <text x="872" y="438" class="small">duty_min/max</text>
 
-  <line x1="230" y1="334" x2="300" y2="334" class="line"/>
-  <line x1="470" y1="334" x2="540" y2="334" class="line"/>
-  <line x1="720" y1="334" x2="790" y2="334" class="line"/>
-  <line x1="960" y1="334" x2="1030" y2="334" class="line"/>
+  <rect x="1098" y="358" width="170" height="112" class="control"/>
+  <text x="1144" y="404" class="label">PWM</text>
+  <text x="1130" y="438" class="small">更新 duty</text>
 
-  <rect x="1030" y="520" width="210" height="92" class="box"/>
-  <text x="1092" y="558" class="label">ADC</text>
-  <text x="1074" y="590" class="small">采样 Vout/Iout</text>
+  <rect x="1336" y="338" width="140" height="152" class="plant"/>
+  <text x="1376" y="402" class="label">Buck</text>
+  <text x="1364" y="436" class="small">功率级</text>
 
-  <path d="M1135 400 L1135 520" class="feedback"/>
-  <path d="M1030 566 L385 566 L385 382" class="feedback"/>
-  <text x="560" y="548" class="small">反馈采样值</text>
+  <line x1="274" y1="414" x2="342" y2="414" class="line"/>
+  <line x1="520" y1="414" x2="588" y2="414" class="line"/>
+  <line x1="774" y1="414" x2="842" y2="414" class="line"/>
+  <line x1="1030" y1="414" x2="1098" y2="414" class="line"/>
+  <line x1="1268" y1="414" x2="1336" y2="414" class="line"/>
 
-  <rect x="520" y="160" width="440" height="88" class="protect"/>
-  <text x="592" y="196" class="label">保护与状态机</text>
-  <text x="578" y="226" class="small">UVLO / OVP / OCP / OTP / FAULT</text>
+  <rect x="1158" y="560" width="236" height="96" class="sample"/>
+  <text x="1226" y="600" class="label">ADC 采样</text>
+  <text x="1206" y="632" class="small">Vout / Iout / Vin</text>
 
-  <path d="M1135 520 L1135 204 L960 204" class="feedback"/>
-  <path d="M740 248 L740 286" class="feedback"/>
-  <text x="970" y="188" class="small">故障检测结果</text>
+  <path d="M1406 490 L1406 608 L1394 608" class="feedback"/>
+  <path d="M1158 608 L431 608 L431 470" class="feedback"/>
+  <text x="690" y="592" class="tag">反馈采样值</text>
 
-  <text x="86" y="462" class="note">第一版先做电压环，后续可继续扩展电流环、前馈控制和更复杂的保护策略。</text>
+  <rect x="492" y="226" width="520" height="92" class="protect"/>
+  <text x="644" y="266" class="label">保护与状态机</text>
+  <text x="604" y="298" class="small">UVLO / OVP / OCP / OTP / FAULT_LATCH</text>
+
+  <path d="M1276 560 L1276 272 L1012 272" class="faultline"/>
+  <text x="1060" y="252" class="tag">采样量进入保护判断</text>
+  <path d="M752 318 L752 358" class="faultline"/>
+  <text x="772" y="344" class="tag">允许/禁止 PWM</text>
+
+  <rect x="86" y="710" width="1428" height="82" class="stage"/>
+  <text x="118" y="746" class="muted">说明：第一版先做电压环。电流环、输入电压前馈和更复杂的故障恢复策略，放到后续章节扩展。</text>
+  <text x="118" y="778" class="muted">控制层只负责计算 duty；保护层只负责故障判断；状态机负责启动、运行和锁故障。</text>
 </svg>
