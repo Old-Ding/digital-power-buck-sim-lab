@@ -1,0 +1,27 @@
+# OS/editor noise
+.DS_Store
+Thumbs.db
+*.tmp
+*.bak
+*.swp
+
+# MATLAB/Simulink generated files
+*.asv
+*.m~
+slprj/
+codegen/
+*.slxc
+*.mex*
+
+# PLECS generated/cache files
+*.plecs~
+*.xml~
+
+# Local run outputs
+artifacts/*
+!artifacts/.gitkeep
+
+# Large local recordings should be curated before commit
+*.mp4
+*.avi
+*.mkv
