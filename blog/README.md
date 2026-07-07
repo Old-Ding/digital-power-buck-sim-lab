@@ -45,3 +45,23 @@ MATLAB + PLECS 数字电源仿真入门
 小结
 下一篇预告
 ```
+
+## 图片规范
+
+教程文章优先使用自绘图片，避免直接搬运网络图片。
+
+图片放在：
+
+```text
+assets/figures/
+```
+
+GitHub 文档中可以直接使用相对路径引用。发布到 CSDN 时，需要把对应图片上传到 CSDN 编辑器，再替换为 CSDN 图片链接。
+
+第一篇当前使用的图片：
+
+| 图片 | 用途 |
+| --- | --- |
+| buck-topology.svg | Buck 功率级拓扑 |
+| digital-control-loop.svg | 数字闭环控制链路 |
+| power-state-machine.svg | 电源软件状态机 |

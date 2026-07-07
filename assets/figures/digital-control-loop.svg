@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1120" height="520" viewBox="0 0 1120 520">
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L8,3 z" fill="#333"/>
+    </marker>
+    <style>
+      .box{fill:#f7fbff;stroke:#2563eb;stroke-width:2.5;rx:12}
+      .plant{fill:#fff7ed;stroke:#ea580c;stroke-width:2.5;rx:12}
+      .protect{fill:#fff1f2;stroke:#e11d48;stroke-width:2.5;rx:12}
+      .line{stroke:#333;stroke-width:3;fill:none;marker-end:url(#arrow);stroke-linecap:round;stroke-linejoin:round}
+      .feedback{stroke:#666;stroke-width:2.5;fill:none;marker-end:url(#arrow);stroke-dasharray:8 6;stroke-linecap:round;stroke-linejoin:round}
+      .label{font-family:"Microsoft YaHei",Arial,sans-serif;font-size:23px;fill:#222}
+      .small{font-family:"Microsoft YaHei",Arial,sans-serif;font-size:18px;fill:#444}
+      .note{font-family:"Microsoft YaHei",Arial,sans-serif;font-size:17px;fill:#666}
+    </style>
+  </defs>
+
+  <rect x="24" y="24" width="1072" height="472" fill="#ffffff" stroke="#e5e7eb" stroke-width="2" rx="14"/>
+  <text x="42" y="64" class="label">数字 Buck 电源闭环控制链路</text>
+  <text x="42" y="94" class="note">控制器周期性采样输出电压，根据误差更新 PWM 占空比</text>
+
+  <rect x="52" y="192" width="132" height="80" class="box"/>
+  <text x="82" y="228" class="label">Vref</text>
+  <text x="78" y="254" class="small">目标 12V</text>
+
+  <rect x="238" y="192" width="138" height="80" class="box"/>
+  <text x="276" y="226" class="label">误差</text>
+  <text x="266" y="254" class="small">e=Vref-Vout</text>
+
+  <rect x="430" y="192" width="138" height="80" class="box"/>
+  <text x="462" y="226" class="label">PI 控制</text>
+  <text x="458" y="254" class="small">限幅/抗饱和</text>
+
+  <rect x="622" y="192" width="138" height="80" class="box"/>
+  <text x="652" y="226" class="label">PWM</text>
+  <text x="646" y="254" class="small">更新 duty</text>
+
+  <rect x="814" y="178" width="172" height="108" class="plant"/>
+  <text x="852" y="222" class="label">Buck</text>
+  <text x="844" y="250" class="small">功率级响应</text>
+
+  <line x1="184" y1="232" x2="238" y2="232" class="line"/>
+  <line x1="376" y1="232" x2="430" y2="232" class="line"/>
+  <line x1="568" y1="232" x2="622" y2="232" class="line"/>
+  <line x1="760" y1="232" x2="814" y2="232" class="line"/>
+
+  <rect x="824" y="354" width="152" height="78" class="box"/>
+  <text x="860" y="390" class="label">ADC</text>
+  <text x="850" y="416" class="small">采样 Vout/Iout</text>
+
+  <path d="M900 286 L900 354" class="feedback"/>
+  <path d="M824 394 L306 394 L306 272" class="feedback"/>
+  <text x="410" y="384" class="small">反馈采样值</text>
+
+  <rect x="430" y="70" width="330" height="74" class="protect"/>
+  <text x="464" y="102" class="label">保护与状态机</text>
+  <text x="462" y="130" class="small">UVLO / OVP / OCP / OTP / FAULT</text>
+  <path d="M900 354 L900 108 L760 108" class="feedback"/>
+  <path d="M594 144 L594 192" class="feedback"/>
+
+  <text x="82" y="338" class="note">说明：第一版先做电压环，后续再扩展电流环和更复杂保护。</text>
+</svg>

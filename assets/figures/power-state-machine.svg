@@ -1,0 +1,70 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1120" height="520" viewBox="0 0 1120 520">
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L0,6 L8,3 z" fill="#333"/>
+    </marker>
+    <style>
+      .state{fill:#f7fbff;stroke:#2563eb;stroke-width:2.5;rx:16}
+      .fault{fill:#fff1f2;stroke:#e11d48;stroke-width:2.5;rx:16}
+      .line{stroke:#333;stroke-width:3;fill:none;marker-end:url(#arrow);stroke-linecap:round;stroke-linejoin:round}
+      .faultline{stroke:#e11d48;stroke-width:3;fill:none;marker-end:url(#arrow);stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:8 6}
+      .label{font-family:"Microsoft YaHei",Arial,sans-serif;font-size:23px;fill:#222}
+      .small{font-family:"Microsoft YaHei",Arial,sans-serif;font-size:18px;fill:#444}
+      .note{font-family:"Microsoft YaHei",Arial,sans-serif;font-size:17px;fill:#666}
+    </style>
+  </defs>
+
+  <rect x="24" y="24" width="1072" height="472" fill="#ffffff" stroke="#e5e7eb" stroke-width="2" rx="14"/>
+  <text x="42" y="64" class="label">数字电源软件状态机</text>
+  <text x="42" y="94" class="note">状态机负责启动、运行、故障锁存和恢复，PI 控制器只负责占空比计算。</text>
+
+  <rect x="70" y="202" width="130" height="80" class="state"/>
+  <text x="112" y="235" class="label">INIT</text>
+  <text x="100" y="262" class="small">初始化</text>
+
+  <rect x="260" y="202" width="130" height="80" class="state"/>
+  <text x="304" y="235" class="label">IDLE</text>
+  <text x="292" y="262" class="small">等待启动</text>
+
+  <rect x="450" y="202" width="150" height="80" class="state"/>
+  <text x="474" y="235" class="label">SOFT_START</text>
+  <text x="482" y="262" class="small">参考值爬升</text>
+
+  <rect x="660" y="202" width="130" height="80" class="state"/>
+  <text x="704" y="235" class="label">RUN</text>
+  <text x="688" y="262" class="small">闭环运行</text>
+
+  <rect x="860" y="124" width="168" height="86" class="fault"/>
+  <text x="884" y="158" class="label">FAULT_LATCH</text>
+  <text x="898" y="184" class="small">故障锁存</text>
+
+  <rect x="860" y="312" width="168" height="86" class="state"/>
+  <text x="894" y="346" class="label">RECOVERY</text>
+  <text x="904" y="372" class="small">故障恢复</text>
+
+  <line x1="200" y1="242" x2="260" y2="242" class="line"/>
+  <text x="210" y="230" class="small">init done</text>
+
+  <line x1="390" y1="242" x2="450" y2="242" class="line"/>
+  <text x="398" y="230" class="small">enable</text>
+
+  <line x1="600" y1="242" x2="660" y2="242" class="line"/>
+  <text x="608" y="230" class="small">vref 到 12V</text>
+
+  <path d="M725 282 L725 430 L325 430 L325 282" class="line"/>
+  <text x="500" y="420" class="small">disable</text>
+
+  <path d="M725 202 L725 166 L860 166" class="faultline"/>
+  <text x="748" y="154" class="small">OVP/OCP/UVLO/OTP</text>
+
+  <path d="M525 202 L525 132 L860 132" class="faultline"/>
+  <text x="604" y="122" class="small">启动异常</text>
+
+  <line x1="944" y1="210" x2="944" y2="312" class="line"/>
+  <text x="956" y="266" class="small">clear fault</text>
+
+  <path d="M860 355 L325 355 L325 282" class="line"/>
+  <text x="570" y="345" class="small">恢复到 IDLE</text>
+
+  <text x="72" y="370" class="note">故障采用锁存方式，原因是要保留故障码和关键变量，方便后续定位问题。</text>
+</svg>
