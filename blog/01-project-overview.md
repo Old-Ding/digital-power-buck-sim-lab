@@ -51,7 +51,7 @@ D = Vout / Vin = 12 / 24 = 0.5
 
 下图是本系列第一阶段要搭建的 Buck 功率级拓扑，后续 PLECS 模型会按照这个结构逐步实现。
 
-![Buck 降压电源基本拓扑](../assets/figures/buck-topology.svg)
+![Buck 降压电源基本拓扑](../assets/figures/buck-topology.png)
 
 图中需要重点关注三个位置：
 
@@ -142,7 +142,7 @@ Buck 功率级响应
 
 下图是数字 Buck 电源的基本闭环控制链路：
 
-![数字 Buck 电源闭环控制链路](../assets/figures/digital-control-loop.svg)
+![数字 Buck 电源闭环控制链路](../assets/figures/digital-control-loop.png)
 
 例如目标输出电压为 12V：
 
@@ -185,7 +185,7 @@ Buck 功率级响应
 
 状态切换关系如下图所示：
 
-![数字电源软件状态机](../assets/figures/power-state-machine.svg)
+![数字电源软件状态机](../assets/figures/power-state-machine.png)
 
 其中 PI 控制器只负责计算占空比，保护模块负责检测故障，状态机负责决定当前电源应该处于哪种运行状态。
 

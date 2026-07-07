@@ -78,4 +78,4 @@ docs: add csdn article for open-loop buck
 assets/figures/
 ```
 
-GitHub 可以直接显示相对路径图片。发布 CSDN 时，需要把图片上传到 CSDN 编辑器，再替换文章里的本地相对路径。
+SVG 作为源图保存，PNG 用于 Markdown 引用。发布 CSDN 时，需要把 PNG 图片上传到 CSDN 编辑器，再替换文章里的本地相对路径。
