@@ -72,10 +72,21 @@ docs: add csdn article for open-loop buck
 
 ## 图片处理
 
-文章中的拓扑图、控制框图和状态机图优先自绘，统一放在：
+文章图片按职责分层：
 
 ```text
-assets/figures/
+assets/figures/       自绘概念图
+assets/screenshots/   PLECS、MATLAB/Simulink 软件截图
+waveforms/            仿真波形和测试结果
 ```
 
-SVG 作为源图保存，PNG 用于 Markdown 引用。发布 CSDN 时，需要把 PNG 图片上传到 CSDN 编辑器，再替换文章里的本地相对路径。
+图片使用原则：
+
+```text
+实操步骤优先用 PLECS/MATLAB 真实截图
+结果分析优先用仿真波形截图
+抽象关系才使用自绘图
+不使用伪造截图，不把概念图当成仿真结果
+```
+
+SVG 作为自绘源图保存，PNG 用于 Markdown 引用。发布 CSDN 时，需要把 PNG 图片上传到 CSDN 编辑器，再替换文章里的本地相对路径。

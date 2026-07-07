@@ -48,15 +48,25 @@ MATLAB + PLECS 数字电源仿真入门
 
 ## 图片规范
 
-教程文章优先使用自绘图片，避免直接搬运网络图片。
+教程文章优先使用仿真软件和测试结果的真实截图，自绘图只用于解释抽象关系。
 
-图片放在：
+图片按来源分目录保存：
 
 ```text
-assets/figures/
+assets/figures/       自绘概念图，例如控制链路、状态机、教学示意图
+assets/screenshots/   PLECS、MATLAB/Simulink 等软件界面截图
+waveforms/            仿真波形、测试结果图
 ```
 
-SVG 作为源图保存，PNG 用于 Markdown 引用和 CSDN 上传。发布到 CSDN 时，需要把对应 PNG 图片上传到 CSDN 编辑器，再替换为 CSDN 图片链接。
+原则：
+
+```text
+能用 PLECS/MATLAB 真实截图说明的，不用自绘图替代
+能用仿真波形证明的，不只写文字结论
+自绘图只承担概念解释职责，不伪装成仿真结果
+```
+
+SVG 作为自绘源图保存，PNG 用于 Markdown 引用和 CSDN 上传。发布到 CSDN 时，需要把对应 PNG 图片上传到 CSDN 编辑器，再替换为 CSDN 图片链接。
 
 第一篇当前使用的图片：
 
@@ -65,3 +75,5 @@ SVG 作为源图保存，PNG 用于 Markdown 引用和 CSDN 上传。发布到 C
 | buck-topology.png | Buck 功率级拓扑 |
 | digital-control-loop.png | 数字闭环控制链路 |
 | power-state-machine.png | 电源软件状态机 |
+
+从第 2 篇开始，文章主体图片应优先来自 PLECS 模型截图和仿真波形截图。
