@@ -12,7 +12,7 @@
 | 输出电流 | 5 A |
 | 输出功率 | 60 W |
 | 开关频率 | 200 kHz |
-| 当前阶段 | 开环功率级验证 |
+| 当前阶段 | 功率级参数初步设计 |
 
 第一阶段只做低压 DC-DC，不涉及市电输入和隔离拓扑。
 
@@ -22,6 +22,7 @@
 | --- | --- | --- |
 | 01 | 为什么从 Buck 开始做 MATLAB + PLECS 仿真 | 已完成 |
 | 02 | PLECS 搭建开环 Buck 功率级 | 已完成，可复现 |
+| 03 | Buck 电感、电容和开关频率参数设计 | 已完成，可复现 |
 
 第二章对应的核心文件：
 
@@ -35,6 +36,16 @@
 | 指标汇总 | `waveforms/02-open-loop-summary.csv` |
 | 波形图 | `waveforms/02-open-loop-*.png` |
 
+第三章对应的核心文件：
+
+| 类型 | 文件 |
+| --- | --- |
+| 教程文章 | `blog/03-buck-parameter-design.md` |
+| 复现说明 | `docs/03-buck-parameter-design-reproduce.md` |
+| 参数估算脚本 | `scripts/export_parameter_sweep.py` |
+| 参数汇总 | `waveforms/03-parameter-sweep-summary.csv` |
+| 图表 | `waveforms/03-*.png` |
+
 ## 复现方式
 
 在仓库根目录运行：
@@ -44,6 +55,14 @@ python scripts\export_open_loop_waveforms.py
 ```
 
 如果 PLECS RPC 已启动，脚本会调用 PLECS 导出仿真数据和波形图。如果 PLECS RPC 没有启动，但已有 CSV 数据存在，脚本会基于 CSV 重新生成波形图，并明确提示“未重新运行 PLECS 仿真”。
+
+第 3 章的参数估算图表运行：
+
+```powershell
+python scripts\export_parameter_sweep.py
+```
+
+这个脚本不重新运行 PLECS 参数扫描，只生成公式估算表格和图表，并读取第 2 章已有 PLECS 汇总数据做基准对照。
 
 ## 第二章结果
 
@@ -56,6 +75,20 @@ python scripts\export_open_loop_waveforms.py
 | 启动 IL 峰值 | 约 27.3 A |
 
 启动过冲来自开环硬启动和 LC 自然响应，不代表功率级接线错误。后续章节会用软启动和闭环控制继续处理这个问题。
+
+## 第三章结果
+
+| 指标 | 结果 |
+| --- | --- |
+| 满载等效负载 | 2.4Ω |
+| 理想 Buck 开环占空比 | 0.5 |
+| 22uH 下电感纹波估算 | 约 1.36A |
+| 第二章 PLECS 电感纹波 | 约 1.31A |
+| 100uF 下输出纹波估算 | 约 8.52mV |
+| 第二章 PLECS 输出纹波 | 约 8.50mV |
+| 22uH / 100uF LC 自然频率 | 约 3.39kHz |
+
+第 3 章的图表用于解释 L、C 和 fsw 对纹波的趋势影响；不同参数组合下的真实暂态峰值需要重新运行 PLECS 参数扫描确认。
 
 ## 仓库结构
 
@@ -74,7 +107,6 @@ waveforms/          仿真原始数据、指标和波形图
 
 | 顺序 | 内容 |
 | --- | --- |
-| 03 | Buck 电感、电容和开关频率参数设计 |
 | 04 | 离散 PI 电压环 |
 | 05 | 占空比限幅和抗积分饱和 |
 | 06 | 软启动 |
