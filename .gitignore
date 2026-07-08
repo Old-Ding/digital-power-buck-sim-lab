@@ -21,10 +21,10 @@ codegen/
 # Local run outputs
 artifacts/
 
-# Local CSDN publishing package with machine-specific upload paths
+# Local publishing package with machine-specific upload paths
 blog/csdn/
 
-# Local drafts that are not ready for the public GitHub repository
+# Draft material kept out of public commits
 blog/0[3-9]-*.md
 blog/10-*.md
 blog/assets/

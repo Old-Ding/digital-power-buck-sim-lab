@@ -1,6 +1,6 @@
 # 第 2 章复现说明：开环 Buck 功率级
 
-本文档对应 CSDN 第 2 章《PLECS 搭建开环 Buck 功率级》，目标是让读者能从 GitHub 仓库中找到模型、脚本、数据和波形，并复查结论。
+本文档用于复现第 2 章的开环 Buck 功率级模型，包含模型、脚本、数据和波形的对应关系。
 
 ## 1. 复现目标
 
@@ -29,7 +29,7 @@
 | `waveforms/02-open-loop-mosfet-vds.png` | MOSFET Vds 局部开关波形 |
 | `waveforms/02-open-loop-il.png` | 稳态电感电流纹波 |
 | `waveforms/02-open-loop-vout.png` | 输出电压启动到稳态波形 |
-| `blog/02-open-loop-buck.md` | GitHub/VS Code 阅读版教程 |
+| `blog/02-open-loop-buck.md` | 教程文章 |
 
 ## 3. 运行环境
 
@@ -66,15 +66,15 @@ python scripts\export_open_loop_waveforms.py
 | `mosfet_vds_min_v` | 0V |
 | `mosfet_vds_max_v` | 24V |
 
-## 5. 没有启动 PLECS RPC 时
+## 5. 离线重绘模式
 
-如果 PLECS RPC 没有启动，但 `waveforms/02-open-loop-data.csv` 已存在，脚本会使用已有 CSV 重新生成波形图，并明确提示：
+如果 PLECS RPC 没有启动，但 `waveforms/02-open-loop-data.csv` 已存在，脚本会进入离线重绘模式，使用已有 CSV 重新生成波形图，并明确提示：
 
 ```text
 无法连接 PLECS RPC，本次使用已有 CSV 重新生成波形图；未重新运行 PLECS 仿真。
 ```
 
-这只是离线重绘，不代表重新完成了 PLECS 仿真。发布文章时要区分“重新仿真”和“基于已有数据重画图”。
+看到这条提示时，本次运行没有调用 PLECS，也没有产生新的仿真数据。如需重新仿真，请先启动 PLECS RPC Server，再运行导出脚本。
 
 ## 6. 第二章结论
 
