@@ -2,6 +2,9 @@
 
 上一篇主要介绍了 Buck 电路、数字电源控制链路以及本系列的整体路线。本文开始进入实操，在 PLECS 中先搭建一个开环 Buck 功率级模型。
 
+> 配套 GitHub 仓库：[digital-power-buck-sim-lab](https://github.com/Old-Ding/digital-power-buck-sim-lab)
+> 本章的 PLECS 模型、导出脚本、原始 CSV 数据和波形图都已经放到仓库中，读者可以对照本文复现。
+
 这里先强调一个顺序：
 
 > 先开环
@@ -452,6 +455,17 @@ MOSFET Vds 应当是一个高低切换的开关波形。
 ## 本章对应的 GitHub 开源内容
 
 本章不是只写一篇教程，而是同步沉淀为一个可以复查的 GitHub 工程资产。第二章对应的开源内容包括：
+
+仓库入口：[https://github.com/Old-Ding/digital-power-buck-sim-lab](https://github.com/Old-Ding/digital-power-buck-sim-lab)
+
+本章直达：
+
+| 内容 | 链接 |
+| --- | --- |
+| 第二章复现说明 | [docs/02-open-loop-buck-reproduce.md](https://github.com/Old-Ding/digital-power-buck-sim-lab/blob/master/docs/02-open-loop-buck-reproduce.md) |
+| PLECS 开环 Buck 模型 | [models/plecs/buck_open_loop_24v_12v.plecs](https://github.com/Old-Ding/digital-power-buck-sim-lab/blob/master/models/plecs/buck_open_loop_24v_12v.plecs) |
+| 波形导出脚本 | [scripts/export_open_loop_waveforms.py](https://github.com/Old-Ding/digital-power-buck-sim-lab/blob/master/scripts/export_open_loop_waveforms.py) |
+| 仿真原始数据 | [waveforms/02-open-loop-data.csv](https://github.com/Old-Ding/digital-power-buck-sim-lab/blob/master/waveforms/02-open-loop-data.csv) |
 
 | 类型 | 文件 | 作用 |
 | --- | --- | --- |
