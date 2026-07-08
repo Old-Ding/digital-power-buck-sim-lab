@@ -195,7 +195,7 @@ def plot_base_compare(path, existing):
     for ax, title, unit, formula_value, plecs_value in pairs:
         style_axis(ax)
         values = [formula_value, plecs_value if plecs_value is not None else 0]
-        bars = ax.bar(["公式估算", "第二章 PLECS"], values, color=colors, width=0.54)
+        bars = ax.bar(["公式估算", "PLECS 基准"], values, color=colors, width=0.54)
         ax.set_title(title, fontsize=13, weight="bold")
         ax.set_ylabel(unit)
         ymax = max(values) * 1.28 if max(values) > 0 else 1
@@ -222,7 +222,7 @@ def plot_base_compare(path, existing):
                 color="#475569",
             )
 
-    fig.suptitle("基准参数：公式估算 vs 第二章已有 PLECS 结果", fontsize=15, weight="bold")
+    fig.suptitle("基准参数：公式估算 vs PLECS 基准结果", fontsize=15, weight="bold")
     save(fig, path)
 
 

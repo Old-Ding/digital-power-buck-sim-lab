@@ -43,8 +43,10 @@
 | 教程文章 | `blog/03-buck-parameter-design.md` |
 | 复现说明 | `docs/03-buck-parameter-design-reproduce.md` |
 | 参数估算脚本 | `scripts/export_parameter_sweep.py` |
-| 参数汇总 | `waveforms/03-parameter-sweep-summary.csv` |
-| 图表 | `waveforms/03-*.png` |
+| PLECS 参数扫描脚本 | `scripts/export_plecs_parameter_sweep.py` |
+| 公式估算汇总 | `waveforms/03-parameter-sweep-summary.csv` |
+| PLECS 扫描汇总 | `waveforms/03-plecs-parameter-sweep-summary.csv` |
+| 图表 | `waveforms/03-*.png`、`waveforms/03-plecs-*.png` |
 
 ## 复现方式
 
@@ -63,6 +65,14 @@ python scripts\export_parameter_sweep.py
 ```
 
 这个脚本不重新运行 PLECS 参数扫描，只生成公式估算表格和图表，并读取第 2 章已有 PLECS 汇总数据做基准对照。
+
+第 3 章的 PLECS 参数扫描运行：
+
+```powershell
+python scripts\export_plecs_parameter_sweep.py
+```
+
+运行前需要启动 PLECS RPC Server，并确认 `localhost:1080` 可用。该脚本会对 `Lo`、`Co`、`fsw` 做真实参数扫描，导出 `waveforms/03-plecs-*` 结果。
 
 ## 第二章结果
 
@@ -83,12 +93,14 @@ python scripts\export_parameter_sweep.py
 | 满载等效负载 | 2.4Ω |
 | 理想 Buck 开环占空比 | 0.5 |
 | 22uH 下电感纹波估算 | 约 1.36A |
-| 第二章 PLECS 电感纹波 | 约 1.31A |
+| PLECS 扫描电感纹波 | 约 1.31A |
 | 100uF 下输出纹波估算 | 约 8.52mV |
-| 第二章 PLECS 输出纹波 | 约 8.50mV |
+| PLECS 扫描输出纹波 | 约 8.50mV |
 | 22uH / 100uF LC 自然频率 | 约 3.39kHz |
+| PLECS 扫描启动 Vout 峰值 | 约 20.8V |
+| PLECS 扫描启动 IL 峰值 | 约 27.3A |
 
-第 3 章的图表用于解释 L、C 和 fsw 对纹波的趋势影响；不同参数组合下的真实暂态峰值需要重新运行 PLECS 参数扫描确认。
+第 3 章通过公式估算解释 L、C 和 fsw 的趋势，再用 PLECS RPC 参数扫描验证稳态纹波和开环硬启动峰值。
 
 ## 仓库结构
 

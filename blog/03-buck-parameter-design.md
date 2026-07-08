@@ -7,7 +7,7 @@
 因为控制器不是用来掩盖功率级参数问题的。如果电感、电容、负载和开关频率之间的关系没有搞清楚，后面看到输出纹波、启动过冲或者负载突变，很容易把功率级本身的问题误判成 PI 参数没有调好。
 
 > 配套 GitHub 仓库：[digital-power-buck-sim-lab](https://github.com/Old-Ding/digital-power-buck-sim-lab)
-> 本章提供参数估算脚本、CSV 表格和图表。图表来自公式估算，并使用第二章已有 PLECS 结果做基准对照；本章没有重新运行 PLECS 参数扫描。
+> 本章提供公式估算脚本和 PLECS RPC 参数扫描脚本。正文中的关键波形图来自 PLECS 对 L、C、fsw 的真实参数扫描，公式表用于提前判断量级。
 
 ## 本章先回答什么问题
 
@@ -35,6 +35,12 @@
 ![第二章 PLECS 开环 Buck 模型](../assets/screenshots/02-plecs-open-loop-buck-model.png)
 
 后面所有 L、C、fsw 的估算，都对应这一个 24V 输入、12V/5A 输出、固定占空比 0.5 的基准模型。
+
+本文的证据链按这个顺序走：
+
+> 先用公式判断趋势和量级
+> 再用 PLECS 参数扫描验证波形和峰值
+> 最后决定 22uH、100uF、200kHz 是否适合作为后续闭环控制基准
 
 ## 先回到 Buck 拓扑
 
@@ -121,11 +127,11 @@ Buck 电感纹波可以先用下面这个公式估算：
 > ΔIL ≈ 1.36A
 > 电感电流最小值约 4.32A
 
-也就是说，满载下电感电流仍然大于 0A，处在连续电流模式。第二章已有 PLECS 结果中，稳态电感纹波约 1.31A，和公式估算非常接近。
+也就是说，满载下电感电流仍然大于 0A，处在连续电流模式。本章 PLECS 参数扫描结果中，稳态电感纹波约 1.31A，和公式估算非常接近。
 
-下面这张图把公式估算和第二章已有 PLECS 结果放在一起：
+先看基准参数的公式估算和 PLECS 结果对照：
 
-![基准参数公式估算与第二章 PLECS 对照](../waveforms/03-base-estimate-vs-plecs.png)
+![基准参数公式估算与 PLECS 基准对照](../waveforms/03-base-estimate-vs-plecs.png)
 
 这张图要读出一个重点：公式不是为了替代仿真，而是为了在仿真前先判断量级。这里两者接近，说明 22uH、100uF、200kHz 这组基准参数不是拍脑袋来的。
 
@@ -133,15 +139,15 @@ Buck 电感纹波可以先用下面这个公式估算：
 
 保持 Vin=24V、Vout=12V、Iout=5A、C=100uF、fsw=200kHz 不变，只改变电感值，可以得到：
 
-| 电感 | ΔIL 估算 | 占满载电流比例 | 电感电流最小值 |
+| 电感 | ΔIL 公式估算 | PLECS 稳态 ΔIL | 启动 IL 峰值 |
 | --- | --- | --- | --- |
-| 10uH | 3.00A | 60.0% | 3.50A |
-| 22uH | 1.36A | 27.3% | 4.32A |
-| 47uH | 0.64A | 12.8% | 4.68A |
+| 10uH | 3.00A | 2.88A | 40.5A |
+| 22uH | 1.36A | 1.31A | 27.3A |
+| 47uH | 0.64A | 0.61A | 19.0A |
 
-图上更直观：
+PLECS 导出的稳态电感电流局部波形如下：
 
-![不同电感值下的电感电流纹波估算](../waveforms/03-inductor-sweep.png)
+![PLECS 不同电感值下的电感电流扫描](../waveforms/03-plecs-inductor-sweep-il.png)
 
 这张图的读法是：
 
@@ -176,15 +182,15 @@ Buck 电感纹波可以先用下面这个公式估算：
 
 继续保持 L=22uH、fsw=200kHz，只改变输出电容，可以得到：
 
-| 输出电容 | ΔVout 估算 |
-| --- | --- |
-| 47uF | 18.13mV |
-| 100uF | 8.52mV |
-| 220uF | 3.87mV |
+| 输出电容 | ΔVout 公式估算 | PLECS 稳态 ΔVout | 启动 IL 峰值 |
+| --- | --- | --- | --- |
+| 47uF | 18.13mV | 18.09mV | 19.3A |
+| 100uF | 8.52mV | 8.50mV | 27.3A |
+| 220uF | 3.87mV | 4.11mV | 39.7A |
 
-对应图表如下：
+PLECS 导出的稳态输出电压纹波如下：
 
-![不同输出电容下的输出电压纹波估算](../waveforms/03-capacitor-sweep.png)
+![PLECS 不同输出电容下的输出纹波扫描](../waveforms/03-plecs-capacitor-sweep-vout.png)
 
 电容越大，理想电容纹波越小。但同样不能只看这一个指标。
 
@@ -194,15 +200,15 @@ Buck 电感纹波可以先用下面这个公式估算：
 
 保持 L=22uH、C=100uF，只改变开关频率：
 
-| fsw | ΔIL 估算 | ΔVout 估算 |
-| --- | --- | --- |
-| 100kHz | 2.73A | 34.09mV |
-| 200kHz | 1.36A | 8.52mV |
-| 300kHz | 0.91A | 3.79mV |
+| fsw | ΔIL 公式估算 | PLECS 稳态 ΔIL | ΔVout 公式估算 | PLECS 稳态 ΔVout |
+| --- | --- | --- | --- | --- |
+| 100kHz | 2.73A | 2.62A | 34.09mV | 34.13mV |
+| 200kHz | 1.36A | 1.31A | 8.52mV | 8.50mV |
+| 300kHz | 0.91A | 0.87A | 3.79mV | 3.79mV |
 
-图上可以看到趋势：
+PLECS 参数扫描图如下：
 
-![不同开关频率下的纹波估算](../waveforms/03-frequency-sweep.png)
+![PLECS 不同开关频率下的纹波扫描](../waveforms/03-plecs-frequency-sweep.png)
 
 频率提高后，IL 纹波下降，输出电压纹波也下降。这里输出纹波下降更快，是因为在 L 和 C 固定时，fsw 提高不仅直接出现在电容纹波公式里，也会先让 ΔIL 变小。
 
@@ -235,16 +241,18 @@ LC 网络的自然频率可以先估算为：
 
 > f0 ≈ 3.39kHz
 
-下面这张图展示了不同 L/C 组合下的 LC 自然频率：
+只看自然频率还不够，所以本章用 PLECS 扫描了 3 组电感和 3 组电容的硬启动峰值：
 
-![不同 L/C 组合下的 LC 自然频率估算](../waveforms/03-lc-natural-frequency-map.png)
+![PLECS L/C 组合对开环硬启动峰值的影响](../waveforms/03-plecs-lc-startup-peak-map.png)
 
-这张图不要读成“自然频率越低就一定越好”，也不要读成“只靠换电感电容就能解决启动过冲”。
+这张图不要读成“电容越大就一定越好”，也不要读成“只靠换电感电容就能解决启动过冲”。
 
 正确理解是：
 
 > L 和 C 决定了输出滤波器的二阶特性
 > 开环硬启动相当于给这个二阶网络一个阶跃激励
+> 电容越大，启动时需要填充的能量越多，冲击电流可能更大
+> 电感越大，电流上升速度会变慢，启动峰值会下降
 > 负载阻尼、等效电阻、初始条件和器件非理想参数都会影响过冲
 > 启动过冲最终要靠软启动、限流和闭环控制继续处理
 
@@ -264,7 +272,7 @@ LC 网络的自然频率可以先估算为：
 | 电感电流最小值 | 约 4.32A | 满载下连续电流模式 |
 | 输出纹波 | 公式约 8.52mV，PLECS 约 8.50mV | 理想模型下量级合理 |
 | LC 自然频率 | 约 3.39kHz | 明显低于 200kHz 开关频率 |
-| 启动过冲 | Vout 约 20.8V，IL 约 27.3A | 开环硬启动问题，后续处理 |
+| 启动过冲 | Vout 约 20.8V，IL 约 27.3A | PLECS 实测开环硬启动问题，后续处理 |
 
 因此第三章的结论是：
 
@@ -283,17 +291,20 @@ LC 网络的自然频率可以先估算为：
 | 教程文章 | `blog/03-buck-parameter-design.md` | 本章正文 |
 | 复现说明 | `docs/03-buck-parameter-design-reproduce.md` | 运行步骤和结果说明 |
 | 参数估算脚本 | `scripts/export_parameter_sweep.py` | 生成公式估算 CSV 和图表 |
+| PLECS 扫描脚本 | `scripts/export_plecs_parameter_sweep.py` | 调用 PLECS RPC 扫描 L/C/fsw |
 | 参数汇总 CSV | `waveforms/03-parameter-sweep-summary.csv` | L/C/fsw 扫描结果 |
+| PLECS 扫描 CSV | `waveforms/03-plecs-parameter-sweep-summary.csv` | PLECS 参数扫描结果 |
 | PLECS 模型截图 | `assets/screenshots/02-plecs-open-loop-buck-model.png` | 本章参数对应的开环 Buck 模型 |
-| 图表 | `waveforms/03-*.png` | 本章使用的参数估算图 |
+| PLECS 图表 | `waveforms/03-plecs-*.png` | 本章使用的 PLECS 扫描图 |
 
 运行方式：
 
 ```powershell
 python scripts\export_parameter_sweep.py
+python scripts\export_plecs_parameter_sweep.py
 ```
 
-脚本会明确提示：本章图表是公式估算，并读取第二章已有 PLECS 结果做基准对照，没有重新运行 PLECS 参数扫描。
+第一个脚本生成公式估算图表；第二个脚本需要 PLECS RPC Server 正常运行，会重新调用 PLECS 扫描不同 L/C/fsw 工况，并导出真实仿真结果。
 
 ## 技术交流
 
