@@ -24,12 +24,14 @@ MATLAB + PLECS 数字电源仿真入门
 | --- | --- | --- |
 | 01 | 01-project-overview.md | 为什么从 Buck 开始做 MATLAB + PLECS 仿真 |
 | 02 | 02-open-loop-buck.md | 搭建开环 Buck，验证固定占空比下的输出 |
-| 03 | 03-discrete-pi-control.md | 加入离散 PI 电压环 |
-| 04 | 04-soft-start.md | 软启动设计 |
-| 05 | 05-protection-state-machine.md | 保护逻辑和状态机 |
-| 06 | 06-load-transient.md | 负载突变测试和波形分析 |
-| 07 | 07-adc-noise-duty-jitter.md | ADC 噪声和 duty 抖动 |
-| 08 | 08-controller-to-c.md | 从仿真控制器整理到 C 风格代码 |
+| 03 | 03-buck-parameter-design.md | 电感、电容和开关频率初步选择 |
+| 04 | 04-discrete-pi-control.md | 加入离散 PI 电压环 |
+| 05 | 05-duty-limit-anti-windup.md | 占空比限幅和抗积分饱和 |
+| 06 | 06-soft-start.md | 软启动设计 |
+| 07 | 07-protection-state-machine.md | 保护逻辑和状态机 |
+| 08 | 08-load-transient.md | 负载突变测试和波形分析 |
+| 09 | 09-adc-noise-duty-jitter.md | ADC 噪声和 duty 抖动 |
+| 10 | 10-controller-to-c.md | 从仿真控制器整理到 C 风格代码 |
 
 ## 单篇结构
 

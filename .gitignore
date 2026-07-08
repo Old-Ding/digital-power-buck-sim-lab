@@ -15,11 +15,15 @@ codegen/
 
 # PLECS generated/cache files
 *.plecs~
+*.plecs.autosave
 *.xml~
 
 # Local run outputs
 artifacts/*
 !artifacts/.gitkeep
+
+# Local CSDN publishing package with machine-specific upload paths
+blog/csdn/
 
 # Large local recordings should be curated before commit
 *.mp4
