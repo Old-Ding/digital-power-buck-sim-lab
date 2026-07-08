@@ -61,7 +61,7 @@ python scripts\export_open_loop_waveforms.py
 
 ```text
 assets/             教程图片和 PLECS 截图
-blog/               已完成的 GitHub 阅读版教程
+blog/               已完成教程
 docs/               已完成章节的复现说明
 models/plecs/       PLECS 模型
 scripts/            可复现脚本
@@ -84,6 +84,18 @@ waveforms/          仿真原始数据、指标和波形图
 | 10 | 从仿真控制器整理到 C 风格代码 |
 
 后续主题会在完成模型、数据、波形和说明后加入本仓库。
+
+## 技术交流
+
+如果你在复现模型、搭建 PLECS 电路或判断波形时遇到问题，可以加入技术交流群交流。
+
+| 渠道 | 信息 |
+| --- | --- |
+| QQ 群 | 嵌入式交流群：1056095456 |
+| 加群链接 | [https://qm.qq.com/q/rygrSD2Ddu](https://qm.qq.com/q/rygrSD2Ddu) |
+| 微信交流 | 微信入口会不定期更新，可在 QQ 群内获取 |
+
+提问时建议附上拓扑截图、关键参数、仿真波形和报错信息，方便定位问题。
 
 ## 许可
 

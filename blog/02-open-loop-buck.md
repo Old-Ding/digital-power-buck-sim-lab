@@ -495,3 +495,15 @@ MOSFET Vds 应当是一个高低切换的开关波形。
 | waveforms/02-open-loop-vout.png | 输出电压波形 |
 | waveforms/02-open-loop-startup-overview.png | 开环硬启动暂态总览 |
 | waveforms/02-open-loop-summary.csv | 开环仿真关键指标 |
+
+## 技术交流
+
+如果你在复现本章模型、运行脚本或判断波形时遇到问题，可以加入技术交流群交流。
+
+| 渠道 | 信息 |
+| --- | --- |
+| QQ 群 | 嵌入式交流群：1056095456 |
+| 加群链接 | [https://qm.qq.com/q/rygrSD2Ddu](https://qm.qq.com/q/rygrSD2Ddu) |
+| 微信交流 | 微信入口会不定期更新，可在 QQ 群内获取 |
+
+提问时建议附上 PLECS 模型截图、关键参数、Scope 波形和脚本输出。
