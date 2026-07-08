@@ -3,7 +3,6 @@ import csv
 import math
 
 import matplotlib.pyplot as plt
-from matplotlib.patches import FancyArrowPatch, FancyBboxPatch
 
 
 VIN = 24.0
@@ -180,60 +179,6 @@ def annotate_points(ax, xs, ys, fmt, dy):
         ax.text(x, y + dy, fmt.format(y), ha="center", va="bottom", fontsize=9, color="#334155")
 
 
-def plot_design_flow(path):
-    fig, ax = plt.subplots(figsize=(13.5, 3.2))
-    ax.set_xlim(0, 1)
-    ax.set_ylim(0, 0.72)
-    ax.axis("off")
-    fig.patch.set_facecolor("white")
-
-    items = [
-        ("输入规格", "24V -> 12V\n5A / 60W"),
-        ("等效负载", "R = 2.4Ω\nD = 0.5"),
-        ("纹波目标", "ΔIL 约 30%\n先定电感"),
-        ("电感选择", "计算约 20uH\n选 22uH"),
-        ("电容和频率", "100uF\n200kHz"),
-    ]
-    xs = [0.04, 0.24, 0.44, 0.64, 0.84]
-    colors = ["#e0f2fe", "#dcfce7", "#fef3c7", "#ede9fe", "#fee2e2"]
-    edge_colors = ["#38bdf8", "#22c55e", "#f59e0b", "#8b5cf6", "#f97316"]
-
-    for idx, ((title, body), x, color, edge) in enumerate(zip(items, xs, colors, edge_colors)):
-        box = FancyBboxPatch(
-            (x, 0.2),
-            0.14,
-            0.38,
-            boxstyle="round,pad=0.018,rounding_size=0.025",
-            linewidth=1.2,
-            edgecolor=edge,
-            facecolor=color,
-        )
-        ax.add_patch(box)
-        ax.text(x + 0.07, 0.48, title, ha="center", va="center", fontsize=13, weight="bold")
-        ax.text(x + 0.07, 0.33, body, ha="center", va="center", fontsize=10.5, linespacing=1.35)
-        if idx < len(items) - 1:
-            arrow = FancyArrowPatch(
-                (x + 0.15, 0.39),
-                (xs[idx + 1] - 0.01, 0.39),
-                arrowstyle="-|>",
-                mutation_scale=13,
-                linewidth=1.2,
-                color="#64748b",
-            )
-            ax.add_patch(arrow)
-
-    ax.text(
-        0.5,
-        0.06,
-        "本章先做参数估算和基准对照，控制器、软启动和保护放到后续章节。",
-        ha="center",
-        va="center",
-        fontsize=11,
-        color="#475569",
-    )
-    save(fig, path)
-
-
 def plot_base_compare(path, existing):
     formula = estimate(BASE_L, BASE_C, BASE_FSW)
     plecs_il = existing.get("inductor_current_ripple_pp_a")
@@ -391,15 +336,12 @@ def plot_lc_map(path):
 def main():
     repo_root = Path(__file__).resolve().parents[1]
     wave_dir = repo_root / "waveforms"
-    figure_dir = repo_root / "assets" / "figures"
     wave_dir.mkdir(parents=True, exist_ok=True)
-    figure_dir.mkdir(parents=True, exist_ok=True)
 
     existing = read_existing_plecs_summary(repo_root)
     rows = build_rows(existing)
     write_summary(wave_dir / "03-parameter-sweep-summary.csv", rows)
 
-    plot_design_flow(figure_dir / "03-parameter-design-flow.png")
     plot_base_compare(wave_dir / "03-base-estimate-vs-plecs.png", existing)
     plot_l_sweep(wave_dir / "03-inductor-sweep.png")
     plot_c_sweep(wave_dir / "03-capacitor-sweep.png")

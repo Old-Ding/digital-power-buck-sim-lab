@@ -26,7 +26,7 @@
 | `blog/03-buck-parameter-design.md` | 第 3 章教程文章 |
 | `scripts/export_parameter_sweep.py` | 生成公式估算 CSV 和图表 |
 | `waveforms/03-parameter-sweep-summary.csv` | 参数扫描汇总表 |
-| `assets/figures/03-parameter-design-flow.png` | 参数设计路线图 |
+| `assets/screenshots/02-plecs-open-loop-buck-model.png` | 第 3 章参数对应的 PLECS 开环 Buck 模型 |
 | `waveforms/03-base-estimate-vs-plecs.png` | 公式估算与第 2 章 PLECS 基准结果对照 |
 | `waveforms/03-inductor-sweep.png` | 不同电感值下的电感纹波估算 |
 | `waveforms/03-capacitor-sweep.png` | 不同输出电容下的输出纹波估算 |

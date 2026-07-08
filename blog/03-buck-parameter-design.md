@@ -30,9 +30,11 @@
 
 这些内容放在后续章节。第三章的边界很明确：先把“功率级参数为什么这样选”讲清楚。
 
-整体路线如下：
+本文的参数讨论全部围绕第二章已经验证过的 PLECS 开环 Buck 模型，不重新画一个脱离模型的流程图：
 
-![Buck 参数设计路线](../assets/figures/03-parameter-design-flow.png)
+![第二章 PLECS 开环 Buck 模型](../assets/screenshots/02-plecs-open-loop-buck-model.png)
+
+后面所有 L、C、fsw 的估算，都对应这一个 24V 输入、12V/5A 输出、固定占空比 0.5 的基准模型。
 
 ## 先回到 Buck 拓扑
 
@@ -282,7 +284,7 @@ LC 网络的自然频率可以先估算为：
 | 复现说明 | `docs/03-buck-parameter-design-reproduce.md` | 运行步骤和结果说明 |
 | 参数估算脚本 | `scripts/export_parameter_sweep.py` | 生成公式估算 CSV 和图表 |
 | 参数汇总 CSV | `waveforms/03-parameter-sweep-summary.csv` | L/C/fsw 扫描结果 |
-| 设计路线图 | `assets/figures/03-parameter-design-flow.png` | 参数选择流程 |
+| PLECS 模型截图 | `assets/screenshots/02-plecs-open-loop-buck-model.png` | 本章参数对应的开环 Buck 模型 |
 | 图表 | `waveforms/03-*.png` | 本章使用的参数估算图 |
 
 运行方式：
