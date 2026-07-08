@@ -75,7 +75,7 @@ Buck 电路也叫降压斩波电路，核心作用是：
 
 下图是本系列第一阶段要搭建的 Buck 功率级拓扑：
 
-![Buck 降压电源基本拓扑](assets/figures/buck-topology.png)
+![Buck 降压电源基本拓扑](../assets/figures/buck-topology.png)
 
 这张图里建议重点看三个位置：
 
@@ -178,7 +178,7 @@ Buck 电路也叫降压斩波电路，核心作用是：
 
 下图是数字 Buck 电源的基本闭环控制链路：
 
-![数字 Buck 电源闭环控制链路](assets/figures/digital-control-loop.png)
+![数字 Buck 电源闭环控制链路](../assets/figures/digital-control-loop.png)
 
 例如目标输出电压为 12V：
 
@@ -217,7 +217,7 @@ Buck 电路也叫降压斩波电路，核心作用是：
 
 状态切换关系如下图所示：
 
-![数字电源软件状态机](assets/figures/power-state-machine.png)
+![数字电源软件状态机](../assets/figures/power-state-machine.png)
 
 这里的关键原则是分层：
 

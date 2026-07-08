@@ -30,7 +30,6 @@
 | `waveforms/02-open-loop-il.png` | 稳态电感电流纹波 |
 | `waveforms/02-open-loop-vout.png` | 输出电压启动到稳态波形 |
 | `blog/02-open-loop-buck.md` | GitHub/VS Code 阅读版教程 |
-| 本机 `blog/csdn/` | CSDN 发布包，包含本机上传路径，不提交到 GitHub |
 
 ## 3. 运行环境
 

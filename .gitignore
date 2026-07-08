@@ -19,11 +19,32 @@ codegen/
 *.xml~
 
 # Local run outputs
-artifacts/*
-!artifacts/.gitkeep
+artifacts/
 
 # Local CSDN publishing package with machine-specific upload paths
 blog/csdn/
+
+# Local drafts that are not ready for the public GitHub repository
+blog/0[3-9]-*.md
+blog/10-*.md
+blog/assets/
+blog/waveforms/
+controller/
+docs/architecture.md
+docs/control-loop.md
+docs/debugging.md
+docs/interview-notes.md
+docs/power-stage-design.md
+docs/protection-strategy.md
+docs/publish-plan.md
+docs/soft-start.md
+docs/state-machine.md
+docs/test-matrix.md
+models/simulink/
+scripts/export_report.m
+scripts/plot_waveforms.m
+scripts/run_test_matrix.m
+waveforms/.gitkeep
 
 # Large local recordings should be curated before commit
 *.mp4

@@ -1,9 +1,0 @@
-metric,value
-startup_vout_peak_v,20.81563891719695
-startup_inductor_current_peak_a,27.33508114525714
-vout_avg_v,11.999999295992295
-vout_ripple_pp_v,0.008499972948589729
-inductor_current_avg_a,4.999999998315892
-inductor_current_ripple_pp_a,1.3094138706464413
-mosfet_vds_min_v,0.0
-mosfet_vds_max_v,24.0
