@@ -454,7 +454,7 @@ MOSFET Vds 应当是一个高低切换的开关波形。
 
 ## 本章对应的 GitHub 开源内容
 
-本章不是只写一篇教程，而是同步沉淀为一个可以复查的 GitHub 工程资产。第二章对应的开源内容包括：
+为了方便复现，本章对应的模型、脚本、数据和说明已经整理到 GitHub。主要文件如下：
 
 仓库入口：[https://github.com/Old-Ding/digital-power-buck-sim-lab](https://github.com/Old-Ding/digital-power-buck-sim-lab)
 
