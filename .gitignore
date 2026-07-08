@@ -25,7 +25,7 @@ artifacts/
 blog/csdn/
 
 # Draft material kept out of public commits
-blog/0[3-9]-*.md
+blog/0[5-9]-*.md
 blog/10-*.md
 blog/assets/
 blog/waveforms/
@@ -40,7 +40,8 @@ docs/publish-plan.md
 docs/soft-start.md
 docs/state-machine.md
 docs/test-matrix.md
-models/simulink/
+models/simulink/*
+!models/simulink/buck_discrete_pi_voltage_loop.slx
 scripts/export_report.m
 scripts/plot_waveforms.m
 scripts/run_test_matrix.m

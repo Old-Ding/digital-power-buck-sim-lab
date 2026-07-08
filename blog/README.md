@@ -9,6 +9,7 @@
 | 01 | `01-project-overview.md` | 为什么从 Buck 开始做 MATLAB + PLECS 仿真 |
 | 02 | `02-open-loop-buck.md` | PLECS 搭建开环 Buck 功率级 |
 | 03 | `03-buck-parameter-design.md` | Buck 电感、电容和开关频率参数设计 |
+| 04 | `04-discrete-pi-control.md` | 离散 PI 电压环 |
 
 ## 后续主题
 
@@ -16,7 +17,6 @@
 
 | 顺序 | 主题 |
 | --- | --- |
-| 04 | 离散 PI 电压环 |
 | 05 | 占空比限幅和抗积分饱和 |
 | 06 | 软启动 |
 | 07 | 保护状态机 |

@@ -1,6 +1,6 @@
 # digital-power-buck-sim-lab
 
-这是一个面向数字电源仿真的 Buck 电源学习项目。当前公开仓库只保留已经完成、可以复现的内容：教程文章、PLECS 模型、导出脚本、原始数据和波形图。
+这是一个面向数字电源仿真的 Buck 电源学习项目。当前公开仓库只保留已经完成、可以复现的内容：教程文章、PLECS/Simulink 模型、导出脚本、原始数据和波形图。
 
 ## 当前规格
 
@@ -12,7 +12,7 @@
 | 输出电流 | 5 A |
 | 输出功率 | 60 W |
 | 开关频率 | 200 kHz |
-| 当前阶段 | 功率级参数初步设计 |
+| 当前阶段 | 离散 PI 电压环 |
 
 第一阶段只做低压 DC-DC，不涉及市电输入和隔离拓扑。
 
@@ -23,6 +23,7 @@
 | 01 | 为什么从 Buck 开始做 MATLAB + PLECS 仿真 | 已完成 |
 | 02 | PLECS 搭建开环 Buck 功率级 | 已完成，可复现 |
 | 03 | Buck 电感、电容和开关频率参数设计 | 已完成，可复现 |
+| 04 | 离散 PI 电压环 | 已完成，可复现 |
 
 第二章对应的核心文件：
 
@@ -47,6 +48,19 @@
 | 公式估算汇总 | `waveforms/03-parameter-sweep-summary.csv` |
 | PLECS 扫描汇总 | `waveforms/03-plecs-parameter-sweep-summary.csv` |
 | 图表 | `waveforms/03-*.png`、`waveforms/03-plecs-*.png` |
+
+第四章对应的核心文件：
+
+| 类型 | 文件 |
+| --- | --- |
+| 教程文章 | `blog/04-discrete-pi-control.md` |
+| 复现说明 | `docs/04-discrete-pi-control-reproduce.md` |
+| Simulink 平均模型 | `models/simulink/buck_discrete_pi_voltage_loop.slx` |
+| Simulink 截图脚本 | `scripts/export_simulink_discrete_pi_snapshot.m` |
+| Python 仿真脚本 | `scripts/export_discrete_pi_control.py` |
+| 原始数据 | `waveforms/04-discrete-pi-control-trace.csv` |
+| 指标汇总 | `waveforms/04-discrete-pi-control-summary.csv` |
+| 波形图 | `waveforms/04-*.png` |
 
 ## 复现方式
 
@@ -73,6 +87,20 @@ python scripts\export_plecs_parameter_sweep.py
 ```
 
 运行前需要启动 PLECS RPC Server，并确认 `localhost:1080` 可用。该脚本会对 `Lo`、`Co`、`fsw` 做真实参数扫描，导出 `waveforms/03-plecs-*` 结果。
+
+第 4 章的离散 PI 平均模型仿真运行：
+
+```powershell
+python scripts\export_discrete_pi_control.py
+```
+
+第 4 章的 Simulink 模型截图生成运行：
+
+```powershell
+matlab -batch "run('scripts/export_simulink_discrete_pi_snapshot.m'); exit"
+```
+
+第 4 章不需要启动 PLECS RPC。该章重点验证离散 PI 控制器的数据流、采样周期、积分项和 duty 更新；开关级波形仍在 PLECS 章节中验证。
 
 ## 第二章结果
 
@@ -102,13 +130,31 @@ python scripts\export_plecs_parameter_sweep.py
 
 第 3 章通过公式估算解释 L、C 和 fsw 的趋势，再用 PLECS RPC 参数扫描验证稳态纹波和开环硬启动峰值。
 
+## 第四章结果
+
+| 指标 | 结果 |
+| --- | --- |
+| 控制周期 | 5us |
+| PI 参数 | Kp = 0.05，Ki = 200 |
+| 输入扰动 | Vin 24V -> 20V |
+| 负载扰动 | 5A -> 7.5A |
+| P-only 输入阶跃后 Vout | 约 11.00V |
+| PI 输入阶跃后 Vout | 约 12.00V |
+| PI 负载阶跃后 Vout | 约 12.00V |
+| PI duty 范围 | 约 0.504 - 0.648 |
+| 输入阶跃 1% 恢复时间 | 约 2.41ms |
+| 负载阶跃 1% 恢复时间 | 约 1.01ms |
+
+第 4 章通过平均模型验证离散 PI 电压环的数据流：采样 Vout、计算误差、更新积分项、输出 duty，再反馈到 Buck 平均功率级。该章故意不加入 duty 限幅和抗积分饱和，相关问题放到第 5 章单独处理。
+
 ## 仓库结构
 
 ```text
-assets/             教程图片和 PLECS 截图
+assets/             教程图片和仿真工具截图
 blog/               已完成教程
 docs/               已完成章节的复现说明
 models/plecs/       PLECS 模型
+models/simulink/    Simulink 平均模型
 scripts/            可复现脚本
 waveforms/          仿真原始数据、指标和波形图
 ```
@@ -119,7 +165,6 @@ waveforms/          仿真原始数据、指标和波形图
 
 | 顺序 | 内容 |
 | --- | --- |
-| 04 | 离散 PI 电压环 |
 | 05 | 占空比限幅和抗积分饱和 |
 | 06 | 软启动 |
 | 07 | 保护状态机 |
