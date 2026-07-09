@@ -8,12 +8,14 @@
 
 ## 复现边界
 
-本章使用两类模型：
+本章使用两类模型，但职责不同：
 
 | 类型 | 文件 | 作用 |
 | --- | --- | --- |
-| Python 平均模型 | `scripts/export_discrete_pi_control.py` | 生成 CSV 数据、指标汇总和文章波形图 |
-| Simulink 平均模型 | `models/simulink/buck_discrete_pi_voltage_loop.slx` | 展示离散 PI 控制器和 Buck 平均功率级的数据流 |
+| Simulink 平均模型 | `models/simulink/buck_discrete_pi_voltage_loop.slx` | 展示离散 PI 控制器和 Buck 平均功率级的数据流，并导出正文主波形 |
+| Python 平均模型 | `scripts/export_discrete_pi_control.py` | 快速复算平均模型，作为算法对照，不作为正文主图来源 |
+
+正文主波形对应 `waveforms/04-simulink-*` 文件。`waveforms/04-p-only-vs-pi-vin-step.png` 和 `waveforms/04-pi-*.png` 是 Python 对照图，用于快速检查算法趋势。
 
 本章不需要运行 PLECS RPC。
 
@@ -25,19 +27,27 @@
 
 | 工具 | 用途 |
 | --- | --- |
-| Python 3 | 运行平均模型仿真脚本 |
-| matplotlib | 生成波形图 |
+| MATLAB R2024b 或相近版本 | 运行 Simulink 模型生成脚本 |
+| Simulink | 生成 `.slx` 模型、模型截图和正文主波形 |
 
 可选具备：
 
 | 工具 | 用途 |
 | --- | --- |
-| MATLAB R2024b 或相近版本 | 运行截图脚本 |
-| Simulink | 生成 `.slx` 模型和模型截图 |
+| Python 3 | 快速复算平均模型 |
+| matplotlib | 生成 Python 对照波形 |
 
-如果没有 MATLAB/Simulink，也可以只运行 Python 脚本复现数据和波形；文章中的 Simulink 截图用于说明控制数据流。
+如果没有 MATLAB/Simulink，也可以只运行 Python 脚本理解控制算法，但不能完整复现正文中的 Simulink 主波形。
 
-## 运行 Python 仿真
+推荐复现顺序：
+
+| 顺序 | 命令 | 目的 |
+| --- | --- | --- |
+| 1 | `matlab -batch "run('scripts/export_simulink_discrete_pi_snapshot.m'); exit"` | 生成 Simulink 模型和模型截图 |
+| 2 | `matlab -batch "run('scripts/export_simulink_discrete_pi_waveforms.m'); exit"` | 运行 Simulink 仿真并导出正文主波形 |
+| 3 | `python scripts\export_discrete_pi_control.py` | 可选，快速复算平均模型趋势 |
+
+## 可选：运行 Python 对照脚本
 
 在仓库根目录运行：
 
@@ -52,16 +62,16 @@ python scripts\export_discrete_pi_control.py
 pi,kp=0.05,ki=200,control_period_us=5,duty_max=0.647856,input_step_settling_ms=2.410250000000001,load_step_settling_ms=1.0052500000000018
 ```
 
-脚本会生成或更新以下文件：
+脚本会生成或更新以下对照文件：
 
 | 文件 | 内容 |
 | --- | --- |
 | `waveforms/04-discrete-pi-control-trace.csv` | PI 仿真的完整时序数据 |
 | `waveforms/04-discrete-pi-control-summary.csv` | 关键指标汇总 |
-| `waveforms/04-p-only-vs-pi-vin-step.png` | P-only 和 PI 的输入扰动对比 |
-| `waveforms/04-pi-vin-load-transient.png` | PI 在输入扰动和负载扰动下的响应 |
-| `waveforms/04-pi-error-integrator.png` | error 和 integrator 变化 |
-| `waveforms/04-pi-sampling-points.png` | 离散采样点示意 |
+| `waveforms/04-p-only-vs-pi-vin-step.png` | P-only 和 PI 的输入扰动对照图 |
+| `waveforms/04-pi-vin-load-transient.png` | PI 在输入扰动和负载扰动下的对照响应 |
+| `waveforms/04-pi-error-integrator.png` | error 和 integrator 对照变化 |
+| `waveforms/04-pi-sampling-points.png` | 离散采样点对照图 |
 
 ## 运行 Simulink 截图脚本
 
@@ -90,6 +100,31 @@ matlab -batch "run('scripts/export_simulink_discrete_pi_snapshot.m'); exit"
 
 其中 Vin 在 3ms 时从 24V 阶跃到 20V，Rload 在 7ms 时从 2.4Ω 阶跃到 1.6Ω。
 
+## 运行 Simulink 主波形导出脚本
+
+在仓库根目录运行：
+
+```powershell
+matlab -batch "run('scripts/export_simulink_discrete_pi_waveforms.m'); exit"
+```
+
+如果 MATLAB 没有加入 PATH，可以使用完整路径：
+
+```powershell
+& 'D:\Program Files\MATLAB\R2024b\bin\matlab.exe' -batch "run('scripts/export_simulink_discrete_pi_waveforms.m'); exit"
+```
+
+脚本会打开 Simulink 模型，从 `Scope mux` 增加 `To Workspace` 导出端口，运行 P-only 和 PI 两组仿真，并生成正文主图：
+
+| 文件 | 内容 |
+| --- | --- |
+| `waveforms/04-simulink-discrete-pi-control-trace.csv` | Simulink PI 仿真的完整时序数据 |
+| `waveforms/04-simulink-discrete-pi-control-summary.csv` | Simulink 仿真的关键指标汇总 |
+| `waveforms/04-simulink-p-only-vs-pi-vin-step.png` | Simulink 仿真中 P-only 和 PI 的输入扰动对比 |
+| `waveforms/04-simulink-pi-vin-load-transient.png` | Simulink 仿真中 PI 对输入扰动和负载扰动的恢复过程 |
+| `waveforms/04-simulink-pi-error-integrator.png` | Simulink 仿真中的 error 和 integrator 状态 |
+| `waveforms/04-simulink-pi-sampling-points.png` | Simulink 仿真输出与 5us 控制采样点 |
+
 ## 关键参数
 
 | 参数 | 数值 |
@@ -111,18 +146,18 @@ matlab -batch "run('scripts/export_simulink_discrete_pi_snapshot.m'); exit"
 
 ## 预期指标
 
-`waveforms/04-discrete-pi-control-summary.csv` 中应包含以下量级的结果：
+`waveforms/04-simulink-discrete-pi-control-summary.csv` 中应包含以下量级的结果：
 
 | 指标 | 预期结果 |
 | --- | --- |
 | P-only 输入阶跃后 Vout | 约 11.00V |
 | PI 输入阶跃后 Vout | 约 12.00V |
 | PI 负载阶跃后 Vout | 约 12.00V |
-| 输入阶跃后 Vout 最低/最高 | 约 10.26V / 12.29V |
-| 负载阶跃后 Vout 最低/最高 | 约 11.25V / 12.66V |
-| duty 范围 | 约 0.504 - 0.648 |
-| 输入阶跃 1% 恢复时间 | 约 2.41ms |
-| 负载阶跃 1% 恢复时间 | 约 1.01ms |
+| 输入阶跃后 Vout 最低/最高 | 约 10.25V / 12.27V |
+| 负载阶跃后 Vout 最低/最高 | 约 11.26V / 12.64V |
+| duty 范围 | 约 0.504 - 0.646 |
+| 输入阶跃 1% 恢复时间 | 约 2.22ms |
+| 负载阶跃 1% 恢复时间 | 约 0.91ms |
 
 这些指标用于验证脚本是否跑出了同一组结果。它们不是量产调参目标。
 
@@ -132,11 +167,11 @@ matlab -batch "run('scripts/export_simulink_discrete_pi_snapshot.m'); exit"
 
 | 检查项 | 判断方式 |
 | --- | --- |
-| P-only 是否留下稳态误差 | 查看 `04-p-only-vs-pi-vin-step.png` |
+| P-only 是否留下稳态误差 | 查看 `04-simulink-p-only-vs-pi-vin-step.png` |
 | PI 是否消除稳态误差 | 查看输入阶跃后 Vout 是否回到 12V 附近 |
-| duty 是否随输入跌落抬升 | 查看 `04-pi-vin-load-transient.png` |
-| 积分项是否参与修正 | 查看 `04-pi-error-integrator.png` |
-| 控制器是否按离散周期更新 | 查看 `04-pi-sampling-points.png` |
+| duty 是否随输入跌落抬升 | 查看 `04-simulink-pi-vin-load-transient.png` |
+| 积分项是否参与修正 | 查看 `04-simulink-pi-error-integrator.png` |
+| 控制器是否按离散周期更新 | 查看 `04-simulink-pi-sampling-points.png` |
 
 如果只看 Vout，很容易误判控制器已经完全调好。第四章至少要同时检查 `Vout`、`duty`、`error` 和 `integrator`。
 
@@ -146,15 +181,21 @@ matlab -batch "run('scripts/export_simulink_discrete_pi_snapshot.m'); exit"
 
 本章验证的是离散 PI 控制逻辑，平均模型更容易看清误差、积分项和 duty 的变化。开关级细节仍然需要 PLECS，但不放在本章重复展开。
 
-### 2. 为什么没有 duty 限幅
+### 2. 为什么正文不是直接截 Scope 小窗口
+
+Scope 窗口适合现场调试，但多路波形直接截图后，在文章里容易出现文字小、图例挤和坐标不清的问题。
+
+本章正文采用 Simulink 模型 `Scope mux -> To Workspace` 导出的仿真数据生成高清图，并保留 CSV 原始数据和指标汇总。这样既保留仿真来源，又保证读者能看清每条曲线。
+
+### 3. 为什么没有 duty 限幅
 
 这是本章的边界。第四章只验证最小闭环，避免把 PI、限幅、抗积分饱和和软启动混在一起。第 5 章再加入 duty 上下限和积分器边界。
 
-### 3. 为什么初始积分项不是 0
+### 4. 为什么初始积分项不是 0
 
 模型中加入了 0.02Ω 串联电阻，5A 负载下会产生小压降。`initial_integrator_trim` 用于补偿这个压降，让仿真从接近 12V 的工作点开始。
 
-### 4. 输出恢复到 12V 是否说明可以上硬件
+### 5. 输出恢复到 12V 是否说明可以上硬件
 
 不能。
 

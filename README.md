@@ -57,10 +57,13 @@
 | 复现说明 | `docs/04-discrete-pi-control-reproduce.md` |
 | Simulink 平均模型 | `models/simulink/buck_discrete_pi_voltage_loop.slx` |
 | Simulink 截图脚本 | `scripts/export_simulink_discrete_pi_snapshot.m` |
-| Python 仿真脚本 | `scripts/export_discrete_pi_control.py` |
-| 原始数据 | `waveforms/04-discrete-pi-control-trace.csv` |
-| 指标汇总 | `waveforms/04-discrete-pi-control-summary.csv` |
-| 波形图 | `waveforms/04-*.png` |
+| Simulink 波形脚本 | `scripts/export_simulink_discrete_pi_waveforms.m` |
+| Simulink 原始数据 | `waveforms/04-simulink-discrete-pi-control-trace.csv` |
+| Simulink 指标汇总 | `waveforms/04-simulink-discrete-pi-control-summary.csv` |
+| Simulink 主波形 | `waveforms/04-simulink-*.png` |
+| Python 对照脚本 | `scripts/export_discrete_pi_control.py` |
+| Python 对照数据 | `waveforms/04-discrete-pi-control-*.csv` |
+| Python 对照波形 | `waveforms/04-p-only-vs-pi-vin-step.png`、`waveforms/04-pi-*.png` |
 
 ## 复现方式
 
@@ -88,19 +91,25 @@ python scripts\export_plecs_parameter_sweep.py
 
 运行前需要启动 PLECS RPC Server，并确认 `localhost:1080` 可用。该脚本会对 `Lo`、`Co`、`fsw` 做真实参数扫描，导出 `waveforms/03-plecs-*` 结果。
 
-第 4 章的离散 PI 平均模型仿真运行：
-
-```powershell
-python scripts\export_discrete_pi_control.py
-```
-
 第 4 章的 Simulink 模型截图生成运行：
 
 ```powershell
 matlab -batch "run('scripts/export_simulink_discrete_pi_snapshot.m'); exit"
 ```
 
-第 4 章不需要启动 PLECS RPC。该章重点验证离散 PI 控制器的数据流、采样周期、积分项和 duty 更新；开关级波形仍在 PLECS 章节中验证。
+第 4 章的 Simulink 主波形导出运行：
+
+```powershell
+matlab -batch "run('scripts/export_simulink_discrete_pi_waveforms.m'); exit"
+```
+
+第 4 章的 Python 离散 PI 对照脚本运行：
+
+```powershell
+python scripts\export_discrete_pi_control.py
+```
+
+第 4 章不需要启动 PLECS RPC。该章重点验证离散 PI 控制器的数据流、采样周期、积分项和 duty 更新；正文主波形来自 Simulink 模型 `Scope mux` 导出的仿真数据，开关级波形仍在 PLECS 章节中验证。
 
 ## 第二章结果
 
@@ -141,9 +150,9 @@ matlab -batch "run('scripts/export_simulink_discrete_pi_snapshot.m'); exit"
 | P-only 输入阶跃后 Vout | 约 11.00V |
 | PI 输入阶跃后 Vout | 约 12.00V |
 | PI 负载阶跃后 Vout | 约 12.00V |
-| PI duty 范围 | 约 0.504 - 0.648 |
-| 输入阶跃 1% 恢复时间 | 约 2.41ms |
-| 负载阶跃 1% 恢复时间 | 约 1.01ms |
+| PI duty 范围 | 约 0.504 - 0.646 |
+| 输入阶跃 1% 恢复时间 | 约 2.22ms |
+| 负载阶跃 1% 恢复时间 | 约 0.91ms |
 
 第 4 章通过平均模型验证离散 PI 电压环的数据流：采样 Vout、计算误差、更新积分项、输出 duty，再反馈到 Buck 平均功率级。该章故意不加入 duty 限幅和抗积分饱和，相关问题放到第 5 章单独处理。
 
