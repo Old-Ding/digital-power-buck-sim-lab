@@ -29,3 +29,4 @@ MATLAB/Simulink 控制和脚本使用软件界面截图
 | `06-simulink-soft-start-logic.png` | 第 6 章软启动参考值路径和控制逻辑截图 |
 | `07-simulink-protection-state-machine-logic.png` | 第 7 章保护状态机结构截图 |
 | `08-simulink-load-transient-testbench.png` | 第 8 章负载突变测试台截图 |
+| `09-simulink-adc-noise-duty-jitter-logic.png` | 第 9 章 ADC 噪声和 duty 抖动采样链路截图 |

@@ -12,7 +12,7 @@
 | 输出电流 | 5 A |
 | 输出功率 | 60 W |
 | 开关频率 | 200 kHz |
-| 当前阶段 | 负载突变测试 |
+| 当前阶段 | ADC 噪声和 duty 抖动 |
 
 第一阶段只做低压 DC-DC，不涉及市电输入和隔离拓扑。
 
@@ -28,6 +28,7 @@
 | 06 | 软启动 | 已完成，可复现 |
 | 07 | 保护状态机 | 已完成，可复现 |
 | 08 | 负载突变测试 | 已完成，可复现 |
+| 09 | ADC 噪声和 duty 抖动 | 已完成，可复现 |
 
 第二章对应的核心文件：
 
@@ -126,6 +127,20 @@
 | MATLAB 原始数据 | `waveforms/08-matlab-load-transient-trace.csv` |
 | MATLAB 指标汇总 | `waveforms/08-matlab-load-transient-summary.csv` |
 | MATLAB 主波形 | `waveforms/08-matlab-load-transient-*.png` |
+
+第九章对应的核心文件：
+
+| 类型 | 文件 |
+| --- | --- |
+| 教程文章 | `blog/09-adc-noise-duty-jitter.md` |
+| 复现说明 | `docs/09-adc-noise-duty-jitter-reproduce.md` |
+| MATLAB ADC 噪声脚本 | `scripts/export_matlab_adc_noise_duty_jitter_waveforms.m` |
+| Simulink 采样链路截图脚本 | `scripts/export_simulink_adc_noise_duty_jitter_snapshot.m` |
+| Simulink 采样链路模型 | `models/simulink/buck_adc_noise_duty_jitter_logic.slx` |
+| Simulink 采样链路截图 | `assets/screenshots/09-simulink-adc-noise-duty-jitter-logic.png` |
+| MATLAB 原始数据 | `waveforms/09-matlab-adc-noise-duty-jitter-trace.csv` |
+| MATLAB 指标汇总 | `waveforms/09-matlab-adc-noise-duty-jitter-summary.csv` |
+| MATLAB 主波形 | `waveforms/09-matlab-adc-noise-*.png` |
 
 ## 复现方式
 
@@ -228,6 +243,20 @@ matlab -batch "run('scripts/export_matlab_load_transient_waveforms.m'); exit"
 ```
 
 第 8 章不需要启动 PLECS RPC。该章重点验证负载 50% -> 100% -> 50% 时的输出下陷、过冲、恢复时间和 duty 饱和诊断；正文主波形来自 MATLAB 平均模型导出的数据，开关级器件应力仍在 PLECS 章节中验证。
+
+第 9 章的 Simulink 采样链路截图生成运行：
+
+```powershell
+matlab -batch "run('scripts/export_simulink_adc_noise_duty_jitter_snapshot.m'); exit"
+```
+
+第 9 章的 MATLAB ADC 噪声和 duty 抖动波形导出运行：
+
+```powershell
+matlab -batch "run('scripts/export_matlab_adc_noise_duty_jitter_waveforms.m'); exit"
+```
+
+第 9 章不需要启动 PLECS RPC。该章重点验证 ADC 量化和模拟噪声如何进入误差计算，并通过 PI 控制器变成 `duty_raw` / `duty_cmd` 抖动；正文主波形来自 MATLAB 平均模型导出的数据，开关级纹波和硬件 ADC 前端仍需后续验证。
 
 ## 第二章结果
 
@@ -347,6 +376,26 @@ matlab -batch "run('scripts/export_matlab_load_transient_waveforms.m'); exit"
 
 第 8 章通过 MATLAB 平均模型验证负载突变测试方法：负载上跳重点看 Vout 下陷、峰值电感电流和 duty 上限；负载下跳重点看 Vout 过冲、恢复时间和 duty 下限。该章同时用 raw duty、duty cmd 和 saturation flag 区分 PI 参数、电容储能和 duty 限幅问题。
 
+## 第九章结果
+
+| 指标 | 结果 |
+| --- | --- |
+| ADC 位数 | 12 bit |
+| ADC 输出等效满量程 | 16V |
+| ADC LSB | 约 3.906mV |
+| ADC 模拟噪声 | 15mV RMS |
+| `noisy_adc` 测量噪声 RMS | 约 15.18mV |
+| `noisy_adc` duty RMS 抖动 | 约 0.000321 |
+| `noisy_adc` 等效 PWM RMS 抖动 | 约 1.60ns |
+| 4 点滑动平均 duty RMS 抖动 | 约 0.000197 |
+| 4 点滑动平均抖动降低比例 | 约 38.6% |
+| 4 点滑动平均近似延迟 | 约 7.5us |
+| 一阶 IIR duty RMS 抖动 | 约 0.000227 |
+| 一阶 IIR 抖动降低比例 | 约 29.3% |
+| 一阶 IIR 近似延迟 | 约 15us |
+
+第 9 章通过 MATLAB 平均模型验证 ADC 噪声到 duty 抖动的数据流：采样噪声进入 `Vout_meas`，误差计算把噪声变成 error 抖动，PI 控制器再把 error 抖动变成 duty 指令抖动。该章同时用 4 点滑动平均和一阶 IIR 对比滤波收益和反馈延迟。
+
 ## 仓库结构
 
 ```text
@@ -365,7 +414,6 @@ waveforms/          仿真原始数据、指标和波形图
 
 | 顺序 | 内容 |
 | --- | --- |
-| 09 | ADC 噪声和 duty 抖动 |
 | 10 | 从仿真控制器整理到 C 风格代码 |
 
 后续主题会在完成模型、数据、波形和说明后加入本仓库。

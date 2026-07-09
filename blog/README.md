@@ -14,6 +14,7 @@
 | 06 | `06-soft-start.md` | 软启动 |
 | 07 | `07-protection-state-machine.md` | 保护状态机 |
 | 08 | `08-load-transient.md` | 负载突变测试 |
+| 09 | `09-adc-noise-duty-jitter.md` | ADC 噪声和 duty 抖动 |
 
 ## 后续主题
 
@@ -21,5 +22,4 @@
 
 | 顺序 | 主题 |
 | --- | --- |
-| 09 | ADC 噪声和 duty 抖动 |
 | 10 | 从仿真控制器整理到 C 风格代码 |
