@@ -19,3 +19,10 @@ MATLAB/Simulink 控制和脚本使用软件界面截图
 仿真结果优先放到 waveforms/
 不要用自绘图冒充仿真软件截图
 ```
+
+## 已使用截图
+
+| 文件 | 用途 |
+| --- | --- |
+| `04-simulink-discrete-pi-control.png` | 第 4 章离散 PI 平均模型截图 |
+| `05-simulink-duty-limit-anti-windup-logic.png` | 第 5 章 duty 限幅和 anti-windup 控制逻辑截图 |

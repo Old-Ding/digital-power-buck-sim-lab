@@ -12,7 +12,7 @@
 | 输出电流 | 5 A |
 | 输出功率 | 60 W |
 | 开关频率 | 200 kHz |
-| 当前阶段 | 离散 PI 电压环 |
+| 当前阶段 | duty 限幅和抗积分饱和 |
 
 第一阶段只做低压 DC-DC，不涉及市电输入和隔离拓扑。
 
@@ -24,6 +24,7 @@
 | 02 | PLECS 搭建开环 Buck 功率级 | 已完成，可复现 |
 | 03 | Buck 电感、电容和开关频率参数设计 | 已完成，可复现 |
 | 04 | 离散 PI 电压环 | 已完成，可复现 |
+| 05 | duty 限幅和抗积分饱和 | 已完成，可复现 |
 
 第二章对应的核心文件：
 
@@ -64,6 +65,20 @@
 | Python 对照脚本 | `scripts/export_discrete_pi_control.py` |
 | Python 对照数据 | `waveforms/04-discrete-pi-control-*.csv` |
 | Python 对照波形 | `waveforms/04-p-only-vs-pi-vin-step.png`、`waveforms/04-pi-*.png` |
+
+第五章对应的核心文件：
+
+| 类型 | 文件 |
+| --- | --- |
+| 教程文章 | `blog/05-duty-limit-anti-windup.md` |
+| 复现说明 | `docs/05-duty-limit-anti-windup-reproduce.md` |
+| MATLAB 主仿真脚本 | `scripts/export_matlab_duty_limit_anti_windup_waveforms.m` |
+| Simulink 逻辑截图脚本 | `scripts/export_simulink_duty_limit_anti_windup_snapshot.m` |
+| Simulink 逻辑模型 | `models/simulink/buck_duty_limit_anti_windup_logic.slx` |
+| Simulink 逻辑截图 | `assets/screenshots/05-simulink-duty-limit-anti-windup-logic.png` |
+| MATLAB 原始数据 | `waveforms/05-matlab-duty-limit-anti-windup-trace.csv` |
+| MATLAB 指标汇总 | `waveforms/05-matlab-duty-limit-anti-windup-summary.csv` |
+| MATLAB 主波形 | `waveforms/05-matlab-*.png` |
 
 ## 复现方式
 
@@ -111,6 +126,20 @@ python scripts\export_discrete_pi_control.py
 
 第 4 章不需要启动 PLECS RPC。该章重点验证离散 PI 控制器的数据流、采样周期、积分项和 duty 更新；正文主波形来自 Simulink 模型 `Scope mux` 导出的仿真数据，开关级波形仍在 PLECS 章节中验证。
 
+第 5 章的 Simulink 逻辑截图生成运行：
+
+```powershell
+matlab -batch "run('scripts/export_simulink_duty_limit_anti_windup_snapshot.m'); exit"
+```
+
+第 5 章的 MATLAB 主波形导出运行：
+
+```powershell
+matlab -batch "run('scripts/export_matlab_duty_limit_anti_windup_waveforms.m'); exit"
+```
+
+第 5 章不需要启动 PLECS RPC。该章重点验证 duty 上下限、`duty_raw`/`duty_cmd` 分离、积分项 windup 和条件积分 anti-windup；正文主波形来自 MATLAB 离散平均模型导出的数据，开关级波形仍在 PLECS 章节中验证。
+
 ## 第二章结果
 
 | 指标 | 结果 |
@@ -156,6 +185,23 @@ python scripts\export_discrete_pi_control.py
 
 第 4 章通过平均模型验证离散 PI 电压环的数据流：采样 Vout、计算误差、更新积分项、输出 duty，再反馈到 Buck 平均功率级。该章故意不加入 duty 限幅和抗积分饱和，相关问题放到第 5 章单独处理。
 
+## 第五章结果
+
+| 指标 | 结果 |
+| --- | --- |
+| duty 上限 | 0.55 |
+| Vin 跌落工况 | 24V -> 20V -> 24V |
+| Vin 跌落时维持 12V 所需 duty | 约 0.605 |
+| 只加限幅时 integrator 峰值 | 约 0.670 |
+| 加 anti-windup 后 integrator 峰值 | 约 0.0176 |
+| 只加限幅时 raw duty 峰值 | 约 1.218 |
+| 加 anti-windup 后 raw duty 峰值 | 约 0.614 |
+| 只加限幅时 Vin 恢复后 Vout 峰值 | 约 14.62V |
+| 加 anti-windup 后 Vin 恢复后 Vout 峰值 | 约 13.13V |
+| Vin 恢复后退出饱和时间 | 约 2.58ms -> 0.22ms |
+
+第 5 章通过 MATLAB 离散平均模型验证 duty 限幅和 anti-windup 的职责边界：Saturation 限制实际 PWM 输出，anti-windup 限制积分项继续向饱和方向累加。
+
 ## 仓库结构
 
 ```text
@@ -174,7 +220,6 @@ waveforms/          仿真原始数据、指标和波形图
 
 | 顺序 | 内容 |
 | --- | --- |
-| 05 | 占空比限幅和抗积分饱和 |
 | 06 | 软启动 |
 | 07 | 保护状态机 |
 | 08 | 负载突变测试 |
