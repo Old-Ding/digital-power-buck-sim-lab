@@ -1,0 +1,9 @@
+case_id,vin_v,vout_v,iout_a,temperature_c,detected_fault,detected_fault_code
+normal,24,12,5,35,NONE,0
+uvlo_only,16,12,5,35,UVLO,3
+ovp_only,24,14,5,35,OVP,2
+ocp_only,24,12,7.2,35,OCP,1
+otp_only,24,12,5,105,OTP,4
+ocp_ovp_uvlo,16,14,7.2,35,OCP,1
+ovp_uvlo,16,14,5,35,OVP,2
+uvlo_otp,16,12,5,105,UVLO,3

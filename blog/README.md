@@ -12,6 +12,7 @@
 | 04 | `04-discrete-pi-control.md` | 离散 PI 电压环 |
 | 05 | `05-duty-limit-anti-windup.md` | duty 限幅和抗积分饱和 |
 | 06 | `06-soft-start.md` | 软启动 |
+| 07 | `07-protection-state-machine.md` | 保护状态机 |
 
 ## 后续主题
 
@@ -19,7 +20,6 @@
 
 | 顺序 | 主题 |
 | --- | --- |
-| 07 | 保护状态机 |
 | 08 | 负载突变测试 |
 | 09 | ADC 噪声和 duty 抖动 |
 | 10 | 从仿真控制器整理到 C 风格代码 |

@@ -12,7 +12,7 @@
 | 输出电流 | 5 A |
 | 输出功率 | 60 W |
 | 开关频率 | 200 kHz |
-| 当前阶段 | 软启动 |
+| 当前阶段 | 保护状态机 |
 
 第一阶段只做低压 DC-DC，不涉及市电输入和隔离拓扑。
 
@@ -26,6 +26,7 @@
 | 04 | 离散 PI 电压环 | 已完成，可复现 |
 | 05 | duty 限幅和抗积分饱和 | 已完成，可复现 |
 | 06 | 软启动 | 已完成，可复现 |
+| 07 | 保护状态机 | 已完成，可复现 |
 
 第二章对应的核心文件：
 
@@ -95,6 +96,21 @@
 | MATLAB 指标汇总 | `waveforms/06-matlab-soft-start-summary.csv` |
 | MATLAB 斜坡扫描 | `waveforms/06-matlab-soft-start-ramp-sweep.csv` |
 | MATLAB 主波形 | `waveforms/06-matlab-soft-start-*.png` |
+
+第七章对应的核心文件：
+
+| 类型 | 文件 |
+| --- | --- |
+| 教程文章 | `blog/07-protection-state-machine.md` |
+| 复现说明 | `docs/07-protection-state-machine-reproduce.md` |
+| MATLAB 故障注入脚本 | `scripts/export_matlab_protection_state_machine_waveforms.m` |
+| Simulink 结构截图脚本 | `scripts/export_simulink_protection_state_machine_snapshot.m` |
+| Simulink 结构模型 | `models/simulink/buck_protection_state_machine_logic.slx` |
+| Simulink 结构截图 | `assets/screenshots/07-simulink-protection-state-machine-logic.png` |
+| MATLAB 原始数据 | `waveforms/07-matlab-protection-state-machine-trace.csv`、`waveforms/07-matlab-protection-clear-while-fault-trace.csv` |
+| MATLAB 优先级数据 | `waveforms/07-matlab-protection-priority-cases.csv` |
+| MATLAB 指标汇总 | `waveforms/07-matlab-protection-state-machine-summary.csv` |
+| MATLAB 主波形 | `waveforms/07-matlab-protection-*.png` |
 
 ## 复现方式
 
@@ -169,6 +185,20 @@ matlab -batch "run('scripts/export_matlab_soft_start_waveforms.m'); exit"
 ```
 
 第 6 章不需要启动 PLECS RPC。该章重点验证软启动参考值斜坡、启动过冲、电感电流峰值、duty 饱和和斜坡时间取舍；正文主波形来自 MATLAB 离散平均模型导出的数据，开关级波形仍在 PLECS 章节中验证。
+
+第 7 章的 Simulink 结构截图生成运行：
+
+```powershell
+matlab -batch "run('scripts/export_simulink_protection_state_machine_snapshot.m'); exit"
+```
+
+第 7 章的 MATLAB 故障注入波形导出运行：
+
+```powershell
+matlab -batch "run('scripts/export_matlab_protection_state_machine_waveforms.m'); exit"
+```
+
+第 7 章不需要启动 PLECS RPC。该章重点验证保护检测、故障锁存、PWM 统一关断和故障优先级；正文主波形来自 MATLAB 状态机故障注入模型导出的数据，开关级器件应力仍在 PLECS 章节中验证。
 
 ## 第二章结果
 
@@ -250,6 +280,24 @@ matlab -batch "run('scripts/export_matlab_soft_start_waveforms.m'); exit"
 
 第 6 章通过 MATLAB 离散平均模型验证软启动参考值路径：软启动不改变最终目标 12V，而是让目标电压以可控斜率进入电压环，从而降低启动过冲和电感电流峰值。
 
+## 第七章结果
+
+| 指标 | 结果 |
+| --- | --- |
+| 状态机周期 | 50us |
+| 故障优先级 | OCP -> OVP -> UVLO -> OTP |
+| OCP 阈值 | 6.5A |
+| OVP 阈值 | 13.2V |
+| UVLO 阈值 | 18V |
+| RUN 状态首次 OCP 检测时间 | 8ms |
+| PWM 关断延迟 | 0us |
+| 锁存故障码 | OCP |
+| 清故障进入恢复时间 | 12ms |
+| 重新进入 RUN 时间 | 19.05ms |
+| OVP 仍存在时 CLEAR_FAULT | 不解除锁存 |
+
+第 7 章通过 MATLAB 故障注入模型验证保护状态机职责边界：保护检测层输出唯一故障码，状态机锁存故障，PWM gate 在非运行态统一关断输出。
+
 ## 仓库结构
 
 ```text
@@ -268,7 +316,6 @@ waveforms/          仿真原始数据、指标和波形图
 
 | 顺序 | 内容 |
 | --- | --- |
-| 07 | 保护状态机 |
 | 08 | 负载突变测试 |
 | 09 | ADC 噪声和 duty 抖动 |
 | 10 | 从仿真控制器整理到 C 风格代码 |

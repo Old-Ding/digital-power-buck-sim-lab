@@ -1,0 +1,15 @@
+metric,value,note
+soft_start_time_ms,5,
+ocp_threshold_a,6.5,
+ovp_threshold_v,13.2,
+uvlo_threshold_v,18,
+run_fault_first_fault_ms,8,
+run_fault_pwm_off_delay_us,0,
+run_fault_recovery_ms,12,
+run_fault_rerun_ms,19.05,
+run_fault_latched_fault,NaN,OCP
+clear_while_fault_first_ovp_ms,6,
+clear_while_fault_ignored_clear_ms,8,
+clear_while_fault_recovery_ms,12,
+priority_ocp_ovp_uvlo,NaN,OCP
+priority_ovp_uvlo,NaN,OVP
