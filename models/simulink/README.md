@@ -7,6 +7,8 @@
 | `buck_discrete_pi_voltage_loop.slx` | 第 4 章 | 离散 PI 电压环平均模型 |
 | `buck_duty_limit_anti_windup_logic.slx` | 第 5 章 | duty 限幅和 anti-windup 控制逻辑模型 |
 | `buck_soft_start_logic.slx` | 第 6 章 | 软启动参考值路径和电压环控制逻辑模型 |
+| `buck_protection_state_machine_logic.slx` | 第 7 章 | 保护状态机职责边界结构模型 |
+| `buck_load_transient_testbench.slx` | 第 8 章 | 负载突变测试台结构模型 |
 
 当前 Simulink 模型重点放在数字控制软件行为：
 
@@ -15,6 +17,8 @@
 - duty 上下限
 - anti-windup 积分边界
 - soft-start 参考值斜坡
+- protection state machine 职责边界
+- load transient 测试台
 - telemetry 关键变量导出
 
 开关节点、电感纹波、MOSFET Vds、二极管电流和器件损耗仍然回到 PLECS 开关级模型中验证。

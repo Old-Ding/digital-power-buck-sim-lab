@@ -12,7 +12,7 @@
 | 输出电流 | 5 A |
 | 输出功率 | 60 W |
 | 开关频率 | 200 kHz |
-| 当前阶段 | 保护状态机 |
+| 当前阶段 | 负载突变测试 |
 
 第一阶段只做低压 DC-DC，不涉及市电输入和隔离拓扑。
 
@@ -27,6 +27,7 @@
 | 05 | duty 限幅和抗积分饱和 | 已完成，可复现 |
 | 06 | 软启动 | 已完成，可复现 |
 | 07 | 保护状态机 | 已完成，可复现 |
+| 08 | 负载突变测试 | 已完成，可复现 |
 
 第二章对应的核心文件：
 
@@ -111,6 +112,20 @@
 | MATLAB 优先级数据 | `waveforms/07-matlab-protection-priority-cases.csv` |
 | MATLAB 指标汇总 | `waveforms/07-matlab-protection-state-machine-summary.csv` |
 | MATLAB 主波形 | `waveforms/07-matlab-protection-*.png` |
+
+第八章对应的核心文件：
+
+| 类型 | 文件 |
+| --- | --- |
+| 教程文章 | `blog/08-load-transient.md` |
+| 复现说明 | `docs/08-load-transient-reproduce.md` |
+| MATLAB 负载阶跃脚本 | `scripts/export_matlab_load_transient_waveforms.m` |
+| Simulink 测试台截图脚本 | `scripts/export_simulink_load_transient_snapshot.m` |
+| Simulink 测试台模型 | `models/simulink/buck_load_transient_testbench.slx` |
+| Simulink 测试台截图 | `assets/screenshots/08-simulink-load-transient-testbench.png` |
+| MATLAB 原始数据 | `waveforms/08-matlab-load-transient-trace.csv` |
+| MATLAB 指标汇总 | `waveforms/08-matlab-load-transient-summary.csv` |
+| MATLAB 主波形 | `waveforms/08-matlab-load-transient-*.png` |
 
 ## 复现方式
 
@@ -199,6 +214,20 @@ matlab -batch "run('scripts/export_matlab_protection_state_machine_waveforms.m')
 ```
 
 第 7 章不需要启动 PLECS RPC。该章重点验证保护检测、故障锁存、PWM 统一关断和故障优先级；正文主波形来自 MATLAB 状态机故障注入模型导出的数据，开关级器件应力仍在 PLECS 章节中验证。
+
+第 8 章的 Simulink 测试台截图生成运行：
+
+```powershell
+matlab -batch "run('scripts/export_simulink_load_transient_snapshot.m'); exit"
+```
+
+第 8 章的 MATLAB 负载阶跃波形导出运行：
+
+```powershell
+matlab -batch "run('scripts/export_matlab_load_transient_waveforms.m'); exit"
+```
+
+第 8 章不需要启动 PLECS RPC。该章重点验证负载 50% -> 100% -> 50% 时的输出下陷、过冲、恢复时间和 duty 饱和诊断；正文主波形来自 MATLAB 平均模型导出的数据，开关级器件应力仍在 PLECS 章节中验证。
 
 ## 第二章结果
 
@@ -298,6 +327,26 @@ matlab -batch "run('scripts/export_matlab_protection_state_machine_waveforms.m')
 
 第 7 章通过 MATLAB 故障注入模型验证保护状态机职责边界：保护检测层输出唯一故障码，状态机锁存故障，PWM gate 在非运行态统一关断输出。
 
+## 第八章结果
+
+| 指标 | 结果 |
+| --- | --- |
+| 负载阶跃 | 50% -> 100% -> 50% |
+| 50% 负载电流 | 2.5A |
+| 100% 负载电流 | 5A |
+| 1% 恢复带宽 | ±0.12V |
+| `load_transient_pi` 上跳下陷 | 约 0.87V |
+| `load_transient_pi` 上跳 1% 恢复时间 | 约 1.40ms |
+| `load_transient_pi` 下跳过冲 | 约 0.93V |
+| `load_transient_pi` 下跳 1% 恢复时间 | 约 4.79ms |
+| `chapter04_pi` 下跳过冲 | 约 3.56V |
+| `chapter04_pi` 下跳恢复 | 30ms 窗口内未恢复 |
+| 220uF 电容上跳下陷 | 约 0.61V |
+| 220uF 电容下跳过冲 | 约 0.63V |
+| duty 上限不足工况重载饱和时间 | 约 6.33ms |
+
+第 8 章通过 MATLAB 平均模型验证负载突变测试方法：负载上跳重点看 Vout 下陷、峰值电感电流和 duty 上限；负载下跳重点看 Vout 过冲、恢复时间和 duty 下限。该章同时用 raw duty、duty cmd 和 saturation flag 区分 PI 参数、电容储能和 duty 限幅问题。
+
 ## 仓库结构
 
 ```text
@@ -316,7 +365,6 @@ waveforms/          仿真原始数据、指标和波形图
 
 | 顺序 | 内容 |
 | --- | --- |
-| 08 | 负载突变测试 |
 | 09 | ADC 噪声和 duty 抖动 |
 | 10 | 从仿真控制器整理到 C 风格代码 |
 

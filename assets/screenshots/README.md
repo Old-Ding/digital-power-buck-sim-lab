@@ -27,3 +27,5 @@ MATLAB/Simulink 控制和脚本使用软件界面截图
 | `04-simulink-discrete-pi-control.png` | 第 4 章离散 PI 平均模型截图 |
 | `05-simulink-duty-limit-anti-windup-logic.png` | 第 5 章 duty 限幅和 anti-windup 控制逻辑截图 |
 | `06-simulink-soft-start-logic.png` | 第 6 章软启动参考值路径和控制逻辑截图 |
+| `07-simulink-protection-state-machine-logic.png` | 第 7 章保护状态机结构截图 |
+| `08-simulink-load-transient-testbench.png` | 第 8 章负载突变测试台截图 |
