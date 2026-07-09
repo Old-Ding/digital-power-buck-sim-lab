@@ -12,7 +12,7 @@
 | 输出电流 | 5 A |
 | 输出功率 | 60 W |
 | 开关频率 | 200 kHz |
-| 当前阶段 | duty 限幅和抗积分饱和 |
+| 当前阶段 | 软启动 |
 
 第一阶段只做低压 DC-DC，不涉及市电输入和隔离拓扑。
 
@@ -25,6 +25,7 @@
 | 03 | Buck 电感、电容和开关频率参数设计 | 已完成，可复现 |
 | 04 | 离散 PI 电压环 | 已完成，可复现 |
 | 05 | duty 限幅和抗积分饱和 | 已完成，可复现 |
+| 06 | 软启动 | 已完成，可复现 |
 
 第二章对应的核心文件：
 
@@ -79,6 +80,21 @@
 | MATLAB 原始数据 | `waveforms/05-matlab-duty-limit-anti-windup-trace.csv` |
 | MATLAB 指标汇总 | `waveforms/05-matlab-duty-limit-anti-windup-summary.csv` |
 | MATLAB 主波形 | `waveforms/05-matlab-*.png` |
+
+第六章对应的核心文件：
+
+| 类型 | 文件 |
+| --- | --- |
+| 教程文章 | `blog/06-soft-start.md` |
+| 复现说明 | `docs/06-soft-start-reproduce.md` |
+| MATLAB 主仿真脚本 | `scripts/export_matlab_soft_start_waveforms.m` |
+| Simulink 逻辑截图脚本 | `scripts/export_simulink_soft_start_snapshot.m` |
+| Simulink 逻辑模型 | `models/simulink/buck_soft_start_logic.slx` |
+| Simulink 逻辑截图 | `assets/screenshots/06-simulink-soft-start-logic.png` |
+| MATLAB 原始数据 | `waveforms/06-matlab-soft-start-trace.csv` |
+| MATLAB 指标汇总 | `waveforms/06-matlab-soft-start-summary.csv` |
+| MATLAB 斜坡扫描 | `waveforms/06-matlab-soft-start-ramp-sweep.csv` |
+| MATLAB 主波形 | `waveforms/06-matlab-soft-start-*.png` |
 
 ## 复现方式
 
@@ -139,6 +155,20 @@ matlab -batch "run('scripts/export_matlab_duty_limit_anti_windup_waveforms.m'); 
 ```
 
 第 5 章不需要启动 PLECS RPC。该章重点验证 duty 上下限、`duty_raw`/`duty_cmd` 分离、积分项 windup 和条件积分 anti-windup；正文主波形来自 MATLAB 离散平均模型导出的数据，开关级波形仍在 PLECS 章节中验证。
+
+第 6 章的 Simulink 逻辑截图生成运行：
+
+```powershell
+matlab -batch "run('scripts/export_simulink_soft_start_snapshot.m'); exit"
+```
+
+第 6 章的 MATLAB 主波形导出运行：
+
+```powershell
+matlab -batch "run('scripts/export_matlab_soft_start_waveforms.m'); exit"
+```
+
+第 6 章不需要启动 PLECS RPC。该章重点验证软启动参考值斜坡、启动过冲、电感电流峰值、duty 饱和和斜坡时间取舍；正文主波形来自 MATLAB 离散平均模型导出的数据，开关级波形仍在 PLECS 章节中验证。
 
 ## 第二章结果
 
@@ -202,6 +232,24 @@ matlab -batch "run('scripts/export_matlab_duty_limit_anti_windup_waveforms.m'); 
 
 第 5 章通过 MATLAB 离散平均模型验证 duty 限幅和 anti-windup 的职责边界：Saturation 限制实际 PWM 输出，anti-windup 限制积分项继续向饱和方向累加。
 
+## 第六章结果
+
+| 指标 | 结果 |
+| --- | --- |
+| 目标输出 | 12V |
+| 对比方式 | 直接 12V 阶跃、2ms 斜坡、5ms 斜坡 |
+| 直接 12V 阶跃 Vout 峰值 | 约 18.64V |
+| 直接 12V 阶跃电感电流峰值 | 约 28.34A |
+| 直接 12V 阶跃 duty 饱和总时长 | 约 0.075ms |
+| 2ms 软启动 Vout 峰值 | 约 12.17V |
+| 2ms 软启动电感电流峰值 | 约 5.51A |
+| 5ms 软启动 Vout 峰值 | 约 12.08V |
+| 5ms 软启动电感电流峰值 | 约 5.24A |
+| 5ms 软启动电流峰值降低量 | 约 23.10A |
+| 5ms 软启动 Vout 过冲降低量 | 约 6.55V |
+
+第 6 章通过 MATLAB 离散平均模型验证软启动参考值路径：软启动不改变最终目标 12V，而是让目标电压以可控斜率进入电压环，从而降低启动过冲和电感电流峰值。
+
 ## 仓库结构
 
 ```text
@@ -220,7 +268,6 @@ waveforms/          仿真原始数据、指标和波形图
 
 | 顺序 | 内容 |
 | --- | --- |
-| 06 | 软启动 |
 | 07 | 保护状态机 |
 | 08 | 负载突变测试 |
 | 09 | ADC 噪声和 duty 抖动 |

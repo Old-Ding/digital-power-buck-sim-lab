@@ -28,6 +28,7 @@ blog/csdn/
 blog/0[5-9]-*.md
 blog/10-*.md
 !blog/05-duty-limit-anti-windup.md
+!blog/06-soft-start.md
 blog/assets/
 blog/waveforms/
 controller/
@@ -42,10 +43,12 @@ docs/soft-start.md
 docs/state-machine.md
 docs/test-matrix.md
 !docs/05-duty-limit-anti-windup-reproduce.md
+!docs/06-soft-start-reproduce.md
 models/simulink/*
 !models/simulink/README.md
 !models/simulink/buck_discrete_pi_voltage_loop.slx
 !models/simulink/buck_duty_limit_anti_windup_logic.slx
+!models/simulink/buck_soft_start_logic.slx
 scripts/export_report.m
 scripts/plot_waveforms.m
 scripts/run_test_matrix.m

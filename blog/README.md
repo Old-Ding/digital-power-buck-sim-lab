@@ -11,6 +11,7 @@
 | 03 | `03-buck-parameter-design.md` | Buck 电感、电容和开关频率参数设计 |
 | 04 | `04-discrete-pi-control.md` | 离散 PI 电压环 |
 | 05 | `05-duty-limit-anti-windup.md` | duty 限幅和抗积分饱和 |
+| 06 | `06-soft-start.md` | 软启动 |
 
 ## 后续主题
 
@@ -18,7 +19,6 @@
 
 | 顺序 | 主题 |
 | --- | --- |
-| 06 | 软启动 |
 | 07 | 保护状态机 |
 | 08 | 负载突变测试 |
 | 09 | ADC 噪声和 duty 抖动 |
