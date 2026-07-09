@@ -12,7 +12,7 @@
 | 输出电流 | 5 A |
 | 输出功率 | 60 W |
 | 开关频率 | 200 kHz |
-| 当前阶段 | ADC 噪声和 duty 抖动 |
+| 当前阶段 | C 风格控制器代码化 |
 
 第一阶段只做低压 DC-DC，不涉及市电输入和隔离拓扑。
 
@@ -29,6 +29,7 @@
 | 07 | 保护状态机 | 已完成，可复现 |
 | 08 | 负载突变测试 | 已完成，可复现 |
 | 09 | ADC 噪声和 duty 抖动 | 已完成，可复现 |
+| 10 | 仿真控制器整理成 C 风格代码 | 已完成，可复现 |
 
 第二章对应的核心文件：
 
@@ -141,6 +142,20 @@
 | MATLAB 原始数据 | `waveforms/09-matlab-adc-noise-duty-jitter-trace.csv` |
 | MATLAB 指标汇总 | `waveforms/09-matlab-adc-noise-duty-jitter-summary.csv` |
 | MATLAB 主波形 | `waveforms/09-matlab-adc-noise-*.png` |
+
+第十章对应的核心文件：
+
+| 类型 | 文件 |
+| --- | --- |
+| 教程文章 | `blog/10-controller-to-c.md` |
+| 复现说明 | `docs/10-controller-to-c-reproduce.md` |
+| C 风格控制器头文件 | `src/digital_power_control.h` |
+| C 风格控制器实现 | `src/digital_power_control.c` |
+| Python 场景测试脚本 | `scripts/export_controller_c_style_tests.py` |
+| 测试报告 | `reports/10-controller-c-style-test-report.md` |
+| 原始数据 | `waveforms/10-controller-c-style-trace.csv` |
+| 指标汇总 | `waveforms/10-controller-c-style-summary.csv` |
+| 正文图表 | `waveforms/10-controller-c-style-*.png` |
 
 ## 复现方式
 
@@ -257,6 +272,14 @@ matlab -batch "run('scripts/export_matlab_adc_noise_duty_jitter_waveforms.m'); e
 ```
 
 第 9 章不需要启动 PLECS RPC。该章重点验证 ADC 量化和模拟噪声如何进入误差计算，并通过 PI 控制器变成 `duty_raw` / `duty_cmd` 抖动；正文主波形来自 MATLAB 平均模型导出的数据，开关级纹波和硬件 ADC 前端仍需后续验证。
+
+第 10 章的 C 风格控制器场景测试运行：
+
+```powershell
+python scripts\export_controller_c_style_tests.py
+```
+
+第 10 章不需要启动 PLECS RPC，也不需要 MATLAB/Simulink。该章重点验证仿真控制器迁移到固定周期 C 风格接口后的数据流、状态机、telemetry、软启动、负载突变、OCP 锁存和 UVLO 关断路径；当前环境没有 C 编译器，因此不声明完成 MCU 编译或上板验证。
 
 ## 第二章结果
 
@@ -396,6 +419,28 @@ matlab -batch "run('scripts/export_matlab_adc_noise_duty_jitter_waveforms.m'); e
 
 第 9 章通过 MATLAB 平均模型验证 ADC 噪声到 duty 抖动的数据流：采样噪声进入 `Vout_meas`，误差计算把噪声变成 error 抖动，PI 控制器再把 error 抖动变成 duty 指令抖动。该章同时用 4 点滑动平均和一阶 IIR 对比滤波收益和反馈延迟。
 
+## 第十章结果
+
+| 指标 | 结果 |
+| --- | --- |
+| 控制周期 | 5us |
+| 目标输出 | 12V |
+| 软启动斜率 | 300V/s |
+| PI 参数 | Kp = 0.05，Ki = 80 |
+| duty 限幅 | 0 - 0.65 |
+| `steady_12v` 56ms 后 Vout 均值 | 12.00V |
+| `soft_start_40ms` Vout 峰值 | 12.00V |
+| `soft_start_40ms` 首次进入 RUN | 40.00ms |
+| `load_step_50_100_50` 上跳下陷 | 约 0.744V |
+| `load_step_50_100_50` 下跳过冲 | 约 0.783V |
+| `load_step_50_100_50` 上跳恢复时间 | 约 1.455ms |
+| `load_step_50_100_50` 下跳恢复时间 | 约 9.50ms |
+| `ocp_latch_clear` 首次 OCP 锁存时间 | 52.00ms |
+| `uvlo_blocks_pwm` PWM 关断 | PASS |
+| 测试报告 FAIL 行数 | 0 |
+
+第 10 章通过 Python 平均模型测试台验证 C 风格控制器的数据流：`Config` 保存可调参数，`Context` 保存跨周期状态，`Input` 接收采样输入，`Output` 输出 duty、状态、故障和 telemetry。该章完成的是控制器接口和算法顺序验证，MCU 编译、定点化、寄存器驱动、ADC/PWM 同步和 HIL 放到后续固件工程阶段。
+
 ## 仓库结构
 
 ```text
@@ -404,7 +449,9 @@ blog/               已完成教程
 docs/               已完成章节的复现说明
 models/plecs/       PLECS 模型
 models/simulink/    Simulink 平均模型
+reports/            场景测试报告
 scripts/            可复现脚本
+src/                C 风格控制器源码
 waveforms/          仿真原始数据、指标和波形图
 ```
 
@@ -412,11 +459,7 @@ waveforms/          仿真原始数据、指标和波形图
 
 ## 后续计划
 
-| 顺序 | 内容 |
-| --- | --- |
-| 10 | 从仿真控制器整理到 C 风格代码 |
-
-后续主题会在完成模型、数据、波形和说明后加入本仓库。
+第 10 章之后，系列可以进入固件工程化阶段：C 编译、定点化、单元测试、HAL 适配、PWM/ADC 同步、HIL 和实机闭环。后续主题会在完成模型、数据、波形和说明后加入本仓库。
 
 ## 技术交流
 

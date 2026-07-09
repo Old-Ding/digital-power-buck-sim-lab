@@ -32,6 +32,7 @@ blog/10-*.md
 !blog/07-protection-state-machine.md
 !blog/08-load-transient.md
 !blog/09-adc-noise-duty-jitter.md
+!blog/10-controller-to-c.md
 blog/assets/
 blog/waveforms/
 controller/

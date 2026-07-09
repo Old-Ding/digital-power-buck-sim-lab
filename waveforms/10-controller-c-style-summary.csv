@@ -1,0 +1,13 @@
+case,metric,value,status,note
+steady_12v,tail_vout_mean_v,12.0,PASS,56ms 后 Vout 均值进入 1% 带内
+steady_12v,tail_duty_mean,0.5041666666666664,INFO,稳态 duty 约等于 Vin 到 Vout 比值加损耗补偿
+soft_start_40ms,vout_peak_v,11.999999999984226,PASS,软启动峰值不过高，并在约 40ms 进入 RUN
+soft_start_40ms,first_run_time_ms,40.00000000000001,INFO,RUN 首次出现时间
+load_step_50_100_50,undershoot_v,0.7442591842877135,PASS,50% 到 100% 负载上跳下陷
+load_step_50_100_50,overshoot_v,0.7832076180083707,INFO,100% 到 50% 负载下跳过冲
+load_step_50_100_50,recovery_up_ms,1.455000000000005,INFO,上跳后回到 1% 带内时间
+load_step_50_100_50,recovery_down_ms,9.500000000000009,INFO,下跳后回到 1% 带内时间
+ocp_latch_clear,first_ocp_time_ms,52.000000000000014,PASS,OCP 锁存、关 PWM、故障未消失时不能清除，故障消失后 clear 进入重启路径
+uvlo_blocks_pwm,uvlo_pwm_off,1.0,PASS,Vin 低于 UVLO 时 PWM 统一出口关断
+all,pass_count,5,INFO,PASS 行数
+all,fail_count,0,INFO,FAIL 行数
