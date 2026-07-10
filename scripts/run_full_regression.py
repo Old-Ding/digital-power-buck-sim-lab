@@ -28,6 +28,14 @@ STEPS = [
 ]
 
 
+def configure_console_encoding() -> None:
+    # GitHub Windows runner 可能继承 cp1252；统一输出 UTF-8，避免中文步骤名在测试前失败。
+    if hasattr(sys.stdout, "reconfigure"):
+        sys.stdout.reconfigure(encoding="utf-8", errors="replace")
+    if hasattr(sys.stderr, "reconfigure"):
+        sys.stderr.reconfigure(encoding="utf-8", errors="replace")
+
+
 def run_step(step_id: str, label: str, command: list[str]) -> dict[str, object]:
     environment = os.environ.copy()
     environment["PYTHONUTF8"] = "1"
@@ -124,6 +132,7 @@ def write_report(path: Path, rows: list[dict[str, object]]) -> None:
 
 
 def main() -> int:
+    configure_console_encoding()
     WAVE_DIR.mkdir(exist_ok=True)
     REPORT_DIR.mkdir(exist_ok=True)
     rows = [run_step(step_id, label, command) for step_id, label, command in STEPS]
