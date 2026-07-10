@@ -292,7 +292,7 @@ matlab -batch "run('scripts/export_matlab_adc_noise_duty_jitter_waveforms.m'); e
 python scripts\export_controller_c_style_tests.py
 ```
 
-第 10 章不需要启动 PLECS RPC，也不需要 MATLAB/Simulink。该章重点验证仿真控制器迁移到固定周期 C 风格接口后的数据流、状态机、telemetry、软启动、负载突变、OCP 锁存和 UVLO 关断路径；当前环境没有 C 编译器，因此不声明完成 MCU 编译或上板验证。
+第 10 章不需要启动 PLECS RPC，也不需要 MATLAB/Simulink。该章重点验证仿真控制器迁移到固定周期 C 风格接口后的数据流、状态机、telemetry、软启动、负载突变、OCP 锁存和 UVLO 关断路径；该章不声明完成 MCU 编译、定点化或上板验证。
 
 第 11 章的 C 控制器 Host 编译与单元测试门禁运行：
 
@@ -300,7 +300,7 @@ python scripts\export_controller_c_style_tests.py
 python scripts\run_host_build_tests.py
 ```
 
-第 11 章进入第二季固件工程化。该章先检测本机 C 编译器，再尝试编译 `src/digital_power_control.c` 和 `tests/test_digital_power_control_host.c`，并生成 CSV、PNG 和 Markdown 报告。当前本机没有检测到 C 编译器，因此真实结果是 `toolchain BLOCKED`，`build` 和 `unit_tests` 为 `SKIPPED`。
+第 11 章进入第二季固件工程化。该章先检测本机 C 编译器，再尝试编译 `src/digital_power_control.c` 和 `tests/test_digital_power_control_host.c`，并生成 CSV、PNG 和 Markdown 报告。当前本机已检测到 Zig 0.16.0，host 编译和 host 单元测试均为 PASS。
 
 ## 第二章结果
 
@@ -466,14 +466,14 @@ python scripts\run_host_build_tests.py
 
 | 门禁 | 当前结果 |
 | --- | --- |
-| `toolchain` | BLOCKED |
-| `build` | SKIPPED |
-| `unit_tests` | SKIPPED |
+| `toolchain` | PASS |
+| `build` | PASS |
+| `unit_tests` | PASS |
 | `report` | PASS |
-| 编译器检测 | 未找到 `gcc`、`clang`、`cc` 或 `cl` |
-| 脚本输出 | `summary,pass=1,blocked=1,skipped=2,fail=0` |
+| 编译器检测 | Zig 0.16.0 |
+| 脚本输出 | `summary,pass=4,blocked=0,skipped=0,fail=0` |
 
-第 11 章建立第二季入口门禁：先证明 host 侧工具链、编译命令、单元测试和报告链路是否成立。当前机器缺少 C 编译器，所以还不能声称第 10 章 C 源码已经编译通过；安装或配置 C 编译器后，重新运行同一脚本即可进入真实 build 和 unit test 判断。
+第 11 章建立第二季入口门禁：先证明 host 侧工具链、编译命令、单元测试和报告链路是否成立。当前结论只覆盖 host 编译和 host 单元测试，不等于目标 MCU 工具链、定点化、HAL、ISR、HIL 或实机闭环已经完成。
 
 ## 仓库结构
 
@@ -494,7 +494,7 @@ waveforms/          仿真原始数据、指标和波形图
 
 ## 后续计划
 
-第 11 章之后，第二季会继续补齐 C 编译工具链、host 单元测试、定点化、ADC/PWM 映射、ISR 分层、HAL 适配、CI/HIL 和实机闭环。后续主题会在完成模型、数据、波形和说明后加入本仓库。
+第 11 章之后，第二季会继续推进 host 单元测试扩展、定点化、ADC/PWM 映射、ISR 分层、HAL 适配、CI/HIL 和实机闭环。后续主题会在完成模型、数据、波形和说明后加入本仓库。
 
 ## 技术交流
 

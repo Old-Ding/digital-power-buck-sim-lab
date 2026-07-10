@@ -8,7 +8,7 @@
 
 | 项目 | 本章覆盖 |
 | --- | --- |
-| 工具链检测 | `CC`、`gcc`、`clang`、`cc`、`cl`、Visual Studio 2022 常见 `cl.exe` 路径 |
+| 工具链检测 | `CC`、`zig`、`gcc`、`clang`、`cc`、`cl`、WinGet Zig、Visual Studio 2022 常见 `cl.exe` 路径 |
 | 编译对象 | `src/digital_power_control.c` |
 | 测试入口 | `tests/test_digital_power_control_host.c` |
 | 输出报告 | `reports/11-host-build-test-report.md` |
@@ -28,10 +28,17 @@
 
 | 工具 | 用途 |
 | --- | --- |
+| Zig 0.16.0 / `zig cc` | 本仓库当前验证过的 Windows host C 编译器 |
 | gcc / clang / cc | host 编译 C 控制器和测试文件 |
 | MSVC cl.exe | Windows host 编译 |
 
-如果没有 C 编译器，脚本仍会生成报告，但 `toolchain` 会是 `BLOCKED`，`build` 和 `unit_tests` 会是 `SKIPPED`。
+Windows 上可以用 WinGet 安装 Zig：
+
+```powershell
+winget install --id zig.zig -e --scope user --accept-source-agreements --accept-package-agreements
+```
+
+如果没有 C 编译器，脚本仍会生成报告，但 `toolchain` 会是 `BLOCKED`，`build` 和 `unit_tests` 会是 `SKIPPED`。这表示构建还没有开始，不表示 C 源码已经失败。
 
 ## 运行命令
 
@@ -41,13 +48,15 @@
 python scripts\run_host_build_tests.py
 ```
 
-当前报告生成环境输出：
+当前报告生成环境输出摘要：
 
 ```text
 已生成第 11 章 Host 编译测试门禁报告。
-summary,pass=1,blocked=1,skipped=2,fail=0
-toolchain,none,未找到 C 编译器
+summary,pass=4,blocked=0,skipped=0,fail=0
+toolchain,zig,Zig 0.16.0 detected
 ```
+
+完整编译器路径和实际编译命令记录在 `reports/11-host-build-test-report.md`。
 
 ## 生成文件
 
@@ -62,32 +71,40 @@ toolchain,none,未找到 C 编译器
 
 | Gate | Status | 说明 |
 | --- | --- | --- |
-| `toolchain` | BLOCKED | PATH 和常见安装目录中没有找到 gcc、clang 或 cl |
-| `build` | SKIPPED | 缺少 C 编译器，未执行编译 |
-| `unit_tests` | SKIPPED | 缺少可执行文件，未运行 host 单元测试 |
+| `toolchain` | PASS | 检测到 Zig 0.16.0 |
+| `build` | PASS | 已生成 host 测试可执行文件 |
+| `unit_tests` | PASS | host 单元测试通过 |
 | `report` | PASS | 已生成 CSV、PNG 和 Markdown 报告 |
 
-## 有编译器时的预期
+## 当前编译命令
 
-如果系统里已经有 `gcc` 或 `clang`，脚本会尝试执行类似命令：
+本机检测到 Zig 后，脚本使用 `zig cc` 编译控制器和测试入口。完整路径以 `reports/11-host-build-test-report.md` 为准，命令结构如下：
 
 ```powershell
-gcc -std=c99 -Wall -Wextra -Werror -I src src\digital_power_control.c tests\test_digital_power_control_host.c -o artifacts\host-build\chapter11\digital_power_control_host_tests.exe
+zig cc -std=c99 -Wall -Wextra -Werror -I src src\digital_power_control.c tests\test_digital_power_control_host.c -o artifacts\host-build\chapter11\digital_power_control_host_tests.exe
 ```
 
-如果系统里有 MSVC `cl.exe`，脚本会使用 `/W4 /WX`。
+如果系统里使用 `gcc`、`clang` 或 MSVC `cl.exe`，脚本会按对应工具链生成等价命令。gcc/clang/Zig 使用 `-Wall -Wextra -Werror`，MSVC 使用 `/W4 /WX`。
 
-编译成功后，脚本会运行生成的测试程序。测试程序会输出逐项 `PASS` / `FAIL`，最后输出：
+当前测试程序输出的关键行如下：
 
 ```text
+PASS,soft_start_vref_first_step,actual=0.0015,expected=0.0015,tolerance=1e-07
+PASS,soft_start_duty_small_positive
+PASS,ocp_enters_fault
+PASS,ocp_latched
+PASS,ocp_pwm_disabled
+PASS,ocp_clear_while_fault_stays_latched
+PASS,ocp_clear_after_fault_removed
+PASS,ocp_clear_restarts_soft_start
 SUMMARY,PASS,failures=0
 ```
 
 ## 常见问题
 
-### 1. 为什么当前结果是 BLOCKED
+### 1. 如果结果是 BLOCKED，先看什么
 
-因为当前机器没有检测到 C 编译器。这个状态来自脚本检测结果，不是人工猜测。
+先看本机是否能在 PowerShell 里找到 `zig`、`gcc`、`clang`、`cc` 或 `cl`。如果是 WinGet 安装的 Zig，脚本也会扫描 WinGet 常见安装目录。
 
 ### 2. BLOCKED 是不是 C 代码写错了
 

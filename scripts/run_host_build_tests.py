@@ -40,6 +40,21 @@ def find_msvc_cl() -> str | None:
     return None
 
 
+def find_winget_zig() -> str | None:
+    local_app_data = os.environ.get("LOCALAPPDATA")
+    if not local_app_data:
+        return None
+
+    package_root = Path(local_app_data) / "Microsoft" / "WinGet" / "Packages"
+    if not package_root.exists():
+        return None
+
+    matches = sorted(package_root.glob("zig.zig_*/*/zig.exe"), reverse=True)
+    if matches:
+        return str(matches[0])
+    return None
+
+
 def find_compiler() -> tuple[str | None, str]:
     env_cc = os.environ.get("CC")
     if env_cc:
@@ -47,10 +62,14 @@ def find_compiler() -> tuple[str | None, str]:
         if resolved:
             return resolved, "CC"
 
-    for name in ("gcc", "clang", "cc", "cl"):
+    for name in ("zig", "gcc", "clang", "cc", "cl"):
         resolved = shutil.which(name)
         if resolved:
             return resolved, name
+
+    zig = find_winget_zig()
+    if zig:
+        return zig, "zig"
 
     msvc = find_msvc_cl()
     if msvc:
@@ -67,6 +86,8 @@ def run_command(command: list[str], cwd: Path) -> tuple[int, str]:
 
 def compiler_family(compiler: str, hint: str) -> str:
     name = Path(compiler).name.lower()
+    if hint == "zig" or name == "zig.exe":
+        return "zig"
     if hint == "cl" or name == "cl.exe":
         return "msvc"
     if "clang" in name:
@@ -74,11 +95,41 @@ def compiler_family(compiler: str, hint: str) -> str:
     return "gcc"
 
 
+def compiler_version(compiler: str, hint: str) -> str | None:
+    family = compiler_family(compiler, hint)
+    if family == "zig":
+        code, output = run_command([compiler, "version"], ROOT)
+    elif family in ("gcc", "clang"):
+        code, output = run_command([compiler, "--version"], ROOT)
+    else:
+        return None
+
+    if code != 0 or not output:
+        return None
+    return output.splitlines()[0].strip()
+
+
 def build_command(compiler: str, hint: str, exe_path: Path) -> list[str]:
     source = ROOT / "src" / "digital_power_control.c"
     test = ROOT / "tests" / "test_digital_power_control_host.c"
     include = ROOT / "src"
     family = compiler_family(compiler, hint)
+
+    if family == "zig":
+        return [
+            compiler,
+            "cc",
+            "-std=c99",
+            "-Wall",
+            "-Wextra",
+            "-Werror",
+            "-I",
+            str(include),
+            str(source),
+            str(test),
+            "-o",
+            str(exe_path),
+        ]
 
     if family == "msvc":
         return [
@@ -138,7 +189,15 @@ def plot_gate(path: Path, rows: list[StepResult]) -> None:
     plt.close(fig)
 
 
-def write_report(path: Path, rows: list[StepResult], compiler: str | None, compile_cmd: list[str] | None, build_output: str, test_output: str) -> None:
+def write_report(
+    path: Path,
+    rows: list[StepResult],
+    compiler: str | None,
+    compiler_display: str | None,
+    compile_cmd: list[str] | None,
+    build_output: str,
+    test_output: str,
+) -> None:
     lines = [
         "# 第 11 章报告：Host 编译和单元测试门禁",
         "",
@@ -153,7 +212,11 @@ def write_report(path: Path, rows: list[StepResult], compiler: str | None, compi
         lines.append(f"| `{row.gate}` | {row.status} | {row.detail} |")
 
     lines.extend(["", "## 工具链", ""])
-    lines.append(f"- 检测到的编译器：`{compiler}`" if compiler else "- 检测到的编译器：`未找到`")
+    if compiler:
+        lines.append(f"- 检测到的编译器：`{compiler_display or 'unknown'}`")
+        lines.append(f"- 编译器路径：`{compiler}`")
+    else:
+        lines.append("- 检测到的编译器：`未找到`")
 
     if compile_cmd:
         lines.extend(["", "## 编译命令", "", "```powershell", " ".join(compile_cmd), "```"])
@@ -170,10 +233,9 @@ def write_report(path: Path, rows: list[StepResult], compiler: str | None, compi
             "## 边界",
             "",
             "读这份报告时，先看 `toolchain`、`build`、`unit_tests` 三个门禁。它们对应的是 host 侧证据；不要把这个结果误读成定点化安全、MCU 寄存器适配、ISR 时序、HIL 或硬件闭环已经完成。",
-            "",
         ]
     )
-    path.write_text("\n".join(lines), encoding="utf-8")
+    path.write_text("\r\n".join(lines) + "\r\n", encoding="utf-8")
 
 
 def main() -> int:
@@ -186,13 +248,16 @@ def main() -> int:
     compile_cmd: list[str] | None = None
     build_output = ""
     test_output = ""
+    compiler_display: str | None = None
 
     if compiler is None:
-        rows.append(StepResult("toolchain", "BLOCKED", "PATH 和常见安装目录中没有找到 gcc、clang 或 cl"))
+        rows.append(StepResult("toolchain", "BLOCKED", "PATH 和常见安装目录中没有找到 zig、gcc、clang、cc 或 cl"))
         rows.append(StepResult("build", "SKIPPED", "缺少 C 编译器，未执行编译"))
         rows.append(StepResult("unit_tests", "SKIPPED", "缺少可执行文件，未运行 host 单元测试"))
     else:
-        rows.append(StepResult("toolchain", "PASS", f"检测到 {hint}: {compiler}"))
+        version = compiler_version(compiler, hint)
+        compiler_display = f"{hint} {version}" if version else hint
+        rows.append(StepResult("toolchain", "PASS", f"检测到 {compiler_display}: {compiler}"))
         exe_path = BUILD_DIR / ("digital_power_control_host_tests.exe" if os.name == "nt" else "digital_power_control_host_tests")
         compile_cmd = build_command(compiler, hint, exe_path)
         code, build_output = run_command(compile_cmd, BUILD_DIR)
@@ -211,7 +276,15 @@ def main() -> int:
 
     write_summary(REPORT_DIR / "11-host-build-summary.csv", rows)
     plot_gate(WAVE_DIR / "11-host-build-gate.png", rows)
-    write_report(REPORT_DIR / "11-host-build-test-report.md", rows, compiler, compile_cmd, build_output, test_output)
+    write_report(
+        REPORT_DIR / "11-host-build-test-report.md",
+        rows,
+        compiler,
+        compiler_display,
+        compile_cmd,
+        build_output,
+        test_output,
+    )
 
     pass_count = sum(1 for row in rows if row.status == "PASS")
     blocked_count = sum(1 for row in rows if row.status == "BLOCKED")

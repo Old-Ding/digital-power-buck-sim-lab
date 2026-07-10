@@ -1,5 +1,5 @@
 gate,status,detail
-toolchain,BLOCKED,PATH 和常见安装目录中没有找到 gcc、clang 或 cl
-build,SKIPPED,缺少 C 编译器，未执行编译
-unit_tests,SKIPPED,缺少可执行文件，未运行 host 单元测试
+toolchain,PASS,检测到 zig 0.16.0: C:\Users\ww\AppData\Local\Microsoft\WinGet\Packages\zig.zig_Microsoft.Winget.Source_8wekyb3d8bbwe\zig-x86_64-windows-0.16.0\zig.exe
+build,PASS,生成 D:\codex\digital-power-buck-sim-lab\artifacts\host-build\chapter11\digital_power_control_host_tests.exe
+unit_tests,PASS,host 单元测试通过
 report,PASS,已生成 CSV、PNG 和 Markdown 报告

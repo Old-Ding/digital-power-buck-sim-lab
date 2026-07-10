@@ -55,7 +55,7 @@ waveforms/
 
 `scripts/run_host_build_tests.py` 是门禁脚本。它负责检测工具链、拼出编译命令、运行测试程序，并导出 CSV、PNG 和 Markdown 报告。
 
-本章的产物不是一个“说明文档”，而是一条可以重复运行的工程链路。
+本章的产物是一条可以重复运行的工程链路：源码、测试入口、构建脚本、报告和门禁图可以一起更新。
 
 ## 第一步：写一个最小 host 测试入口
 
@@ -165,11 +165,19 @@ scripts/run_host_build_tests.py
 | 优先级 | 工具链 |
 | --- | --- |
 | 1 | 环境变量 `CC` |
-| 2 | `gcc` |
-| 3 | `clang` |
-| 4 | `cc` |
-| 5 | `cl` |
-| 6 | Visual Studio 2022 常见安装目录里的 `cl.exe` |
+| 2 | PATH 里的 `zig` |
+| 3 | `gcc` |
+| 4 | `clang` |
+| 5 | `cc` |
+| 6 | `cl` |
+| 7 | WinGet 安装目录里的 `zig.exe` |
+| 8 | Visual Studio 2022 常见安装目录里的 `cl.exe` |
+
+找到 Zig 时，脚本会使用 `zig cc` 调用 C 编译前端：
+
+```powershell
+zig cc -std=c99 -Wall -Wextra -Werror -I src src\digital_power_control.c tests\test_digital_power_control_host.c -o artifacts\host-build\chapter11\digital_power_control_host_tests.exe
+```
 
 找到 `gcc`、`clang` 或 `cc` 时，脚本生成的编译命令类似：
 
@@ -193,13 +201,15 @@ gcc -std=c99 -Wall -Wextra -Werror -I src src\digital_power_control.c tests\test
 python scripts\run_host_build_tests.py
 ```
 
-当前报告生成环境的输出是：
+当前报告生成环境的输出摘要是：
 
 ```text
 已生成第 11 章 Host 编译测试门禁报告。
-summary,pass=1,blocked=1,skipped=2,fail=0
-toolchain,none,未找到 C 编译器
+summary,pass=4,blocked=0,skipped=0,fail=0
+toolchain,zig,Zig 0.16.0 detected
 ```
+
+完整编译器路径和实际编译命令记录在 `reports/11-host-build-test-report.md`。
 
 脚本生成的门禁图如下：
 
@@ -209,12 +219,26 @@ toolchain,none,未找到 C 编译器
 
 | Gate | 当前状态 | 含义 |
 | --- | --- | --- |
-| `toolchain` | BLOCKED | 本机没有找到 C 编译器 |
-| `build` | SKIPPED | 没有编译器，所以没有执行编译 |
-| `unit_tests` | SKIPPED | 没有可执行文件，所以没有运行测试 |
+| `toolchain` | PASS | 本机检测到 Zig 0.16.0，可作为 host C 编译器 |
+| `build` | PASS | 已编译 `src/digital_power_control.c` 和 `tests/test_digital_power_control_host.c` |
+| `unit_tests` | PASS | 生成的 host 测试程序运行通过 |
 | `report` | PASS | CSV、PNG、Markdown 报告生成成功 |
 
-这组结果说明流程停在工具链门禁。源码是否能编译，还没有进入判断阶段。
+这组结果说明第十章的 C 风格控制器已经通过 host 侧编译和最小单元测试门禁。这里说的是电脑端 host 证据，不是目标 MCU 工具链或硬件闭环证据。
+
+本次测试程序的关键输出如下：
+
+```text
+PASS,soft_start_vref_first_step,actual=0.0015,expected=0.0015,tolerance=1e-07
+PASS,soft_start_duty_small_positive
+PASS,ocp_enters_fault
+PASS,ocp_latched
+PASS,ocp_pwm_disabled
+PASS,ocp_clear_while_fault_stays_latched
+PASS,ocp_clear_after_fault_removed
+PASS,ocp_clear_restarts_soft_start
+SUMMARY,PASS,failures=0
+```
 
 ## 第五步：看报告文件
 
@@ -230,9 +254,9 @@ CSV 汇总内容如下：
 
 | Gate | Status | Detail |
 | --- | --- | --- |
-| `toolchain` | BLOCKED | PATH 和常见安装目录中没有找到 gcc、clang 或 cl |
-| `build` | SKIPPED | 缺少 C 编译器，未执行编译 |
-| `unit_tests` | SKIPPED | 缺少可执行文件，未运行 host 单元测试 |
+| `toolchain` | PASS | 检测到 Zig 0.16.0 |
+| `build` | PASS | 生成 host 测试可执行文件 |
+| `unit_tests` | PASS | host 单元测试通过 |
 | `report` | PASS | 已生成 CSV、PNG 和 Markdown 报告 |
 
 读这张表时，优先看前三行：
@@ -241,26 +265,32 @@ CSV 汇总内容如下：
 toolchain -> build -> unit_tests
 ```
 
-`report PASS` 只说明报告生成成功，不代表 C 编译通过。
+`report PASS` 只说明报告文件生成成功；本章能判断 C 编译和测试通过，是因为 `build` 和 `unit_tests` 也同时进入 PASS。
 
-## 如果装好编译器，会看到什么
+## 如果没有编译器，怎么处理
 
-安装或配置好 `gcc`、`clang` 或 `cl` 后，还是运行同一个命令：
+如果另一台电脑没有 `zig`、`gcc`、`clang` 或 `cl`，还是运行同一个命令：
 
 ```powershell
 python scripts\run_host_build_tests.py
 ```
 
-这时流程会继续往下走：
+这时流程会停在工具链门禁：
 
 ```text
-toolchain PASS
--> build PASS 或 FAIL
--> unit_tests PASS 或 FAIL
+toolchain BLOCKED
+-> build SKIPPED
+-> unit_tests SKIPPED
 -> report PASS
 ```
 
-如果 C 代码有语法问题、头文件路径问题、warning 或链接问题，`build` 会变成 `FAIL`。
+Windows 上可以用 WinGet 安装 Zig：
+
+```powershell
+winget install --id zig.zig -e --scope user --accept-source-agreements --accept-package-agreements
+```
+
+安装后重新运行门禁脚本。如果 C 代码有语法问题、头文件路径问题、warning 或链接问题，`build` 会变成 `FAIL`。
 
 如果编译通过，但控制器行为不符合测试预期，例如 OCP 没有锁存、故障未消失时被清除、PWM 没有关断，`unit_tests` 会变成 `FAIL`。
 
@@ -270,10 +300,10 @@ toolchain PASS
 
 | 观察到的现象 | 教学结论 | 不要误读成 |
 | --- | --- | --- |
-| `toolchain BLOCKED` | 当前机器缺 C 编译器 | C 源码已经编译失败 |
-| `build SKIPPED` | 没有执行编译命令 | C 编译已经通过 |
-| `unit_tests SKIPPED` | 没有可执行文件可运行 | 单元测试已经通过 |
-| `report PASS` | 报告文件生成成功 | 固件已经可上板 |
+| `toolchain PASS` | host 侧已经找到 Zig 0.16.0 | 目标 MCU 工具链已经验证 |
+| `build PASS` | C 控制器和 host 测试入口可以在电脑端编译 | MCU 工程已经编译通过 |
+| `unit_tests PASS` | 默认参数、初始化、软启动首周期和 OCP 锁存路径通过 | 第十章所有动态场景都已用 C 单元测试覆盖 |
+| `report PASS` | CSV、PNG、Markdown 证据链生成成功 | 固件已经可上板 |
 
 本章完成的是第二季的入口工程链路：用脚本把工具链、编译、单元测试和报告串起来。
 
@@ -303,11 +333,11 @@ python scripts\run_host_build_tests.py
 
 | 顺序 | 内容 |
 | --- | --- |
-| 1 | 让 `toolchain` 进入 PASS |
-| 2 | 让 `build` 进入 PASS |
-| 3 | 扩展 `unit_tests`，把第十章场景数据作为 oracle |
-| 4 | 做 float baseline 和定点化对照 |
-| 5 | 再进入 ADC/PWM 映射和 MCU 工程 |
+| 1 | 扩展 `unit_tests`，把第十章场景数据作为 oracle |
+| 2 | 做 float baseline 和定点化对照 |
+| 3 | 设计 ADC/PWM 标定、限幅和单位换算 |
+| 4 | 拆分 ISR 实时层和后台状态机 |
+| 5 | 再进入 MCU 工程、HIL 和实机闭环 |
 
 对数字电源固件来说，先让 host 侧门禁稳定，再谈定点化和上板，风险会低很多。
 
