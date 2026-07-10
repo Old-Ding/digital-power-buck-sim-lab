@@ -1,0 +1,16 @@
+case,metric,value,tolerance,status,note
+resolution_72mhz,max_abs_effective_duty_error,0.002778244019000009,0.002778731452094184,PASS,比较值取整误差不得超过半个定时器计数加一个 Q20 LSB
+resolution_100mhz,max_abs_effective_duty_error,0.002000312805000015,0.0020009536743164063,PASS,比较值取整误差不得超过半个定时器计数加一个 Q20 LSB
+resolution_170mhz,max_abs_effective_duty_error,0.0011769104000000086,0.0011774242625517003,PASS,比较值取整误差不得超过半个定时器计数加一个 Q20 LSB
+duty_clamp_170mhz,negative_duty_clamp,1.0,1.0,PASS,负 duty 必须钳位到 0
+duty_clamp_170mhz,high_duty_clamp,1.0,1.0,PASS,超过 65% 的 duty 必须钳位
+duty_clamp_170mhz,max_compare_counts,276.0,276.0,PASS,65% Q20 duty 映射后的比较值不得超过 276 counts
+shadow_update_sequence,queue_does_not_change_active_compare,1.0,1.0,PASS,预装载写入不得在周期中间改变有效比较值
+shadow_update_sequence,update_event_applies_pending,1.0,1.0,PASS,更新事件后 pending 标志必须清除
+shadow_update_sequence,disable_is_immediate,1.0,1.0,PASS,保护关断不等待更新事件
+all,arithmetic_overflow_count,0.0,0.0,PASS,Q20 duty 到比较值的整数运算不得溢出
+pwm_unit_tests,center_aligned_170mhz_200khz_contract,1.0,1.0,PASS,PWM 映射 C 单元测试
+pwm_unit_tests,half_duty_waits_for_update_event,1.0,1.0,PASS,PWM 映射 C 单元测试
+pwm_unit_tests,half_duty_applies_at_update_event,1.0,1.0,PASS,PWM 映射 C 单元测试
+pwm_unit_tests,duty_above_limit_is_clamped,1.0,1.0,PASS,PWM 映射 C 单元测试
+pwm_unit_tests,disable_is_immediate,1.0,1.0,PASS,PWM 映射 C 单元测试
