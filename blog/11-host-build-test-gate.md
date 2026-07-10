@@ -26,36 +26,17 @@ python scripts\run_host_build_tests.py
 
 配套 GitHub 仓库：[digital-power-buck-sim-lab](https://github.com/Old-Ding/digital-power-buck-sim-lab)
 
-## 本章最终做成什么
+## 先看本章要跑通的结果
 
-本章新增的文件结构如下：
+本章先验证三件事：
 
-```text
-src/
-  digital_power_control.c
-  digital_power_control.h
+| 检查点 | 通过标准 |
+| --- | --- |
+| 找到 C 编译器 | `toolchain` 为 PASS |
+| 编译控制器和测试入口 | `build` 为 PASS |
+| 运行 host 单元测试 | 输出 `SUMMARY,PASS,failures=0` |
 
-tests/
-  test_digital_power_control_host.c
-
-scripts/
-  run_host_build_tests.py
-
-reports/
-  11-host-build-summary.csv
-  11-host-build-test-report.md
-
-waveforms/
-  11-host-build-gate.png
-```
-
-这里的重点是 `tests/` 和 `scripts/`。
-
-`tests/test_digital_power_control_host.c` 是 host 侧单元测试入口。它直接包含第十章的控制器头文件，然后调用 `DpControl_DefaultConfig()`、`DpControl_Init()` 和 `DpControl_Step()`。
-
-`scripts/run_host_build_tests.py` 是门禁脚本。它负责检测工具链、拼出编译命令、运行测试程序，并导出 CSV、PNG 和 Markdown 报告。
-
-本章的产物是一条可以重复运行的工程链路：源码、测试入口、构建脚本、报告和门禁图可以一起更新。
+读这章时先抓住两个文件：`tests/test_digital_power_control_host.c` 是测试入口，`scripts/run_host_build_tests.py` 是一键门禁脚本。完整配套文件放在文末。
 
 ## 第一步：写一个最小 host 测试入口
 
