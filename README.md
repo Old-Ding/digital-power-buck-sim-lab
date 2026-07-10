@@ -12,7 +12,7 @@
 | 输出电流 | 5 A |
 | 输出功率 | 60 W |
 | 开关频率 | 200 kHz |
-| 当前阶段 | 第二季：Q20 定点控制器与浮点 C 逐周期对照 |
+| 当前阶段 | 第二季：ADC 原始码值到 Q20 工程量映射 |
 
 第一阶段只做低压 DC-DC，不涉及市电输入和隔离拓扑。
 
@@ -33,6 +33,7 @@
 | 11 | 为什么上板前要先做 C 语言单元测试 | 已完成，可复现 |
 | 12 | C 控制器编译通过后，怎么确认结果没有改错 | 已完成，可复现 |
 | 13 | 浮点控制器怎么改成定点数并验证不会溢出 | 已完成，可复现 |
+| 14 | ADC 原始码怎么变成 Q20 电压、电流和温度 | 已完成，可复现 |
 
 第二章对应的核心文件：
 
@@ -199,6 +200,19 @@
 | 指标与格式数据 | `waveforms/13-fixed-point-*.csv` |
 | 正文图表 | `waveforms/13-fixed-point-*.png` |
 
+第十四章对应的核心文件：
+
+| 类型 | 文件 |
+| --- | --- |
+| 教程文章 | `blog/14-adc-to-q20-mapping.md` |
+| 复现说明 | `docs/14-adc-to-q20-mapping-reproduce.md` |
+| ADC 映射源码 | `src/digital_power_adc_map.c`、`src/digital_power_adc_map.h` |
+| C 单元测试 | `tests/test_digital_power_adc_map.c` |
+| C 回放入口 | `tests/replay_digital_power_adc_map.c` |
+| 自动化脚本 | `scripts/run_adc_mapping_tests.py` |
+| 测试报告 | `reports/14-adc-mapping-report.md` |
+| 数据与图表 | `waveforms/14-adc-*.csv`、`waveforms/14-adc-*.png` |
+
 ## 复现方式
 
 在仓库根目录运行：
@@ -346,6 +360,14 @@ python scripts\run_fixed_point_parity.py
 ```
 
 该章比较 Q16、Q20、Q24 的精度与范围，采用有符号 32 位、20 个小数位的统一格式；随后编译定点单元测试和浮点/定点双实现回放程序。当前 4 个定点单元测试和 80,400 周期对照共 74 项指标全部 PASS，正常场景算术溢出和离散行为错位均为 0。
+
+第 14 章的 ADC 原始码值到 Q20 工程量映射运行：
+
+```powershell
+python scripts\run_adc_mapping_tests.py
+```
+
+该章使用真实编译后的 C 映射层处理 `Vin`、`Vout`、`Iout` 和温度四通道，比较标称前端、元件偏差未校准和写入校准系数三种场景。当前 607 行输入得到 PASS 22 / FAIL 0 / INFO 4，标称与校准误差均低于约一个通道 ADC LSB。
 
 ## 第二章结果
 
@@ -552,6 +574,20 @@ python scripts\run_fixed_point_parity.py
 
 第 13 章建立了定点格式选择、统一舍入与饱和、溢出观测和浮点基准回放链路。当前结果覆盖电脑端 Q20 控制算法，不覆盖 ADC 原始码值、PWM 寄存器、目标 MCU 执行时间或硬件闭环。
 
+## 第十四章结果
+
+| 检查项 | 当前结果 |
+| --- | --- |
+| ADC | 12 bit，3.3 V 参考 |
+| C 映射数据行 | 607 |
+| 指标结果 | PASS 22 / FAIL 0 / INFO 4 |
+| 标称 `Vin/Vout/Iout/Temp` 最大误差 | 0.003708 V / 0.001951 V / 0.001008 A / 0.040300°C |
+| 校准后 `Vin/Vout/Iout/Temp` 最大误差 | 0.003742 V / 0.001956 V / 0.000963 A / 0.040606°C |
+| 校准后/未校准最大误差比例 | 0.67%～5.57% |
+| 映射整数溢出 | 0 |
+
+第 14 章建立 ADC code、参考电压、分压比、增益、零点偏置、物理范围和 Q20 输出之间的唯一映射层。元件偏差场景是合成数据；真实硬件校准仍需实物测量。
+
 ## 仓库结构
 
 ```text
@@ -562,7 +598,7 @@ models/plecs/       PLECS 模型
 models/simulink/    Simulink 平均模型
 reports/            场景测试报告
 scripts/            可复现脚本
-src/                浮点与 Q20 定点控制器源码
+src/                浮点/定点控制器与 ADC 映射源码
 tests/              电脑端单元测试、边界测试和 C 回放入口
 waveforms/          仿真原始数据、指标和波形图
 ```
@@ -571,7 +607,7 @@ waveforms/          仿真原始数据、指标和波形图
 
 ## 后续计划
 
-第 13 章之后，第二季将把 ADC 码值、分压比、电流采样增益和零点偏置映射到当前 Q20 输入，再继续推进 PWM 映射、ISR 分层、HAL 适配、CI/HIL 和实机闭环。后续主题会在完成源码、测试、数据、图表和说明后加入本仓库。
+第 14 章之后，第二季将把 Q20 duty 映射为 PWM 定时器周期和比较值，再继续推进 ISR 分层、HAL 适配、CI/HIL 和实机闭环。后续主题会在完成源码、测试、数据、图表和说明后加入本仓库。
 
 ## 技术交流
 

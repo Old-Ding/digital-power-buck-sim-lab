@@ -1,0 +1,27 @@
+case,metric,value,tolerance,status,note
+nominal_sweep,max_abs_vin_error,0.003708076500000601,0.008,PASS,最大 V 映射误差不超过约一个通道 ADC LSB
+nominal_sweep,max_abs_vout_error,0.0019505691999999186,0.0041,PASS,最大 V 映射误差不超过约一个通道 ADC LSB
+nominal_sweep,max_abs_iout_error,0.00100784302000001,0.0022,PASS,最大 A 映射误差不超过约一个通道 ADC LSB
+nominal_sweep,max_abs_temperature_error,0.040300369299998806,0.083,PASS,最大 degC 映射误差不超过约一个通道 ADC LSB
+nominal_operating_point,max_abs_vin_error,0.0011472702000006052,0.008,PASS,最大 V 映射误差不超过约一个通道 ADC LSB
+nominal_operating_point,max_abs_vout_error,0.00015354159999958483,0.0041,PASS,最大 V 映射误差不超过约一个通道 ADC LSB
+nominal_operating_point,max_abs_iout_error,0.00018215178999980708,0.0022,PASS,最大 A 映射误差不超过约一个通道 ADC LSB
+nominal_operating_point,max_abs_temperature_error,0.010999679599997592,0.083,PASS,最大 degC 映射误差不超过约一个通道 ADC LSB
+tolerance_uncalibrated,max_abs_vin_error,0.2998428345000015,0.0,INFO,元件偏差未校准时的最大 V 误差
+tolerance_uncalibrated,max_abs_vout_error,0.1305112838999989,0.0,INFO,元件偏差未校准时的最大 V 误差
+tolerance_uncalibrated,max_abs_iout_error,0.14340782166000032,0.0,INFO,元件偏差未校准时的最大 A 误差
+tolerance_uncalibrated,max_abs_temperature_error,0.7286003112999992,0.0,INFO,元件偏差未校准时的最大 degC 误差
+tolerance_calibrated,max_abs_vin_error,0.003741645799998139,0.008,PASS,最大 V 映射误差不超过约一个通道 ADC LSB
+tolerance_calibrated,max_abs_vout_error,0.001955947879999975,0.0041,PASS,最大 V 映射误差不超过约一个通道 ADC LSB
+tolerance_calibrated,max_abs_iout_error,0.0009634017899999847,0.0022,PASS,最大 A 映射误差不超过约一个通道 ADC LSB
+tolerance_calibrated,max_abs_temperature_error,0.040606307999993874,0.083,PASS,最大 degC 映射误差不超过约一个通道 ADC LSB
+calibration_improvement,vin_error_ratio,0.012478690065205212,0.1,PASS,校准后最大误差应低于未校准误差的 10%
+calibration_improvement,vout_error_ratio,0.014986810500605243,0.1,PASS,校准后最大误差应低于未校准误差的 10%
+calibration_improvement,iout_error_ratio,0.006717916629987409,0.1,PASS,校准后最大误差应低于未校准误差的 10%
+calibration_improvement,temperature_error_ratio,0.05573193885621926,0.1,PASS,校准后最大误差应低于未校准误差的 10%
+boundary_codes,over_code_clamp,1.0,1.0,PASS,超过 12-bit 满量程的输入必须被钳位并置标志
+boundary_codes,physical_clamp_present,1.0,1.0,PASS,电流和温度超出物理范围时必须钳位
+all,arithmetic_overflow_count,0.0,0.0,PASS,ADC 映射整数运算不得溢出
+adc_unit_tests,nominal_24v_12v_5a_45c,1.0,1.0,PASS,ADC 映射 C 单元测试
+adc_unit_tests,adc_code_above_full_scale_is_clamped,1.0,1.0,PASS,ADC 映射 C 单元测试
+adc_unit_tests,sensor_values_respect_physical_limits,1.0,1.0,PASS,ADC 映射 C 单元测试
