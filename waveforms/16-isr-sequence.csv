@@ -1,0 +1,7 @@
+cycle,scenario,invocation,active_compare_before_update,active_compare_after_update,pending_compare_after_control,active_pwm_enable,pwm_enable_command,vin_v,vout_v,iout_a,temperature_c,duty_cmd,state,active_fault,latched_fault,adc_input_clamped,adc_physical_clamped,arithmetic_overflow
+0,normal,1,0,85,212,1,1,23.9988527,12.0001535,5.00018215,45.0109997,0.499992371,2,0,0,0,0,0
+1,normal,2,85,212,212,1,1,23.9988527,12.0001535,5.00018215,45.0109997,0.499992371,2,0,0,0,0,0
+2,ocp,3,212,212,0,0,0,23.9988527,12.0001535,6.99871731,45.0109997,0,3,1,1,0,0,0
+3,ocp,4,212,0,0,0,0,23.9988527,12.0001535,6.99871731,45.0109997,0,3,1,1,0,0,0
+4,clear_fault,5,0,0,0,0,1,23.9988527,12.0001535,5.00018215,45.0109997,0,1,0,0,0,0,0
+5,restart,6,0,0,0,1,1,23.9988527,12.0001535,5.00018215,45.0109997,0,1,0,0,0,0,0

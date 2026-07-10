@@ -12,7 +12,7 @@
 | 输出电流 | 5 A |
 | 输出功率 | 60 W |
 | 开关频率 | 200 kHz |
-| 当前阶段 | 第二季：Q20 duty 到中心对齐 PWM 比较值映射 |
+| 当前阶段 | 第二季：5 us 控制中断执行顺序与时间预算 |
 
 第一阶段只做低压 DC-DC，不涉及市电输入和隔离拓扑。
 
@@ -35,6 +35,7 @@
 | 13 | 浮点控制器怎么改成定点数并验证不会溢出 | 已完成，可复现 |
 | 14 | ADC 原始码怎么变成 Q20 电压、电流和温度 | 已完成，可复现 |
 | 15 | Q20 duty 怎么变成中心对齐 PWM 比较值 | 已完成，可复现 |
+| 16 | 5 us 控制中断里 ADC、控制器和 PWM 应该按什么顺序执行 | 已完成，可复现 |
 
 第二章对应的核心文件：
 
@@ -227,6 +228,20 @@
 | 测试报告 | `reports/15-pwm-mapping-report.md` |
 | 数据与图表 | `waveforms/15-pwm-*.csv`、`waveforms/15-pwm-*.png` |
 
+第十六章对应的核心文件：
+
+| 类型 | 文件 |
+| --- | --- |
+| 教程文章 | `blog/16-control-isr-timing.md` |
+| 复现说明 | `docs/16-control-isr-timing-reproduce.md` |
+| ISR 编排源码 | `src/digital_power_control_isr.c`、`src/digital_power_control_isr.h` |
+| 顺序单元测试 | `tests/test_digital_power_control_isr.c` |
+| 六周期回放入口 | `tests/replay_digital_power_control_isr.c` |
+| 主机基准入口 | `tests/benchmark_digital_power_control_isr.c` |
+| 自动化脚本 | `scripts/run_isr_timing_tests.py` |
+| 测试报告 | `reports/16-isr-timing-report.md` |
+| 数据与图表 | `waveforms/16-isr-*.csv`、`waveforms/16-isr-*.png` |
+
 ## 复现方式
 
 在仓库根目录运行：
@@ -390,6 +405,14 @@ python scripts\run_pwm_mapping_tests.py
 ```
 
 该章使用真实编译后的 C 映射层验证 72/100/170 MHz 三种定时器分辨率、0%～65% duty 限幅、四舍五入、预装载更新和立即关断。当前 640 行输入得到 PASS 15 / FAIL 0；170 MHz、200 kHz 中心对齐配置为 `ARR=425`、100 ns 死区为 17 counts。
+
+第 16 章的控制 ISR 顺序、预算与主机回归运行：
+
+```powershell
+python scripts\run_isr_timing_tests.py
+```
+
+该章把 PWM 更新、ADC 映射、Q20 控制和下一周期 PWM 排队放进唯一编排层，验证一周期 compare 延迟、OCP 同周期关断和同步重启。当前 13 项 PASS、0 项 FAIL；5 us 周期分配 3.5 us ISR 目标预算和 1.5 us 余量，4 项主机计时仅标为 INFO。
 
 ## 第二章结果
 
@@ -626,6 +649,22 @@ python scripts\run_pwm_mapping_tests.py
 
 第 15 章建立 Q20 duty、软件限幅、整数比较值、预装载更新和保护立即关断之间的唯一输出映射层。结果覆盖通用中心对齐 PWM 软件语义，具体 MCU 寄存器编码和门极波形仍需目标适配与实测。
 
+## 第十六章结果
+
+| 检查项 | 当前结果 |
+| --- | --- |
+| 控制周期 | 5 us |
+| ISR 目标预算 / 余量 | 3.5 us / 1.5 us |
+| 六周期集成回放 | PASS |
+| compare 一周期延迟 | PASS |
+| OCP 同周期关闭 active enable | PASS |
+| 清故障同步重启 | PASS |
+| 正常映射钳位 / 溢出 | 0 / 0 |
+| 指标结果 | PASS 13 / FAIL 0 / INFO 4 |
+| 当前主机 P50 / P99 | 45.40 ns / 59.36 ns（INFO） |
+
+第 16 章固定更新事件、ADC、控制器和 PWM 的调用顺序，并建立目标 MCU 的时间预算验收线。Windows 主机基准只用于代码回归，不作为目标 MCU 5 us 截止时间证据。
+
 ## 仓库结构
 
 ```text
@@ -645,7 +684,7 @@ waveforms/          仿真原始数据、指标和波形图
 
 ## 后续计划
 
-第 15 章之后，第二季将把 ADC 读取、Q20 控制和 PWM 更新组织进固定周期控制中断，再继续推进 HAL 适配、目标构建、CI/HIL 和实机闭环。后续主题会在完成源码、测试、数据、图表和说明后加入本仓库。
+第 16 章之后，第二季将把固定周期中断与通信、日志、参数保存等后台任务分层，并通过 HAL 适配接口连接具体 ADC、PWM 和故障输入。后续主题会在完成源码、测试、数据、图表和说明后加入本仓库。
 
 ## 技术交流
 
