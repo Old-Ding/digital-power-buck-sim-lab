@@ -16,7 +16,7 @@
 安装 Python 依赖：
 
 ```powershell
-python -m pip install matplotlib pyelftools capstone
+python -m pip install -r requirements-ci.txt
 ```
 
 ## 最短命令
@@ -96,7 +96,7 @@ summary,pass=9,fail=0,checks=9
 windows-latest
 Python 3.13
 Zig 0.16.0
-pip install matplotlib pyelftools capstone
+pip install -r requirements-ci.txt
 python scripts\run_full_regression.py
 upload reports/19-* and waveforms/19-*
 ```
@@ -133,7 +133,7 @@ P50/P99/最大值变化不会单独导致失败。确认顺序与预算 PASS 后
 运行：
 
 ```powershell
-python -m pip install pyelftools capstone
+python -m pip install -r requirements-ci.txt
 ```
 
 ### GitHub Actions 超时

@@ -134,11 +134,17 @@ def check_target_artifacts() -> dict[str, str]:
 
 def check_workflow() -> dict[str, str]:
     path = ROOT / ".github" / "workflows" / "firmware-regression.yml"
+    requirements = ROOT / "requirements-ci.txt"
     if not path.exists():
         return result("github_workflow_calls_local_entry", False, "缺少 firmware-regression.yml")
     text = path.read_text(encoding="utf-8")
-    passed = "python scripts\\run_full_regression.py" in text and "windows-latest" in text
-    return result("github_workflow_calls_local_entry", passed, "CI 调用 scripts/run_full_regression.py" if passed else "工作流没有调用统一入口")
+    passed = (
+        "python scripts\\run_full_regression.py" in text
+        and "windows-latest" in text
+        and "requirements-ci.txt" in text
+        and requirements.exists()
+    )
+    return result("github_workflow_calls_local_entry", passed, "CI 调用统一入口并使用依赖清单" if passed else "工作流入口或依赖清单不完整")
 
 
 def check_diff_whitespace() -> dict[str, str]:
