@@ -112,7 +112,7 @@ static void test_default_config(void)
 | --- | --- |
 | 默认参数 | `ts_ctrl_s`、`vref_final_v`、`duty_max`、`ocp_threshold_a` |
 | 初始化 | 初始状态、故障码、滤波初值、积分器 |
-| 软启动首周期 | 状态进入 `SOFT_START`、PWM 允许、参考值爬坡、duty 低限幅 |
+| 软启动首周期 | 0V 启动输入下，状态进入 `SOFT_START`、PWM 允许、参考值爬坡、duty 为小正值 |
 | OCP 锁存和清故障路径 | OCP 进入故障、PWM 关断、故障存在时不能清除、故障消失后进入软启动 |
 
 例如 OCP 测试的核心逻辑是：
@@ -193,7 +193,7 @@ gcc -std=c99 -Wall -Wextra -Werror -I src src\digital_power_control.c tests\test
 python scripts\run_host_build_tests.py
 ```
 
-当前这台机器的输出是：
+当前报告生成环境的输出是：
 
 ```text
 已生成第 11 章 Host 编译测试门禁报告。

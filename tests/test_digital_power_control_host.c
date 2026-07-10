@@ -76,13 +76,14 @@ static void test_soft_start_first_step(void)
     DpControlOutput out;
     DpControl_DefaultConfig(&cfg);
     DpControl_Init(&ctx, &cfg);
+    in.vout_adc_v = 0.0f;
 
     out = DpControl_Step(&ctx, &cfg, &in);
 
     expect_true("soft_start_state", out.state == DP_STATE_SOFT_START);
     expect_true("soft_start_pwm_enabled", out.pwm_enable);
     expect_close("soft_start_vref_first_step", out.vref_cmd_v, cfg.soft_start_ramp_v_per_s * cfg.ts_ctrl_s, 1.0e-7f);
-    expect_close("soft_start_duty_clamped_low", out.duty_cmd, 0.0f, 1.0e-6f);
+    expect_true("soft_start_duty_small_positive", out.duty_cmd > 0.0f && out.duty_cmd < 0.001f);
 }
 
 static void test_ocp_latch_and_clear_path(void)

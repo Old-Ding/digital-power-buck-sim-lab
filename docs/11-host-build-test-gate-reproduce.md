@@ -41,7 +41,7 @@
 python scripts\run_host_build_tests.py
 ```
 
-当前本机输出：
+当前报告生成环境输出：
 
 ```text
 已生成第 11 章 Host 编译测试门禁报告。
