@@ -168,7 +168,13 @@ def write_summary(path: Path, rows: list[StepResult]) -> None:
 
 def plot_gate(path: Path, rows: list[StepResult]) -> None:
     status_color = {"PASS": "#2e8b57", "BLOCKED": "#d9480f", "SKIPPED": "#868e96", "FAIL": "#c92a2a"}
-    labels = [row.gate for row in rows]
+    gate_labels = {
+        "toolchain": "工具链",
+        "build": "编译",
+        "unit_tests": "单元测试",
+        "report": "报告",
+    }
+    labels = [gate_labels.get(row.gate, row.gate) for row in rows]
     values = [1.0 for _ in rows]
     colors = [status_color.get(row.status, "#868e96") for row in rows]
 
@@ -177,7 +183,7 @@ def plot_gate(path: Path, rows: list[StepResult]) -> None:
     fig, ax = plt.subplots(figsize=(9.2, 4.8))
     ax.barh(labels, values, color=colors)
     ax.set_xlim(0.0, 1.05)
-    ax.set_title("第 11 章 Host 编译测试门禁")
+    ax.set_title("第 11 章 电脑端编译测试检查")
     ax.set_xticks([])
     ax.spines["top"].set_visible(False)
     ax.spines["right"].set_visible(False)
@@ -199,11 +205,11 @@ def write_report(
     test_output: str,
 ) -> None:
     lines = [
-        "# 第 11 章报告：Host 编译和单元测试门禁",
+        "# 第 11 章报告：电脑端编译和单元测试检查",
         "",
-        "本报告由 `scripts/run_host_build_tests.py` 生成，用来判断第 10 章的 C 风格控制器是否已经具备 host 编译和单元测试证据。",
+        "本报告由 `scripts/run_host_build_tests.py` 生成，用来判断第 10 章的 C 风格控制器是否已经具备电脑端编译和单元测试证据。",
         "",
-        "## 门禁结果",
+        "## 检查结果",
         "",
         "| Gate | Status | Detail |",
         "| --- | --- | --- |",
@@ -232,10 +238,11 @@ def write_report(
             "",
             "## 边界",
             "",
-            "读这份报告时，先看 `toolchain`、`build`、`unit_tests` 三个门禁。它们对应的是 host 侧证据；不要把这个结果误读成定点化安全、MCU 寄存器适配、ISR 时序、HIL 或硬件闭环已经完成。",
+            "读这份报告时，先看 `toolchain`、`build`、`unit_tests` 三个检查项。它们对应的是电脑端证据；不要把这个结果误读成定点化安全、MCU 寄存器适配、ISR 时序、HIL 或硬件闭环已经完成。",
         ]
     )
-    path.write_text("\r\n".join(lines) + "\r\n", encoding="utf-8")
+    with path.open("w", encoding="utf-8", newline="") as f:
+        f.write("\r\n".join(lines) + "\r\n")
 
 
 def main() -> int:
@@ -253,7 +260,7 @@ def main() -> int:
     if compiler is None:
         rows.append(StepResult("toolchain", "BLOCKED", "PATH 和常见安装目录中没有找到 zig、gcc、clang、cc 或 cl"))
         rows.append(StepResult("build", "SKIPPED", "缺少 C 编译器，未执行编译"))
-        rows.append(StepResult("unit_tests", "SKIPPED", "缺少可执行文件，未运行 host 单元测试"))
+        rows.append(StepResult("unit_tests", "SKIPPED", "缺少可执行文件，未运行电脑端单元测试"))
     else:
         version = compiler_version(compiler, hint)
         compiler_display = f"{hint} {version}" if version else hint
@@ -268,7 +275,7 @@ def main() -> int:
             rows.append(StepResult("build", "PASS", f"生成 {exe_path}"))
             test_code, test_output = run_command([str(exe_path)], BUILD_DIR)
             if test_code == 0 and "SUMMARY,PASS" in test_output:
-                rows.append(StepResult("unit_tests", "PASS", "host 单元测试通过"))
+                rows.append(StepResult("unit_tests", "PASS", "电脑端单元测试通过"))
             else:
                 rows.append(StepResult("unit_tests", "FAIL", f"测试失败，退出码 {test_code}"))
 
@@ -291,7 +298,7 @@ def main() -> int:
     fail_count = sum(1 for row in rows if row.status == "FAIL")
     skipped_count = sum(1 for row in rows if row.status == "SKIPPED")
 
-    print("已生成第 11 章 Host 编译测试门禁报告。")
+    print("已生成第 11 章电脑端编译测试检查报告。")
     print(f"summary,pass={pass_count},blocked={blocked_count},skipped={skipped_count},fail={fail_count}")
     if compiler:
         print(f"toolchain,{hint},{compiler}")

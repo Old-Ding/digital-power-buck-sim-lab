@@ -12,7 +12,7 @@
 | 输出电流 | 5 A |
 | 输出功率 | 60 W |
 | 开关频率 | 200 kHz |
-| 当前阶段 | 第二季：C 控制器 Host 编译与单元测试门禁 |
+| 当前阶段 | 第二季：C 控制器电脑端编译与单元测试检查 |
 
 第一阶段只做低压 DC-DC，不涉及市电输入和隔离拓扑。
 
@@ -30,7 +30,7 @@
 | 08 | 负载突变测试 | 已完成，可复现 |
 | 09 | ADC 噪声和 duty 抖动 | 已完成，可复现 |
 | 10 | 仿真控制器整理成 C 风格代码 | 已完成，可复现 |
-| 11 | C 控制器 Host 编译与单元测试门禁 | 已完成，可复现 |
+| 11 | C 控制器电脑端编译与单元测试检查 | 已完成，可复现 |
 
 第二章对应的核心文件：
 
@@ -164,11 +164,11 @@
 | --- | --- |
 | 教程文章 | `blog/11-host-build-test-gate.md` |
 | 复现说明 | `docs/11-host-build-test-gate-reproduce.md` |
-| C host 测试 | `tests/test_digital_power_control_host.c` |
+| 电脑端 C 测试 | `tests/test_digital_power_control_host.c` |
 | 构建测试脚本 | `scripts/run_host_build_tests.py` |
-| 门禁汇总 | `reports/11-host-build-summary.csv` |
+| 检查汇总 | `reports/11-host-build-summary.csv` |
 | 测试报告 | `reports/11-host-build-test-report.md` |
-| 门禁图 | `waveforms/11-host-build-gate.png` |
+| 检查结果图 | `waveforms/11-host-build-gate.png` |
 
 ## 复现方式
 
@@ -294,13 +294,13 @@ python scripts\export_controller_c_style_tests.py
 
 第 10 章不需要启动 PLECS RPC，也不需要 MATLAB/Simulink。该章重点验证仿真控制器迁移到固定周期 C 风格接口后的数据流、状态机、telemetry、软启动、负载突变、OCP 锁存和 UVLO 关断路径；该章不声明完成 MCU 编译、定点化或上板验证。
 
-第 11 章的 C 控制器 Host 编译与单元测试门禁运行：
+第 11 章的 C 控制器电脑端编译与单元测试检查运行：
 
 ```powershell
 python scripts\run_host_build_tests.py
 ```
 
-第 11 章进入第二季固件工程化。该章先检测本机 C 编译器，再尝试编译 `src/digital_power_control.c` 和 `tests/test_digital_power_control_host.c`，并生成 CSV、PNG 和 Markdown 报告。当前本机已检测到 Zig 0.16.0，host 编译和 host 单元测试均为 PASS。
+第 11 章进入第二季固件工程化。该章先检测本机 C 编译器，再尝试编译 `src/digital_power_control.c` 和 `tests/test_digital_power_control_host.c`，并生成 CSV、PNG 和 Markdown 报告。当前本机已检测到 Zig 0.16.0，电脑端编译和电脑端单元测试均为 PASS。
 
 ## 第二章结果
 
@@ -464,7 +464,7 @@ python scripts\run_host_build_tests.py
 
 ## 第十一章结果
 
-| 门禁 | 当前结果 |
+| 检查项 | 当前结果 |
 | --- | --- |
 | `toolchain` | PASS |
 | `build` | PASS |
@@ -473,7 +473,7 @@ python scripts\run_host_build_tests.py
 | 编译器检测 | Zig 0.16.0 |
 | 脚本输出 | `summary,pass=4,blocked=0,skipped=0,fail=0` |
 
-第 11 章建立第二季入口门禁：先证明 host 侧工具链、编译命令、单元测试和报告链路是否成立。当前结论只覆盖 host 编译和 host 单元测试，不等于目标 MCU 工具链、定点化、HAL、ISR、HIL 或实机闭环已经完成。
+第 11 章建立第二季入口检查：先证明电脑端工具链、编译命令、单元测试和报告链路是否成立。当前结论只覆盖电脑端编译和电脑端单元测试，不等于目标 MCU 工具链、定点化、HAL、ISR、HIL 或实机闭环已经完成。
 
 ## 仓库结构
 
@@ -494,7 +494,7 @@ waveforms/          仿真原始数据、指标和波形图
 
 ## 后续计划
 
-第 11 章之后，第二季会继续推进 host 单元测试扩展、定点化、ADC/PWM 映射、ISR 分层、HAL 适配、CI/HIL 和实机闭环。后续主题会在完成模型、数据、波形和说明后加入本仓库。
+第 11 章之后，第二季会继续推进电脑端单元测试扩展、定点化、ADC/PWM 映射、ISR 分层、HAL 适配、CI/HIL 和实机闭环。后续主题会在完成模型、数据、波形和说明后加入本仓库。
 
 ## 技术交流
 

@@ -1,8 +1,8 @@
-# 第 11 章复现说明：如何复现 C 控制器 Host 编译与单元测试门禁
+# 第 11 章复现说明：如何复现 C 控制器电脑端编译与单元测试检查
 
 本说明对应文章：`blog/11-host-build-test-gate.md`
 
-本章目标是复现第二季入口门禁：检测 C 编译器、尝试编译第十章控制器、运行 host 单元测试，并生成 CSV、PNG 和 Markdown 报告。
+本章目标是复现第二季入口检查：检测 C 编译器、尝试编译第十章控制器、运行电脑端单元测试，并生成 CSV、PNG 和 Markdown 报告。
 
 ## 复现边界
 
@@ -13,7 +13,7 @@
 | 测试入口 | `tests/test_digital_power_control_host.c` |
 | 输出报告 | `reports/11-host-build-test-report.md` |
 
-读本章结果时，先看 `toolchain`、`build`、`unit_tests` 三个门禁；不要把 host 门禁误读成定点化、HAL、ISR、HIL 或硬件闭环已经完成。
+读本章结果时，先看 `toolchain`、`build`、`unit_tests` 三个检查项；不要把电脑端检查误读成定点化、HAL、ISR、HIL 或硬件闭环已经完成。
 
 ## 环境要求
 
@@ -21,16 +21,16 @@
 
 | 工具 | 用途 |
 | --- | --- |
-| Python 3 | 运行门禁脚本 |
-| matplotlib | 生成门禁图 |
+| Python 3 | 运行检查脚本 |
+| matplotlib | 生成检查结果图 |
 
 可选工具：
 
 | 工具 | 用途 |
 | --- | --- |
-| Zig 0.16.0 / `zig cc` | 本仓库当前验证过的 Windows host C 编译器 |
-| gcc / clang / cc | host 编译 C 控制器和测试文件 |
-| MSVC cl.exe | Windows host 编译 |
+| Zig 0.16.0 / `zig cc` | 本仓库当前验证过的 Windows 电脑端 C 编译器 |
+| gcc / clang / cc | 电脑端编译 C 控制器和测试文件 |
+| MSVC cl.exe | Windows 电脑端编译 |
 
 Windows 上可以用 WinGet 安装 Zig：
 
@@ -51,7 +51,7 @@ python scripts\run_host_build_tests.py
 当前报告生成环境输出摘要：
 
 ```text
-已生成第 11 章 Host 编译测试门禁报告。
+已生成第 11 章电脑端编译测试检查报告。
 summary,pass=4,blocked=0,skipped=0,fail=0
 toolchain,zig,Zig 0.16.0 detected
 ```
@@ -62,9 +62,9 @@ toolchain,zig,Zig 0.16.0 detected
 
 | 文件 | 内容 |
 | --- | --- |
-| `reports/11-host-build-summary.csv` | 门禁状态 CSV |
+| `reports/11-host-build-summary.csv` | 检查状态 CSV |
 | `reports/11-host-build-test-report.md` | Markdown 测试报告 |
-| `waveforms/11-host-build-gate.png` | 门禁状态图 |
+| `waveforms/11-host-build-gate.png` | 检查结果图 |
 | `artifacts/host-build/chapter11/` | 编译临时目录，已被 `.gitignore` 忽略 |
 
 ## 当前结果
@@ -72,8 +72,8 @@ toolchain,zig,Zig 0.16.0 detected
 | Gate | Status | 说明 |
 | --- | --- | --- |
 | `toolchain` | PASS | 检测到 Zig 0.16.0 |
-| `build` | PASS | 已生成 host 测试可执行文件 |
-| `unit_tests` | PASS | host 单元测试通过 |
+| `build` | PASS | 已生成电脑端测试可执行文件 |
+| `unit_tests` | PASS | 电脑端单元测试通过 |
 | `report` | PASS | 已生成 CSV、PNG 和 Markdown 报告 |
 
 ## 当前编译命令
@@ -112,11 +112,11 @@ SUMMARY,PASS,failures=0
 
 ### 3. 为什么要把 warning 当成错误
 
-host 编译阶段越早暴露类型、初始化、头文件和接口问题，越不容易把问题带到 MCU 工程里。脚本对 gcc/clang 使用 `-Werror`，对 MSVC 使用 `/WX`。
+电脑端编译阶段越早暴露类型、初始化、头文件和接口问题，越不容易把问题带到 MCU 工程里。脚本对 gcc/clang 使用 `-Werror`，对 MSVC 使用 `/WX`。
 
 ### 4. 为什么不直接进入定点化
 
-定点化依赖一个可编译、可测试的 float baseline。先让 host 编译和单元测试门禁跑起来，后面定点化才有对照基准。
+定点化依赖一个可编译、可测试的浮点基准版本。先让电脑端编译和单元测试检查跑起来，后面定点化才有对照基准。
 
 ### 5. 编译临时文件为什么不提交
 

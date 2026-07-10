@@ -1,57 +1,30 @@
-# 第 11 章报告：Host 编译和单元测试门禁
+# 第 11 章报告：电脑端编译和单元测试检查
 
+本报告由 `scripts/run_host_build_tests.py` 生成，用来判断第 10 章的 C 风格控制器是否已经具备电脑端编译和单元测试证据。
 
-
-本报告由 `scripts/run_host_build_tests.py` 生成，用来判断第 10 章的 C 风格控制器是否已经具备 host 编译和单元测试证据。
-
-
-
-## 门禁结果
-
-
+## 检查结果
 
 | Gate | Status | Detail |
-
 | --- | --- | --- |
-
 | `toolchain` | PASS | 检测到 zig 0.16.0: C:\Users\ww\AppData\Local\Microsoft\WinGet\Packages\zig.zig_Microsoft.Winget.Source_8wekyb3d8bbwe\zig-x86_64-windows-0.16.0\zig.exe |
-
 | `build` | PASS | 生成 D:\codex\digital-power-buck-sim-lab\artifacts\host-build\chapter11\digital_power_control_host_tests.exe |
-
-| `unit_tests` | PASS | host 单元测试通过 |
-
+| `unit_tests` | PASS | 电脑端单元测试通过 |
 | `report` | PASS | 已生成 CSV、PNG 和 Markdown 报告 |
-
-
 
 ## 工具链
 
-
-
 - 检测到的编译器：`zig 0.16.0`
-
 - 编译器路径：`C:\Users\ww\AppData\Local\Microsoft\WinGet\Packages\zig.zig_Microsoft.Winget.Source_8wekyb3d8bbwe\zig-x86_64-windows-0.16.0\zig.exe`
-
-
 
 ## 编译命令
 
-
-
 ```powershell
-
 C:\Users\ww\AppData\Local\Microsoft\WinGet\Packages\zig.zig_Microsoft.Winget.Source_8wekyb3d8bbwe\zig-x86_64-windows-0.16.0\zig.exe cc -std=c99 -Wall -Wextra -Werror -I D:\codex\digital-power-buck-sim-lab\src D:\codex\digital-power-buck-sim-lab\src\digital_power_control.c D:\codex\digital-power-buck-sim-lab\tests\test_digital_power_control_host.c -o D:\codex\digital-power-buck-sim-lab\artifacts\host-build\chapter11\digital_power_control_host_tests.exe
-
 ```
-
-
 
 ## 测试输出
 
-
-
 ```text
-
 PASS,default_ts_ctrl,actual=5e-06,expected=5e-06,tolerance=1e-09
 PASS,default_vref,actual=12,expected=12,tolerance=1e-06
 PASS,default_duty_max,actual=0.65,expected=0.65,tolerance=1e-06
@@ -72,13 +45,8 @@ PASS,ocp_clear_while_fault_stays_latched
 PASS,ocp_clear_after_fault_removed
 PASS,ocp_clear_restarts_soft_start
 SUMMARY,PASS,failures=0
-
 ```
-
-
 
 ## 边界
 
-
-
-读这份报告时，先看 `toolchain`、`build`、`unit_tests` 三个门禁。它们对应的是 host 侧证据；不要把这个结果误读成定点化安全、MCU 寄存器适配、ISR 时序、HIL 或硬件闭环已经完成。
+读这份报告时，先看 `toolchain`、`build`、`unit_tests` 三个检查项。它们对应的是电脑端证据；不要把这个结果误读成定点化安全、MCU 寄存器适配、ISR 时序、HIL 或硬件闭环已经完成。
