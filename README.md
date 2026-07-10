@@ -12,7 +12,7 @@
 | 输出电流 | 5 A |
 | 输出功率 | 60 W |
 | 开关频率 | 200 kHz |
-| 当前阶段 | C 风格控制器代码化 |
+| 当前阶段 | 第二季：Host 编译和单元测试门禁 |
 
 第一阶段只做低压 DC-DC，不涉及市电输入和隔离拓扑。
 
@@ -30,6 +30,7 @@
 | 08 | 负载突变测试 | 已完成，可复现 |
 | 09 | ADC 噪声和 duty 抖动 | 已完成，可复现 |
 | 10 | 仿真控制器整理成 C 风格代码 | 已完成，可复现 |
+| 11 | Host 编译和单元测试门禁 | 已完成，可复现 |
 
 第二章对应的核心文件：
 
@@ -157,6 +158,18 @@
 | 指标汇总 | `waveforms/10-controller-c-style-summary.csv` |
 | 正文图表 | `waveforms/10-controller-c-style-*.png` |
 
+第十一章对应的核心文件：
+
+| 类型 | 文件 |
+| --- | --- |
+| 教程文章 | `blog/11-host-build-test-gate.md` |
+| 复现说明 | `docs/11-host-build-test-gate-reproduce.md` |
+| C host 测试 | `tests/test_digital_power_control_host.c` |
+| 构建测试脚本 | `scripts/run_host_build_tests.py` |
+| 门禁汇总 | `reports/11-host-build-summary.csv` |
+| 测试报告 | `reports/11-host-build-test-report.md` |
+| 门禁图 | `waveforms/11-host-build-gate.png` |
+
 ## 复现方式
 
 在仓库根目录运行：
@@ -280,6 +293,14 @@ python scripts\export_controller_c_style_tests.py
 ```
 
 第 10 章不需要启动 PLECS RPC，也不需要 MATLAB/Simulink。该章重点验证仿真控制器迁移到固定周期 C 风格接口后的数据流、状态机、telemetry、软启动、负载突变、OCP 锁存和 UVLO 关断路径；当前环境没有 C 编译器，因此不声明完成 MCU 编译或上板验证。
+
+第 11 章的 Host 编译和单元测试门禁运行：
+
+```powershell
+python scripts\run_host_build_tests.py
+```
+
+第 11 章进入第二季固件工程化。该章先检测本机 C 编译器，再尝试编译 `src/digital_power_control.c` 和 `tests/test_digital_power_control_host.c`，并生成 CSV、PNG 和 Markdown 报告。当前本机没有检测到 C 编译器，因此真实结果是 `toolchain BLOCKED`，`build` 和 `unit_tests` 为 `SKIPPED`。
 
 ## 第二章结果
 
@@ -441,6 +462,19 @@ python scripts\export_controller_c_style_tests.py
 
 第 10 章通过 Python 平均模型测试台验证 C 风格控制器的数据流：`Config` 保存可调参数，`Context` 保存跨周期状态，`Input` 接收采样输入，`Output` 输出 duty、状态、故障和 telemetry。该章完成的是控制器接口和算法顺序验证，MCU 编译、定点化、寄存器驱动、ADC/PWM 同步和 HIL 放到后续固件工程阶段。
 
+## 第十一章结果
+
+| 门禁 | 当前结果 |
+| --- | --- |
+| `toolchain` | BLOCKED |
+| `build` | SKIPPED |
+| `unit_tests` | SKIPPED |
+| `report` | PASS |
+| 编译器检测 | 未找到 `gcc`、`clang`、`cc` 或 `cl` |
+| 脚本输出 | `summary,pass=1,blocked=1,skipped=2,fail=0` |
+
+第 11 章建立第二季入口门禁：先证明 host 侧工具链、编译命令、单元测试和报告链路是否成立。当前机器缺少 C 编译器，所以还不能声称第 10 章 C 源码已经编译通过；安装或配置 C 编译器后，重新运行同一脚本即可进入真实 build 和 unit test 判断。
+
 ## 仓库结构
 
 ```text
@@ -452,6 +486,7 @@ models/simulink/    Simulink 平均模型
 reports/            场景测试报告
 scripts/            可复现脚本
 src/                C 风格控制器源码
+tests/              Host 单元测试
 waveforms/          仿真原始数据、指标和波形图
 ```
 
@@ -459,7 +494,7 @@ waveforms/          仿真原始数据、指标和波形图
 
 ## 后续计划
 
-第 10 章之后，系列可以进入固件工程化阶段：C 编译、定点化、单元测试、HAL 适配、PWM/ADC 同步、HIL 和实机闭环。后续主题会在完成模型、数据、波形和说明后加入本仓库。
+第 11 章之后，第二季会继续补齐 C 编译工具链、host 单元测试、定点化、ADC/PWM 映射、ISR 分层、HAL 适配、CI/HIL 和实机闭环。后续主题会在完成模型、数据、波形和说明后加入本仓库。
 
 ## 技术交流
 

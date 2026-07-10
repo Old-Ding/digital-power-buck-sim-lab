@@ -16,7 +16,8 @@
 | 08 | `08-load-transient.md` | 负载突变测试 |
 | 09 | `09-adc-noise-duty-jitter.md` | ADC 噪声和 duty 抖动 |
 | 10 | `10-controller-to-c.md` | 仿真控制器整理成 C 风格代码 |
+| 11 | `11-host-build-test-gate.md` | 第二季先建立 C 编译和单元测试门禁 |
 
 ## 后续主题
 
-后续内容会在模型、数据、波形和文章完成后再加入。第十章之后，系列可以继续扩展到 C 编译、定点化、单元测试、HAL 适配、PWM/ADC 同步、HIL 和实机闭环。
+后续内容会在源码、测试、报告和文章完成后再加入。第二季会继续扩展到 C 编译工具链补齐、host 单元测试、定点化、ADC/PWM 映射、ISR 分层、HAL 适配、CI/HIL 和实机闭环。
