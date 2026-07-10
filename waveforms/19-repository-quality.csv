@@ -1,10 +1,10 @@
 check,status,detail
-public_text_has_no_draft_markers,PASS,扫描 98 个公开文本文件
+public_text_has_no_draft_markers,PASS,公开编号文本与数据扫描通过
 public_text_has_no_machine_paths,PASS,未发现本机绝对路径
-blog_image_links_resolve,PASS,检查 66 个本地图片引用
-chapters_11_18_have_complete_packages,PASS,8 章均包含教程、复现、脚本、CSV、PNG 和报告
-tracked_files_exclude_local_outputs,PASS,artifacts、CSDN 本地包和 Python cache 均未跟踪
-all_python_scripts_compile,PASS,编译 15 个 Python 脚本
+blog_image_links_resolve,PASS,全部博客本地图片引用可解析
+chapters_11_20_have_complete_packages,PASS,第11～20章均包含教程、复现、脚本、CSV、PNG 和报告
+tracked_files_exclude_local_outputs,PASS,本地验收记录、artifacts、CSDN 本地包和 Python cache 均未跟踪
+all_python_scripts_compile,PASS,编译 16 个 Python 脚本
 target_artifacts_exist,PASS,ELF、BIN、map、反汇编均存在且非空
 github_workflow_calls_local_entry,PASS,CI 调用统一入口并使用依赖清单
 git_diff_check,PASS,无空白错误

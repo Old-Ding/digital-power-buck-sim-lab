@@ -1,0 +1,12 @@
+item,label,required,available,source,detail
+development_board,Cortex-M4F开发板,yes,no,template,未登记型号；PnP开发板数量 0（仅供参考）
+power_stage_24v_12v_5a,24V/12V/5A功率级,yes,no,template,未登记型号
+current_limited_supply_0_30v_5a,限流台式电源,yes,no,template,未登记型号
+electronic_load_0_30v_10a,电子负载,yes,no,template,未登记型号
+oscilloscope_100mhz,示波器,yes,no,template,未登记型号
+differential_probe_50v,差分探头,yes,no,template,未登记型号
+multimeter,万用表,yes,no,template,未登记型号
+debug_probe,调试接口/探针,yes,no,template,未登记型号；PnP探针数量 0
+thermal_camera_or_thermocouple,测温设备,yes,no,template,未登记型号
+detected_serial_ports,检测到的串口,no,no,Windows CIM,数量 0
+jlink_software,J-Link软件,no,yes,installed software,软件存在不代表调试器已连接

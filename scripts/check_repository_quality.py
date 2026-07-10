@@ -9,7 +9,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 OUTPUT_PATH = ROOT / "waveforms" / "19-repository-quality.csv"
-CHAPTERS = range(11, 19)
+CHAPTERS = range(11, 21)
 
 SCRIPT_BY_CHAPTER = {
     11: "run_host_build_tests.py",
@@ -20,6 +20,8 @@ SCRIPT_BY_CHAPTER = {
     16: "run_isr_timing_tests.py",
     17: "run_firmware_layering_tests.py",
     18: "build_cortex_m4f_firmware.py",
+    19: "run_full_regression.py",
+    20: "run_hardware_acceptance.py",
 }
 
 
@@ -31,11 +33,17 @@ def run_command(command: list[str]) -> tuple[int, str]:
 
 def public_text_files() -> list[Path]:
     files = [
+        ROOT / "README.md",
+        ROOT / "blog" / "README.md",
+        ROOT / "RELEASE_READINESS.md",
         *sorted((ROOT / "blog").glob("[0-9][0-9]-*.md")),
         *sorted((ROOT / "docs").glob("[0-9][0-9]-*.md")),
         *sorted((ROOT / "reports").glob("[0-9][0-9]-*.md")),
         *sorted((ROOT / "reports").glob("[0-9][0-9]-*.csv")),
         *sorted((ROOT / "waveforms").glob("[0-9][0-9]-*.csv")),
+        *sorted((ROOT / "hardware" / "acceptance").glob("*.md")),
+        *sorted((ROOT / "hardware" / "acceptance").glob("*.csv")),
+        *sorted((ROOT / "hardware" / "acceptance" / "evidence" / "public").glob("*.md")),
         *sorted((ROOT / "firmware").rglob("*.map")),
         *sorted((ROOT / "firmware").rglob("*.lst")),
     ]
@@ -53,7 +61,7 @@ def check_draft_markers(files: list[Path]) -> dict[str, str]:
         for line_number, line in enumerate(path.read_text(encoding="utf-8").splitlines(), 1):
             if pattern.search(line):
                 hits.append(f"{path.relative_to(ROOT)}:{line_number}")
-    return result("public_text_has_no_draft_markers", not hits, ", ".join(hits[:8]) if hits else f"扫描 {len(files)} 个公开文本文件")
+    return result("public_text_has_no_draft_markers", not hits, ", ".join(hits[:8]) if hits else "公开编号文本与数据扫描通过")
 
 
 def check_machine_paths(files: list[Path]) -> dict[str, str]:
@@ -80,7 +88,7 @@ def check_markdown_images() -> dict[str, str]:
             target = (path.parent / target_text).resolve()
             if not target.exists():
                 missing.append(f"{path.relative_to(ROOT)} -> {target_text}")
-    return result("blog_image_links_resolve", not missing, ", ".join(missing[:8]) if missing else f"检查 {checked} 个本地图片引用")
+    return result("blog_image_links_resolve", not missing, ", ".join(missing[:8]) if missing else "全部博客本地图片引用可解析")
 
 
 def check_chapter_packages() -> dict[str, str]:
@@ -100,7 +108,7 @@ def check_chapter_packages() -> dict[str, str]:
             missing.append(f"{prefix} CSV")
         if not list((ROOT / "waveforms").glob(f"{prefix}*.png")):
             missing.append(f"waveforms/{prefix}*.png")
-    return result("chapters_11_18_have_complete_packages", not missing, ", ".join(missing[:12]) if missing else "8 章均包含教程、复现、脚本、CSV、PNG 和报告")
+    return result("chapters_11_20_have_complete_packages", not missing, ", ".join(missing[:12]) if missing else "第11～20章均包含教程、复现、脚本、CSV、PNG 和报告")
 
 
 def check_tracked_hygiene() -> dict[str, str]:
@@ -110,9 +118,11 @@ def check_tracked_hygiene() -> dict[str, str]:
     forbidden = [
         line
         for line in output.splitlines()
-        if line.startswith(("artifacts/", "blog/csdn/")) or "__pycache__" in line
+        if line.startswith(("artifacts/", "blog/csdn/", "hardware/acceptance/evidence/local/"))
+        or line in ("hardware/acceptance/inventory.local.csv", "hardware/acceptance/measurements.local.csv")
+        or "__pycache__" in line
     ]
-    return result("tracked_files_exclude_local_outputs", not forbidden, ", ".join(forbidden[:8]) if forbidden else "artifacts、CSDN 本地包和 Python cache 均未跟踪")
+    return result("tracked_files_exclude_local_outputs", not forbidden, ", ".join(forbidden[:8]) if forbidden else "本地验收记录、artifacts、CSDN 本地包和 Python cache 均未跟踪")
 
 
 def check_python_syntax() -> dict[str, str]:

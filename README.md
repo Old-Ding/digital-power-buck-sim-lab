@@ -12,7 +12,7 @@
 | 输出电流 | 5 A |
 | 输出功率 | 60 W |
 | 开关频率 | 200 kHz |
-| 当前阶段 | 第二季：GitHub Actions 与第 11～18 章全链路回归 |
+| 当前阶段 | 第二季软件链完成；低压硬件验收 BLOCKED |
 
 第一阶段只做低压 DC-DC，不涉及市电输入和隔离拓扑。
 
@@ -39,6 +39,7 @@
 | 17 | 哪些代码放 5 us 中断，哪些放后台，HAL 接口怎么拆 | 已完成，可复现 |
 | 18 | 如何把控制固件交叉编译成 Cortex-M4F 的 ELF 和 BIN | 已完成，可复现 |
 | 19 | 如何用 GitHub Actions 持续回归第 11～18 章 | 已完成，可复现 |
+| 20 | 如何完成低压硬件验收并决定能否发布 v1.0 | 验收包已完成；硬件 BLOCKED |
 
 第二章对应的核心文件：
 
@@ -285,6 +286,19 @@
 | 测试报告 | `reports/19-full-regression-report.md` |
 | 数据与图表 | `waveforms/19-*.csv`、`waveforms/19-*.png` |
 
+第二十章对应的核心文件：
+
+| 类型 | 文件 |
+| --- | --- |
+| 教程文章 | `blog/20-low-voltage-hardware-acceptance.md` |
+| 复现说明 | `docs/20-low-voltage-hardware-acceptance-reproduce.md` |
+| 验收说明与 test plan | `hardware/acceptance/README.md`、`hardware/acceptance/test-plan.csv` |
+| 本地设备/测量模板 | `hardware/acceptance/*-template.csv` |
+| 自动判定脚本 | `scripts/run_hardware_acceptance.py` |
+| 发布门禁 | `RELEASE_READINESS.md` |
+| 当前报告 | `reports/20-hardware-acceptance-report.md` |
+| 当前数据与图表 | `waveforms/20-*.csv`、`waveforms/20-*.png` |
+
 ## 复现方式
 
 在仓库根目录运行：
@@ -479,7 +493,15 @@ python scripts\build_cortex_m4f_firmware.py
 python scripts\run_full_regression.py
 ```
 
-该章先检查公开文件、图片、机器路径、证据包和 Python 语法，再真实运行第二季前八章全部入口。当前 9 个顶层步骤全部 PASS，本机总耗时 25.837 s；GitHub Actions 使用相同入口。
+该章先检查公开文件、图片、机器路径、证据包和 Python 语法，再真实运行第二季前八章全部入口。当前 9 个顶层步骤全部 PASS，本机总耗时 27.146 s；GitHub Actions 使用相同入口。
+
+第 20 章的低压硬件验收门禁运行：
+
+```powershell
+python scripts\run_hardware_acceptance.py
+```
+
+当前第十九章软件回归 PASS；Windows 未检测到开发板、USB 调试探针或串口，完整发布所需设备也没有本地登记，因此结果为 PASS 1 / BLOCKED 18 / FAIL 0，v1.0 保持 BLOCKED。
 
 ## 第二章结果
 
@@ -769,15 +791,28 @@ python scripts\run_full_regression.py
 | 检查项 | 当前结果 |
 | --- | --- |
 | 仓库质量门禁 | PASS 9 / FAIL 0 |
-| 公开文本/数据扫描 | 98 个文件 |
-| 博客本地图片检查 | 66 个引用 |
+| 公开文本/数据扫描 | PASS |
+| 博客本地图片检查 | PASS |
 | 全回归顶层步骤 | PASS 9 / FAIL 0 |
 | 第 12/13 章回放 | 80400 / 80400 周期 |
 | 第 17 章 HAL 事件 | 34 |
 | 第 18 章目标构建 | PASS 13 / INFO 1 |
-| 本机总耗时 | 25.837 s |
+| 本机总耗时 | 27.146 s |
 
 第 19 章把仓库质量和第 11～18 章技术入口统一到 `scripts/run_full_regression.py`，GitHub Actions 只负责在干净环境调用该入口并上传证据。该结果仍不包含 HIL 或实物闭环。
+
+## 第二十章结果
+
+| 检查项 | 当前结果 |
+| --- | --- |
+| 第十九章软件回归 | PASS |
+| 调试探针 / 开发板 / 串口 | 0 / 0 / 0 |
+| 完整发布所需设备 | 0/9 |
+| 低压硬件验收项 | PASS 1 / BLOCKED 18 / FAIL 0 |
+| v1.0 门禁 | BLOCKED |
+| v1.0 标签 | 未创建 |
+
+第 20 章已经固化设备清单、19 项 test plan、测量模板、证据规则和自动范围判定。当前没有板级 HAL 与硬件测量事实，软件基线可以继续使用，但不能声称完成 HIL、实物闭环或 v1.0 发布。
 
 ## 仓库结构
 
@@ -793,6 +828,7 @@ src/                浮点/定点控制器、ADC 与 PWM 映射源码
 target/cortex-m4f/  Cortex-M4F 启动、链接和目标入口源码
 firmware/cortex-m4f/ 已生成的 ELF、BIN、map 和反汇编
 .github/workflows/  GitHub Actions 持续回归入口
+hardware/acceptance/ 低压硬件 test plan、模板和公开证据目录
 tests/              电脑端单元测试、边界测试和 C 回放入口
 waveforms/          仿真原始数据、指标和波形图
 ```
@@ -801,7 +837,7 @@ waveforms/          仿真原始数据、指标和波形图
 
 ## 后续计划
 
-第 19 章之后，第二季只剩最终验收：准备低压开发板/HIL 接线、测试矩阵、仪器记录和 v1.0 发布边界。没有实物时，软件与目标构建可以完成，但 HIL/硬件 PASS 必须保持未验收。
+第二季教程与软件工程包已经推进到第 20 章。下一次推进只处理真实硬件验收：接入 Cortex-M4F 开发板后先替换目标 HAL 寄存器模型，再连接 24 V/12 V/5 A 功率级和台架仪器补齐 17 项硬件测量；全部 PASS 后审核 v1.0 标签。
 
 ## 技术交流
 

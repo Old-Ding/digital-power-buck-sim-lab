@@ -25,7 +25,8 @@
 | 17 | `17-firmware-layering-hal.md` | 哪些代码放 5 us 中断，哪些放后台，HAL 接口怎么拆 |
 | 18 | `18-cortex-m4f-target-build.md` | 如何把控制固件交叉编译成 Cortex-M4F 的 ELF 和 BIN |
 | 19 | `19-ci-full-regression.md` | 如何用 GitHub Actions 持续回归第 11～18 章 |
+| 20 | `20-low-voltage-hardware-acceptance.md` | 如何完成低压硬件验收并决定能否发布 v1.0 |
 
 ## 后续主题
 
-后续内容会在源码、测试、报告和文章完成后再加入。第二季下一步是低压 HIL/实物最终验收；没有硬件证据时不会标记硬件 PASS。
+第二季教程已经写到第 20 章。当前软件链和验收包完整，低压硬件项目为 BLOCKED；接入开发板、功率级和台架后继续填写同一验收包，不新增解释性章节替代实测。

@@ -24,6 +24,11 @@ codegen/
 # Local run outputs
 artifacts/
 
+# Local hardware inventory, measurements, and raw captures
+hardware/acceptance/inventory.local.csv
+hardware/acceptance/measurements.local.csv
+hardware/acceptance/evidence/local/
+
 # Local publishing package with machine-specific upload paths
 blog/csdn/
 

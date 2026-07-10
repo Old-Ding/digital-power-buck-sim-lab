@@ -28,7 +28,7 @@ python scripts\run_full_regression.py
 当前摘要：
 
 ```text
-summary,pass=9,fail=0,steps=9,duration_s=25.837
+summary,pass=9,fail=0,steps=9,duration_s=27.146
 ```
 
 运行时间会随电脑和 CI runner 改变；PASS/FAIL 数量和子步骤技术指标才是门禁。
@@ -67,16 +67,16 @@ summary,pass=9,fail=0,checks=9
 
 | 步骤 | 状态 | 时间/s |
 | --- | --- | ---: |
-| 仓库质量 | PASS | 0.934 |
-| 第 11 章 | PASS | 1.432 |
-| 第 12 章 | PASS | 4.890 |
-| 第 13 章 | PASS | 6.186 |
-| 第 14 章 | PASS | 2.676 |
-| 第 15 章 | PASS | 2.287 |
-| 第 16 章 | PASS | 2.829 |
-| 第 17 章 | PASS | 2.323 |
-| 第 18 章 | PASS | 2.280 |
-| 合计 | 9 PASS / 0 FAIL | 25.837 |
+| 仓库质量 | PASS | 0.978 |
+| 第 11 章 | PASS | 1.296 |
+| 第 12 章 | PASS | 5.160 |
+| 第 13 章 | PASS | 6.575 |
+| 第 14 章 | PASS | 2.523 |
+| 第 15 章 | PASS | 3.760 |
+| 第 16 章 | PASS | 2.571 |
+| 第 17 章 | PASS | 2.198 |
+| 第 18 章 | PASS | 2.085 |
+| 合计 | 9 PASS / 0 FAIL | 27.146 |
 
 精确值以 `waveforms/19-full-regression.csv` 为准。
 

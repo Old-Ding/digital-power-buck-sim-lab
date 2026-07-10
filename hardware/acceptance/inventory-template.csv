@@ -1,0 +1,10 @@
+item,label,required,available,model,calibration_due,notes
+development_board,Cortex-M4F开发板,yes,no,,,
+power_stage_24v_12v_5a,24V/12V/5A功率级,yes,no,,,
+current_limited_supply_0_30v_5a,限流台式电源,yes,no,,,
+electronic_load_0_30v_10a,电子负载,yes,no,,,
+oscilloscope_100mhz,示波器,yes,no,,,
+differential_probe_50v,差分探头,yes,no,,,
+multimeter,万用表,yes,no,,,
+debug_probe,调试接口/探针,yes,no,,,
+thermal_camera_or_thermocouple,测温设备,yes,no,,,
