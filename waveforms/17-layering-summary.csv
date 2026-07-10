@@ -1,0 +1,22 @@
+case,metric,value,expected,status,note
+ownership,isr_realtime_operations_only,1.0,1.0,PASS,ISR 事件中不得出现通信、存储或后台临界区
+ownership,background_services_only,1.0,1.0,PASS,后台步骤只调用通信与存储服务
+normal_isr,normal_hal_order,1.0,1.0,PASS,正常周期按更新、ADC、PWM 预装载顺序调用 HAL
+ocp_isr,disable_precedes_preload_write,1.0,1.0,PASS,OCP 立即关断必须先于预装载写入
+adc_failure,adc_failure_fail_safe_order,1.0,1.0,PASS,ADC 读取失败时立即关断并写入关闭预装载
+shared_exchange,commands_use_critical_section,1.0,1.0,PASS,后台命令使用短临界区完整发布
+shared_exchange,telemetry_copy_uses_critical_section,1.0,1.0,PASS,后台遥测读取使用短临界区复制快照
+command_boundary,disable_commits_at_next_isr,1.0,1.0,PASS,后台 disable 命令只在下一 ISR 边界提交
+command_boundary,restart_waits_for_pwm_update,1.0,1.0,PASS,重新使能先写 pending，再由更新事件生效
+adc_failure,failure_visible_and_pwm_off,1.0,1.0,PASS,ADC 无效状态进入遥测且硬件 PWM 关闭
+background,background_does_not_advance_control,1.0,1.0,PASS,后台步骤不得推进控制周期
+firmware_unit_tests,isr_calls_only_realtime_hal_operations,1.0,1.0,PASS,C 固件分层单元测试
+firmware_unit_tests,background_calls_only_communication_and_storage,1.0,1.0,PASS,C 固件分层单元测试
+firmware_unit_tests,ocp_disable_precedes_preload_write,1.0,1.0,PASS,C 固件分层单元测试
+firmware_unit_tests,ocp_turns_off_fake_hardware,1.0,1.0,PASS,C 固件分层单元测试
+firmware_unit_tests,background_command_waits_for_isr_boundary,1.0,1.0,PASS,C 固件分层单元测试
+firmware_unit_tests,command_is_atomic_at_isr_boundary,1.0,1.0,PASS,C 固件分层单元测试
+firmware_unit_tests,adc_failure_uses_fail_safe_hal_order,1.0,1.0,PASS,C 固件分层单元测试
+firmware_unit_tests,adc_failure_is_visible_in_telemetry,1.0,1.0,PASS,C 固件分层单元测试
+firmware_unit_tests,telemetry_is_available,1.0,1.0,PASS,C 固件分层单元测试
+firmware_unit_tests,telemetry_copy_uses_critical_section,1.0,1.0,PASS,C 固件分层单元测试

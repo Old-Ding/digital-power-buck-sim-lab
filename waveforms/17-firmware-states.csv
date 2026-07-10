@@ -1,0 +1,13 @@
+phase,control_cycles,active_command_enable,pending_command_enable,command_pending,telemetry_valid,adc_sample_valid,pwm_enable_command,hal_active_compare,hal_pending_compare,hal_active_enable,hal_pending_enable,communication_calls,storage_calls,total_events
+command_enable,0,0,1,1,0,0,0,0,0,0,0,0,0,2
+startup_isr,1,1,1,0,1,1,1,0,0,0,1,0,0,5
+apply_isr,2,1,1,0,1,1,1,0,0,1,1,0,0,8
+background,2,1,1,0,1,1,1,0,0,1,1,1,1,10
+telemetry_read,2,1,1,0,1,1,1,0,0,1,1,1,1,12
+command_disable,2,1,0,1,1,1,1,0,0,1,1,1,1,14
+disable_isr,3,0,0,0,1,1,0,0,0,0,0,1,1,18
+command_restart,3,0,1,1,1,1,0,0,0,0,0,1,1,20
+restart_queue_isr,4,1,1,0,1,1,1,0,0,0,1,1,1,23
+restart_apply_isr,5,1,1,0,1,1,1,0,0,1,1,1,1,26
+ocp_isr,6,1,1,0,1,1,0,0,0,0,0,1,1,30
+adc_failure_isr,7,1,1,0,1,0,0,0,0,0,0,1,1,34

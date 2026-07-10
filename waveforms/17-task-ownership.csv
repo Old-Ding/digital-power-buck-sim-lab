@@ -1,0 +1,4 @@
+task,pwm_update,adc_read,pwm_disable,pwm_write,communication,storage,critical_enter,critical_exit
+control_isr,7,7,3,7,0,0,0,0
+background,0,0,0,0,1,1,0,0
+shared_exchange,0,0,0,0,0,0,4,4

@@ -12,7 +12,7 @@
 | 输出电流 | 5 A |
 | 输出功率 | 60 W |
 | 开关频率 | 200 kHz |
-| 当前阶段 | 第二季：5 us 控制中断执行顺序与时间预算 |
+| 当前阶段 | 第二季：实时/后台任务分层与 HAL 适配边界 |
 
 第一阶段只做低压 DC-DC，不涉及市电输入和隔离拓扑。
 
@@ -36,6 +36,7 @@
 | 14 | ADC 原始码怎么变成 Q20 电压、电流和温度 | 已完成，可复现 |
 | 15 | Q20 duty 怎么变成中心对齐 PWM 比较值 | 已完成，可复现 |
 | 16 | 5 us 控制中断里 ADC、控制器和 PWM 应该按什么顺序执行 | 已完成，可复现 |
+| 17 | 哪些代码放 5 us 中断，哪些放后台，HAL 接口怎么拆 | 已完成，可复现 |
 
 第二章对应的核心文件：
 
@@ -242,6 +243,20 @@
 | 测试报告 | `reports/16-isr-timing-report.md` |
 | 数据与图表 | `waveforms/16-isr-*.csv`、`waveforms/16-isr-*.png` |
 
+第十七章对应的核心文件：
+
+| 类型 | 文件 |
+| --- | --- |
+| 教程文章 | `blog/17-firmware-layering-hal.md` |
+| 复现说明 | `docs/17-firmware-layering-hal-reproduce.md` |
+| 固件分层源码 | `src/digital_power_firmware.c`、`src/digital_power_firmware.h` |
+| 假 HAL | `tests/fake_digital_power_hal.c`、`tests/fake_digital_power_hal.h` |
+| C 单元测试 | `tests/test_digital_power_firmware.c` |
+| 事件回放入口 | `tests/replay_digital_power_firmware.c` |
+| 自动化脚本 | `scripts/run_firmware_layering_tests.py` |
+| 测试报告 | `reports/17-firmware-layering-report.md` |
+| 数据与图表 | `waveforms/17-*.csv`、`waveforms/17-*.png` |
+
 ## 复现方式
 
 在仓库根目录运行：
@@ -413,6 +428,14 @@ python scripts\run_isr_timing_tests.py
 ```
 
 该章把 PWM 更新、ADC 映射、Q20 控制和下一周期 PWM 排队放进唯一编排层，验证一周期 compare 延迟、OCP 同周期关断和同步重启。当前 13 项 PASS、0 项 FAIL；5 us 周期分配 3.5 us ISR 目标预算和 1.5 us 余量，4 项主机计时仅标为 INFO。
+
+第 17 章的实时/后台分层与 HAL 适配测试运行：
+
+```powershell
+python scripts\run_firmware_layering_tests.py
+```
+
+该章用假 HAL 记录 12 个阶段的 34 次真实 C 调用，验证 ISR 只处理更新、ADC、PWM 和立即关断，后台只处理通信与存储，多字段命令和遥测通过短临界区交换。当前 21 项指标全部 PASS。
 
 ## 第二章结果
 
@@ -665,6 +688,22 @@ python scripts\run_isr_timing_tests.py
 
 第 16 章固定更新事件、ADC、控制器和 PWM 的调用顺序，并建立目标 MCU 的时间预算验收线。Windows 主机基准只用于代码回归，不作为目标 MCU 5 us 截止时间证据。
 
+## 第十七章结果
+
+| 检查项 | 当前结果 |
+| --- | --- |
+| 回放阶段 / HAL 事件 | 12 / 34 |
+| ISR 实时动作边界 | PASS |
+| 后台通信/存储边界 | PASS |
+| OCP 先关断后写预装载 | PASS |
+| ADC 失败失效安全顺序 | PASS |
+| disable 命令下一 ISR 提交 | PASS |
+| restart 等待 PWM 更新 | PASS |
+| 遥测快照短临界区复制 | PASS |
+| 指标结果 | PASS 21 / FAIL 0 |
+
+第 17 章建立平台无关固件编排层和 HAL 接口。结果覆盖调用顺序、任务归属和共享数据边界，不包含具体 MCU 寄存器、DMA、NVIC 或 Flash 驱动。
+
 ## 仓库结构
 
 ```text
@@ -684,7 +723,7 @@ waveforms/          仿真原始数据、指标和波形图
 
 ## 后续计划
 
-第 16 章之后，第二季将把固定周期中断与通信、日志、参数保存等后台任务分层，并通过 HAL 适配接口连接具体 ADC、PWM 和故障输入。后续主题会在完成源码、测试、数据、图表和说明后加入本仓库。
+第 17 章之后，第二季将选择明确的 MCU 指令集目标，用真实交叉编译器生成 ELF/BIN/反汇编文件，再把主机测试和目标构建接入持续回归。后续主题会在完成源码、测试、数据、图表和说明后加入本仓库。
 
 ## 技术交流
 
