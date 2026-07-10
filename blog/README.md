@@ -23,7 +23,8 @@
 | 15 | `15-pwm-timer-mapping.md` | Q20 duty 怎么变成中心对齐 PWM 比较值 |
 | 16 | `16-control-isr-timing.md` | 5 us 控制中断里 ADC、控制器和 PWM 应该按什么顺序执行 |
 | 17 | `17-firmware-layering-hal.md` | 哪些代码放 5 us 中断，哪些放后台，HAL 接口怎么拆 |
+| 18 | `18-cortex-m4f-target-build.md` | 如何把控制固件交叉编译成 Cortex-M4F 的 ELF 和 BIN |
 
 ## 后续主题
 
-后续内容会在源码、测试、报告和文章完成后再加入。第二季下一步将使用真实交叉编译器生成目标 MCU 的 ELF/BIN/反汇编文件，并检查映像和指令依赖。
+后续内容会在源码、测试、报告和文章完成后再加入。第二季下一步将把第二季全部主机测试和 Cortex-M4F 构建接入同一套持续回归。

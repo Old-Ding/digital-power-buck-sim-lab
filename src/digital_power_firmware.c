@@ -1,6 +1,15 @@
 #include "digital_power_firmware.h"
 
-#include <string.h>
+static void dp_firmware_zero_bytes(void *memory, uint32_t count)
+{
+    uint8_t *bytes = (uint8_t *)memory;
+    uint32_t index;
+
+    for (index = 0u; index < count; index++)
+    {
+        bytes[index] = 0u;
+    }
+}
 
 static void dp_firmware_publish_telemetry(DpFirmwareContext *ctx,
                                           const DpControlIsrOutput *control_out,
@@ -31,7 +40,7 @@ void DpFirmware_Init(DpFirmwareContext *ctx, const DpControlIsrConfig *cfg)
     ctx->active_command.clear_fault = false;
     ctx->pending_command = ctx->active_command;
     ctx->command_pending = false;
-    memset(&ctx->telemetry, 0, sizeof(ctx->telemetry));
+    dp_firmware_zero_bytes(&ctx->telemetry, (uint32_t)sizeof(ctx->telemetry));
     ctx->telemetry_valid = false;
 }
 
@@ -56,7 +65,7 @@ void DpFirmware_ControlIsr(DpFirmwareContext *ctx,
     bool sample_valid;
 
     hal->ops->pwm_update_event(hal->user_context);
-    memset(&sample, 0, sizeof(sample));
+    dp_firmware_zero_bytes(&sample, (uint32_t)sizeof(sample));
     sample_valid = hal->ops->read_adc_sample(hal->user_context, &sample);
 
     if (ctx->command_pending)
@@ -100,11 +109,11 @@ bool DpFirmware_ReadTelemetry(DpFirmwareContext *ctx,
 
 void DpFirmware_BackgroundStep(const DpFirmwareHal *hal)
 {
-    if (hal->ops->service_communication != NULL)
+    if (hal->ops->service_communication != 0)
     {
         hal->ops->service_communication(hal->user_context);
     }
-    if (hal->ops->service_storage != NULL)
+    if (hal->ops->service_storage != 0)
     {
         hal->ops->service_storage(hal->user_context);
     }

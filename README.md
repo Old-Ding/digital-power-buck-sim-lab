@@ -12,7 +12,7 @@
 | 输出电流 | 5 A |
 | 输出功率 | 60 W |
 | 开关频率 | 200 kHz |
-| 当前阶段 | 第二季：实时/后台任务分层与 HAL 适配边界 |
+| 当前阶段 | 第二季：Cortex-M4F 交叉构建与固件映像审计 |
 
 第一阶段只做低压 DC-DC，不涉及市电输入和隔离拓扑。
 
@@ -37,6 +37,7 @@
 | 15 | Q20 duty 怎么变成中心对齐 PWM 比较值 | 已完成，可复现 |
 | 16 | 5 us 控制中断里 ADC、控制器和 PWM 应该按什么顺序执行 | 已完成，可复现 |
 | 17 | 哪些代码放 5 us 中断，哪些放后台，HAL 接口怎么拆 | 已完成，可复现 |
+| 18 | 如何把控制固件交叉编译成 Cortex-M4F 的 ELF 和 BIN | 已完成，可复现 |
 
 第二章对应的核心文件：
 
@@ -257,6 +258,20 @@
 | 测试报告 | `reports/17-firmware-layering-report.md` |
 | 数据与图表 | `waveforms/17-*.csv`、`waveforms/17-*.png` |
 
+第十八章对应的核心文件：
+
+| 类型 | 文件 |
+| --- | --- |
+| 教程文章 | `blog/18-cortex-m4f-target-build.md` |
+| 复现说明 | `docs/18-cortex-m4f-target-build-reproduce.md` |
+| 启动文件与链接脚本 | `target/cortex-m4f/startup_cortex_m4f.c`、`target/cortex-m4f/linker.ld` |
+| 目标入口与 HAL 寄存器模型 | `target/cortex-m4f/firmware_entry.c` |
+| 构建/审计脚本 | `scripts/build_cortex_m4f_firmware.py` |
+| 发布映像 | `firmware/cortex-m4f/digital_power_cortex_m4f.elf`、`.bin` |
+| map 与反汇编 | `firmware/cortex-m4f/digital_power_cortex_m4f.map`、`.lst` |
+| 测试报告 | `reports/18-target-build-report.md` |
+| 数据与图表 | `waveforms/18-*.csv`、`waveforms/18-*.png` |
+
 ## 复现方式
 
 在仓库根目录运行：
@@ -436,6 +451,14 @@ python scripts\run_firmware_layering_tests.py
 ```
 
 该章用假 HAL 记录 12 个阶段的 34 次真实 C 调用，验证 ISR 只处理更新、ADC、PWM 和立即关断，后台只处理通信与存储，多字段命令和遥测通过短临界区交换。当前 21 项指标全部 PASS。
+
+第 18 章的 Cortex-M4F 交叉构建与映像审计运行：
+
+```powershell
+python scripts\build_cortex_m4f_firmware.py
+```
+
+该章使用 Zig 0.16.0 真实生成 Cortex-M4F ELF/BIN，并用 pyelftools 和 Capstone 检查入口、向量表、段、符号和 Thumb 指令。当前发布 ELF 为 131652 B、BIN 为 5112 B，13 项 PASS、0 项 FAIL、1 项整数除法助手 INFO。
 
 ## 第二章结果
 
@@ -704,6 +727,22 @@ python scripts\run_firmware_layering_tests.py
 
 第 17 章建立平台无关固件编排层和 HAL 接口。结果覆盖调用顺序、任务归属和共享数据边界，不包含具体 MCU 寄存器、DMA、NVIC 或 Flash 驱动。
 
+## 第十八章结果
+
+| 检查项 | 当前结果 |
+| --- | --- |
+| 目标 | thumb-freestanding-eabihf / Cortex-M4 |
+| 发布 ELF / BIN | 131652 B / 5112 B |
+| ELF 入口 | `0x08000F85`，匹配 `Reset_Handler` |
+| 向量表 | `0x08000000`，68 B |
+| Flash / RAM+4KB栈 | 5112 B / 4376 B |
+| 必需符号 / 未解析符号 | 4 / 0 |
+| 浮点助手 / VFP 指令 | 0 / 0 |
+| 64 位整数除法助手 | 2，INFO |
+| 指标结果 | PASS 13 / FAIL 0 / INFO 1 |
+
+第 18 章证明平台无关固件可以生成可审计的 Cortex-M4F 裸机映像。目标 HAL 仍使用可编译寄存器模型，不包含具体 STM32G4 外设初始化或实物执行时间证据。
+
 ## 仓库结构
 
 ```text
@@ -715,6 +754,8 @@ models/simulink/    Simulink 平均模型
 reports/            场景测试报告
 scripts/            可复现脚本
 src/                浮点/定点控制器、ADC 与 PWM 映射源码
+target/cortex-m4f/  Cortex-M4F 启动、链接和目标入口源码
+firmware/cortex-m4f/ 已生成的 ELF、BIN、map 和反汇编
 tests/              电脑端单元测试、边界测试和 C 回放入口
 waveforms/          仿真原始数据、指标和波形图
 ```
@@ -723,7 +764,7 @@ waveforms/          仿真原始数据、指标和波形图
 
 ## 后续计划
 
-第 17 章之后，第二季将选择明确的 MCU 指令集目标，用真实交叉编译器生成 ELF/BIN/反汇编文件，再把主机测试和目标构建接入持续回归。后续主题会在完成源码、测试、数据、图表和说明后加入本仓库。
+第 18 章之后，第二季将把主机单元测试、数值对照、定点/映射检查、固件分层和 Cortex-M4F 构建接入同一套持续回归。后续主题会在完成源码、测试、数据、图表和说明后加入本仓库。
 
 ## 技术交流
 

@@ -1,0 +1,1789 @@
+; Cortex-M4F Thumb disassembly generated from digital_power_cortex_m4f.elf
+
+
+DpAdcMap_DefaultConfig:
+08000044:  b0 b5         push      {r4, r5, r7, lr}
+08000046:  48 f2 a0 64   movw      r4, #0x86a0
+0800004a:  41 f6 80 25   movw      r5, #0x1a80
+0800004e:  45 f6 a0 22   movw      r2, #0x5aa0
+08000052:  5c 23         movs      r3, #0x5c
+08000054:  0a 21         movs      r1, #0xa
+08000056:  4f f0 31 0e   mov.w     lr, #0x31
+0800005a:  c0 f2 01 04   movt      r4, #1
+0800005e:  c0 f2 06 05   movt      r5, #6
+08000062:  40 f6 ff 7c   movw      ip, #0xfff
+08000066:  c0 f2 32 02   movt      r2, #0x32
+0800006a:  c0 e9 02 31   strd      r3, r1, [r0, #8]
+0800006e:  c0 e9 04 e1   strd      lr, r1, [r0, #0x10]
+08000072:  c0 e9 06 45   strd      r4, r5, [r0, #0x18]
+08000076:  4a f2 20 11   movw      r1, #0xa120
+0800007a:  00 24         movs      r4, #0
+0800007c:  c0 e9 00 c2   strd      ip, r2, [r0]
+08000080:  c0 f2 07 01   movt      r1, #7
+08000084:  cf f6 80 54   movt      r4, #0xfd80
+08000088:  4f f0 16 6c   mov.w     ip, #0x9600000
+0800008c:  00 f1 20 0e   add.w     lr, r0, #0x20
+08000090:  42 f2 10 72   movw      r2, #0x2710
+08000094:  00 23         movs      r3, #0
+08000096:  4f f4 00 05   mov.w     r5, #0x800000
+0800009a:  8e e8 2e 00   stm.w     lr, {r1, r2, r3, r5}
+0800009e:  c0 e9 0c 4c   strd      r4, ip, [r0, #0x30]
+080000a2:  b0 bd         pop       {r4, r5, r7, pc}
+
+DpAdcMap_Convert:
+080000a4:  2d e9 f0 4f   push.w    {r4, r5, r6, r7, r8, sb, sl, fp, lr}
+080000a8:  89 b0         sub       sp, #0x24
+080000aa:  0d 46         mov       r5, r1
+080000ac:  d2 e9 00 31   ldrd      r3, r1, [r2]
+080000b0:  d5 e9 00 b7   ldrd      fp, r7, [r5]
+080000b4:  4f f0 00 0c   mov.w     ip, #0
+080000b8:  5b 45         cmp       r3, fp
+080000ba:  5e 46         mov       r6, fp
+080000bc:  04 93         str       r3, [sp, #0x10]
+080000be:  38 bf         it        lo
+080000c0:  1e 46         movlo     r6, r3
+080000c2:  59 45         cmp       r1, fp
+080000c4:  d8 46         mov       r8, fp
+080000c6:  05 91         str       r1, [sp, #0x14]
+080000c8:  38 bf         it        lo
+080000ca:  88 46         movlo     r8, r1
+080000cc:  5f ea 5c 09   lsrs.w    sb, ip, #1
+080000d0:  4f ea 3b 04   rrx       r4, fp
+080000d4:  49 46         mov       r1, sb
+080000d6:  23 46         mov       r3, r4
+080000d8:  02 97         str       r7, [sp, #8]
+080000da:  e7 fb 06 31   umlal     r3, r1, r7, r6
+080000de:  97 68         ldr       r7, [r2, #8]
+080000e0:  ae 68         ldr       r6, [r5, #8]
+080000e2:  03 97         str       r7, [sp, #0xc]
+080000e4:  d7 68         ldr       r7, [r2, #0xc]
+080000e6:  12 8a         ldrh      r2, [r2, #0x10]
+080000e8:  06 97         str       r7, [sp, #0x18]
+080000ea:  07 90         str       r0, [sp, #0x1c]
+080000ec:  02 80         strh      r2, [r0]
+080000ee:  d5 f8 0c a0   ldr.w     sl, [r5, #0xc]
+080000f2:  44 f2 40 27   movw      r7, #0x4240
+080000f6:  18 46         mov       r0, r3
+080000f8:  5a 46         mov       r2, fp
+080000fa:  00 23         movs      r3, #0
+080000fc:  8d f8 23 c0   strb.w    ip, [sp, #0x23]
+08000100:  c0 f2 0f 07   movt      r7, #0xf
+08000104:  00 f0 c6 ff   bl        #0x8001094
+08000108:  a6 fb 00 02   umull     r0, r2, r6, r0
+0800010c:  06 fb 01 21   mla       r1, r6, r1, r2
+08000110:  aa fb 07 23   umull     r2, r3, sl, r7
+08000114:  5f ea 53 06   lsrs.w    r6, r3, #1
+08000118:  ba 46         mov       sl, r7
+0800011a:  4f ea 01 51   lsl.w     r1, r1, #0x14
+0800011e:  4f ea 32 07   rrx       r7, r2
+08000122:  41 ea 10 31   orr.w     r1, r1, r0, lsr #12
+08000126:  17 eb 00 50   adds.w    r0, r7, r0, lsl #20
+0800012a:  71 41         adcs      r1, r6
+0800012c:  00 f0 b2 ff   bl        #0x8001094
+08000130:  b0 f1 00 42   subs.w    r2, r0, #-0x80000000
+08000134:  71 f1 00 01   sbcs      r1, r1, #0
+08000138:  22 bf         ittt      hs
+0800013a:  01 20         movhs     r0, #1
+0800013c:  8d f8 23 00   strbhs.w  r0, [sp, #0x23]
+08000140:  6f f0 00 40   mvnhs     r0, #0x80000000
+08000144:  02 99         ldr       r1, [sp, #8]
+08000146:  d5 e9 04 67   ldrd      r6, r7, [r5, #0x10]
+0800014a:  e1 fb 08 49   umlal     r4, sb, r1, r8
+0800014e:  dd f8 1c 80   ldr.w     r8, [sp, #0x1c]
+08000152:  49 46         mov       r1, sb
+08000154:  c8 f8 04 00   str.w     r0, [r8, #4]
+08000158:  20 46         mov       r0, r4
+0800015a:  5a 46         mov       r2, fp
+0800015c:  00 23         movs      r3, #0
+0800015e:  00 f0 99 ff   bl        #0x8001094
+08000162:  a6 fb 00 02   umull     r0, r2, r6, r0
+08000166:  06 fb 01 21   mla       r1, r6, r1, r2
+0800016a:  a7 fb 0a 23   umull     r2, r3, r7, sl
+0800016e:  5f ea 53 07   lsrs.w    r7, r3, #1
+08000172:  4f ea 01 51   lsl.w     r1, r1, #0x14
+08000176:  4f ea 32 06   rrx       r6, r2
+0800017a:  41 ea 10 31   orr.w     r1, r1, r0, lsr #12
+0800017e:  16 eb 00 50   adds.w    r0, r6, r0, lsl #20
+08000182:  79 41         adcs      r1, r7
+08000184:  00 f0 86 ff   bl        #0x8001094
+08000188:  b0 f1 00 42   subs.w    r2, r0, #-0x80000000
+0800018c:  71 f1 00 01   sbcs      r1, r1, #0
+08000190:  22 bf         ittt      hs
+08000192:  01 20         movhs     r0, #1
+08000194:  8d f8 23 00   strbhs.w  r0, [sp, #0x23]
+08000198:  6f f0 00 40   mvnhs     r0, #0x80000000
+0800019c:  06 9f         ldr       r7, [sp, #0x18]
+0800019e:  00 21         movs      r1, #0
+080001a0:  5f 45         cmp       r7, fp
+080001a2:  88 bf         it        hi
+080001a4:  01 21         movhi     r1, #1
+080001a6:  28 bf         it        hs
+080001a8:  5f 46         movhs     r7, fp
+080001aa:  04 9a         ldr       r2, [sp, #0x10]
+080001ac:  00 26         movs      r6, #0
+080001ae:  5a 45         cmp       r2, fp
+080001b0:  4f f0 00 02   mov.w     r2, #0
+080001b4:  88 bf         it        hi
+080001b6:  01 22         movhi     r2, #1
+080001b8:  05 9b         ldr       r3, [sp, #0x14]
+080001ba:  4f f0 00 09   mov.w     sb, #0
+080001be:  5b 45         cmp       r3, fp
+080001c0:  4f f0 00 03   mov.w     r3, #0
+080001c4:  88 bf         it        hi
+080001c6:  01 23         movhi     r3, #1
+080001c8:  03 9c         ldr       r4, [sp, #0xc]
+080001ca:  5c 45         cmp       r4, fp
+080001cc:  88 bf         it        hi
+080001ce:  01 26         movhi     r6, #1
+080001d0:  41 ea 06 01   orr.w     r1, r1, r6
+080001d4:  41 ea 03 01   orr.w     r1, r1, r3
+080001d8:  41 ea 02 0a   orr.w     sl, r1, r2
+080001dc:  38 bf         it        lo
+080001de:  a3 46         movlo     fp, r4
+080001e0:  d5 e9 06 12   ldrd      r1, r2, [r5, #0x18]
+080001e4:  c8 f8 08 00   str.w     r0, [r8, #8]
+080001e8:  0d f1 23 06   add.w     r6, sp, #0x23
+080001ec:  58 46         mov       r0, fp
+080001ee:  2b 46         mov       r3, r5
+080001f0:  00 96         str       r6, [sp]
+080001f2:  00 f0 39 f8   bl        #0x8000268
+080001f6:  d5 e9 08 12   ldrd      r1, r2, [r5, #0x20]
+080001fa:  04 46         mov       r4, r0
+080001fc:  38 46         mov       r0, r7
+080001fe:  2b 46         mov       r3, r5
+08000200:  00 96         str       r6, [sp]
+08000202:  00 f0 31 f8   bl        #0x8000268
+08000206:  05 f1 28 06   add.w     r6, r5, #0x28
+0800020a:  4e ce         ldm       r6, {r1, r2, r3, r6}
+0800020c:  94 42         cmp       r4, r2
+0800020e:  4f f0 00 05   mov.w     r5, #0
+08000212:  c8 bf         it        gt
+08000214:  01 25         movgt     r5, #1
+08000216:  b8 bf         it        lt
+08000218:  22 46         movlt     r2, r4
+0800021a:  8c 42         cmp       r4, r1
+0800021c:  4f f0 00 04   mov.w     r4, #0
+08000220:  bc bf         itt       lt
+08000222:  01 24         movlt     r4, #1
+08000224:  0a 46         movlt     r2, r1
+08000226:  b0 42         cmp       r0, r6
+08000228:  4f f0 00 01   mov.w     r1, #0
+0800022c:  c8 f8 0c 20   str.w     r2, [r8, #0xc]
+08000230:  c8 bf         it        gt
+08000232:  01 21         movgt     r1, #1
+08000234:  b8 bf         it        lt
+08000236:  06 46         movlt     r6, r0
+08000238:  98 42         cmp       r0, r3
+0800023a:  b8 bf         it        lt
+0800023c:  4f f0 01 09   movlt.w   sb, #1
+08000240:  49 ea 04 00   orr.w     r0, sb, r4
+08000244:  40 ea 01 00   orr.w     r0, r0, r1
+08000248:  b8 bf         it        lt
+0800024a:  1e 46         movlt     r6, r3
+0800024c:  9d f8 23 10   ldrb.w    r1, [sp, #0x23]
+08000250:  28 43         orrs      r0, r5
+08000252:  c8 f8 10 60   str.w     r6, [r8, #0x10]
+08000256:  88 f8 14 a0   strb.w    sl, [r8, #0x14]
+0800025a:  88 f8 15 00   strb.w    r0, [r8, #0x15]
+0800025e:  88 f8 16 10   strb.w    r1, [r8, #0x16]
+08000262:  09 b0         add       sp, #0x24
+08000264:  bd e8 f0 8f   pop.w     {r4, r5, r6, r7, r8, sb, sl, fp, pc}
+
+dp_adc_sensor_to_fixed:
+08000268:  2d e9 f0 47   push.w    {r4, r5, r6, r7, r8, sb, sl, lr}
+0800026c:  d3 e9 00 37   ldrd      r3, r7, [r3]
+08000270:  4f f0 00 09   mov.w     sb, #0
+08000274:  5f ea 59 06   lsrs.w    r6, sb, #1
+08000278:  4f ea 33 04   rrx       r4, r3
+0800027c:  35 46         mov       r5, r6
+0800027e:  e7 fb 00 45   umlal     r4, r5, r7, r0
+08000282:  92 46         mov       sl, r2
+08000284:  dd f8 20 80   ldr.w     r8, [sp, #0x20]
+08000288:  0f 46         mov       r7, r1
+0800028a:  20 46         mov       r0, r4
+0800028c:  29 46         mov       r1, r5
+0800028e:  1a 46         mov       r2, r3
+08000290:  4f f0 00 03   mov.w     r3, #0
+08000294:  4f ea 3a 04   rrx       r4, sl
+08000298:  00 f0 fc fe   bl        #0x8001094
+0800029c:  c0 1b         subs      r0, r0, r7
+0800029e:  61 eb e7 71   sbc.w     r1, r1, r7, asr #31
+080002a2:  63 42         rsbs      r3, r4, #0
+080002a4:  4f ea 01 52   lsl.w     r2, r1, #0x14
+080002a8:  69 eb 06 07   sbc.w     r7, sb, r6
+080002ac:  00 29         cmp       r1, #0
+080002ae:  42 ea 10 32   orr.w     r2, r2, r0, lsr #12
+080002b2:  5c bf         itt       pl
+080002b4:  37 46         movpl     r7, r6
+080002b6:  23 46         movpl     r3, r4
+080002b8:  13 eb 00 50   adds.w    r0, r3, r0, lsl #20
+080002bc:  47 eb 02 01   adc.w     r1, r7, r2
+080002c0:  52 46         mov       r2, sl
+080002c2:  00 23         movs      r3, #0
+080002c4:  00 f0 f0 fe   bl        #0x80010a8
+080002c8:  b0 f1 00 42   subs.w    r2, r0, #-0x80000000
+080002cc:  71 f1 00 02   sbcs      r2, r1, #0
+080002d0:  06 db         blt       #0x80002e0
+080002d2:  01 20         movs      r0, #1
+080002d4:  88 f8 00 00   strb.w    r0, [r8]
+080002d8:  6f f0 00 40   mvn       r0, #0x80000000
+080002dc:  bd e8 f0 87   pop.w     {r4, r5, r6, r7, r8, sb, sl, pc}
+080002e0:  6f f0 00 42   mvn       r2, #0x80000000
+080002e4:  12 1a         subs      r2, r2, r0
+080002e6:  4f f0 ff 32   mov.w     r2, #-1
+080002ea:  72 eb 01 01   sbcs.w    r1, r2, r1
+080002ee:  a2 bf         ittt      ge
+080002f0:  01 20         movge     r0, #1
+080002f2:  88 f8 00 00   strbge.w  r0, [r8]
+080002f6:  4f f0 00 40   movge.w   r0, #-0x80000000
+080002fa:  bd e8 f0 87   pop.w     {r4, r5, r6, r7, r8, sb, sl, pc}
+
+DpFixedControl_DefaultConfig:
+080002fe:  70 b5         push      {r4, r5, r6, lr}
+08000300:  4f f4 40 01   mov.w     r1, #0xc00000
+08000304:  40 f2 25 62   movw      r2, #0x625
+08000308:  4c f6 cd 43   movw      r3, #0xcccd
+0800030c:  40 f2 a3 1c   movw      ip, #0x1a3
+08000310:  4f f4 00 2e   mov.w     lr, #0x80000
+08000314:  00 24         movs      r4, #0
+08000316:  46 f2 66 65   movw      r5, #0x6666
+0800031a:  80 e8 0e 50   stm.w     r0, {r1, r2, r3, ip, lr}
+0800031e:  00 f1 14 01   add.w     r1, r0, #0x14
+08000322:  c0 f2 0a 05   movt      r5, #0xa
+08000326:  4f f4 80 16   mov.w     r6, #0x100000
+0800032a:  70 c1         stm       r1!, {r4, r5, r6}
+0800032c:  4f f4 d0 01   mov.w     r1, #0x680000
+08000330:  43 f2 33 32   movw      r2, #0x3333
+08000334:  20 30         adds      r0, #0x20
+08000336:  c0 f2 d3 02   movt      r2, #0xd3
+0800033a:  4f f0 90 73   mov.w     r3, #0x1200000
+0800033e:  4f f0 c8 66   mov.w     r6, #0x6400000
+08000342:  4e c0         stm       r0!, {r1, r2, r3, r6}
+08000344:  70 bd         pop       {r4, r5, r6, pc}
+
+DpFixedControl_Init:
+08000346:  09 68         ldr       r1, [r1]
+08000348:  00 22         movs      r2, #0
+0800034a:  02 60         str       r2, [r0]
+0800034c:  c0 e9 01 21   strd      r2, r1, [r0, #4]
+08000350:  c0 e9 03 22   strd      r2, r2, [r0, #0xc]
+08000354:  c0 e9 05 22   strd      r2, r2, [r0, #0x14]
+08000358:  c2 61         str       r2, [r0, #0x1c]
+0800035a:  70 47         bx        lr
+
+DpFixedControl_Step:
+0800035c:  2d e9 f0 4f   push.w    {r4, r5, r6, r7, r8, sb, sl, fp, lr}
+08000360:  93 b0         sub       sp, #0x4c
+08000362:  8b 46         mov       fp, r1
+08000364:  d2 e9 07 17   ldrd      r1, r7, [r2, #0x1c]
+08000368:  db f8 08 c0   ldr.w     ip, [fp, #8]
+0800036c:  07 91         str       r1, [sp, #0x1c]
+0800036e:  21 ea e1 71   bic.w     r1, r1, r1, asr #31
+08000372:  0e 97         str       r7, [sp, #0x38]
+08000374:  b1 f5 80 1f   cmp.w     r1, #0x100000
+08000378:  a8 bf         it        ge
+0800037a:  4f f4 80 11   movge.w   r1, #0x100000
+0800037e:  0b 93         str       r3, [sp, #0x2c]
+08000380:  d3 e9 02 a3   ldrd      sl, r3, [r3, #8]
+08000384:  40 f2 00 09   movw      sb, #0
+08000388:  c1 f5 80 18   rsb.w     r8, r1, #0x100000
+0800038c:  cf f6 f8 79   movt      sb, #0xfff8
+08000390:  81 fb 0a 76   smull     r7, r6, r1, sl
+08000394:  88 fb 0c 75   smull     r7, r5, r8, ip
+08000398:  4c 46         mov       r4, sb
+0800039a:  b6 f1 ff 3f   cmp.w     r6, #-1
+0800039e:  c8 bf         it        gt
+080003a0:  4f f4 00 24   movgt.w   r4, #0x80000
+080003a4:  f7 17         asrs      r7, r6, #0x1f
+080003a6:  c1 fb 0a 47   smlal     r4, r7, r1, sl
+080003aa:  f9 17         asrs      r1, r7, #0x1f
+080003ac:  14 eb 11 3e   adds.w    lr, r4, r1, lsr #12
+080003b0:  47 f1 00 04   adc       r4, r7, #0
+080003b4:  b5 f1 ff 3f   cmp.w     r5, #-1
+080003b8:  c8 bf         it        gt
+080003ba:  4f f4 00 29   movgt.w   sb, #0x80000
+080003be:  db f8 18 10   ldr.w     r1, [fp, #0x18]
+080003c2:  ee 17         asrs      r6, r5, #0x1f
+080003c4:  01 31         adds      r1, #1
+080003c6:  c8 fb 0c 96   smlal     sb, r6, r8, ip
+080003ca:  cb f8 18 10   str.w     r1, [fp, #0x18]
+080003ce:  4f ea 1e 51   lsr.w     r1, lr, #0x14
+080003d2:  41 ea 04 35   orr.w     r5, r1, r4, lsl #12
+080003d6:  f1 17         asrs      r1, r6, #0x1f
+080003d8:  19 eb 11 31   adds.w    r1, sb, r1, lsr #12
+080003dc:  46 f1 00 07   adc       r7, r6, #0
+080003e0:  09 0d         lsrs      r1, r1, #0x14
+080003e2:  41 ea 07 31   orr.w     r1, r1, r7, lsl #12
+080003e6:  3e 15         asrs      r6, r7, #0x14
+080003e8:  4f 19         adds      r7, r1, r5
+080003ea:  4f f0 ff 3c   mov.w     ip, #-1
+080003ee:  46 eb 24 51   adc.w     r1, r6, r4, asr #20
+080003f2:  d7 f1 00 46   rsbs.w    r6, r7, #-0x80000000
+080003f6:  7c eb 01 06   sbcs.w    r6, ip, r1
+080003fa:  4f f0 ff 35   mov.w     r5, #-1
+080003fe:  3c 46         mov       r4, r7
+08000400:  9e 46         mov       lr, r3
+08000402:  0e 9b         ldr       r3, [sp, #0x38]
+08000404:  b4 bf         ite       lt
+08000406:  0d 46         movlt     r5, r1
+08000408:  4f f0 00 44   movge.w   r4, #-0x80000000
+0800040c:  17 f1 00 47   adds.w    r7, r7, #-0x80000000
+08000410:  61 f1 00 01   sbc       r1, r1, #0
+08000414:  b1 f1 ff 38   subs.w    r8, r1, #-1
+08000418:  6f f0 00 47   mvn       r7, #0x80000000
+0800041c:  18 bf         it        ne
+0800041e:  4f f0 01 08   movne.w   r8, #1
+08000422:  e1 1b         subs      r1, r4, r7
+08000424:  75 f1 00 01   sbcs      r1, r5, #0
+08000428:  4f f0 00 06   mov.w     r6, #0
+0800042c:  a8 bf         it        ge
+0800042e:  3c 46         movge     r4, r7
+08000430:  b8 bf         it        lt
+08000432:  01 26         movlt     r6, #1
+08000434:  00 2e         cmp       r6, #0
+08000436:  18 bf         it        ne
+08000438:  2e 46         movne     r6, r5
+0800043a:  9e 45         cmp       lr, r3
+0800043c:  0f 94         str       r4, [sp, #0x3c]
+0800043e:  cb f8 08 40   str.w     r4, [fp, #8]
+08000442:  12 92         str       r2, [sp, #0x48]
+08000444:  cd f8 40 b0   str.w     fp, [sp, #0x40]
+08000448:  cd e9 09 ae   strd      sl, lr, [sp, #0x24]
+0800044c:  1d da         bge       #0x800048a
+0800044e:  51 6a         ldr       r1, [r2, #0x24]
+08000450:  0b 9b         ldr       r3, [sp, #0x2c]
+08000452:  a1 42         cmp       r1, r4
+08000454:  1b dd         ble       #0x800048e
+08000456:  59 68         ldr       r1, [r3, #4]
+08000458:  97 6a         ldr       r7, [r2, #0x28]
+0800045a:  b9 42         cmp       r1, r7
+0800045c:  19 dd         ble       #0x8000492
+0800045e:  19 69         ldr       r1, [r3, #0x10]
+08000460:  d2 6a         ldr       r2, [r2, #0x2c]
+08000462:  91 42         cmp       r1, r2
+08000464:  17 da         bge       #0x8000496
+08000466:  db f8 00 20   ldr.w     r2, [fp]
+0800046a:  00 21         movs      r1, #0
+0800046c:  03 2a         cmp       r2, #3
+0800046e:  c1 62         str       r1, [r0, #0x2c]
+08000470:  40 f0 89 83   bne.w     #0x8000b86
+08000474:  59 78         ldrb      r1, [r3, #1]
+08000476:  01 29         cmp       r1, #1
+08000478:  40 f0 a4 83   bne.w     #0x8000bc4
+0800047c:  1a 78         ldrb      r2, [r3]
+0800047e:  00 21         movs      r1, #0
+08000480:  cb e9 00 21   strd      r2, r1, [fp]
+08000484:  cb e9 03 11   strd      r1, r1, [fp, #0xc]
+08000488:  90 e3         b         #0x8000bac
+0800048a:  01 21         movs      r1, #1
+0800048c:  04 e0         b         #0x8000498
+0800048e:  02 21         movs      r1, #2
+08000490:  02 e0         b         #0x8000498
+08000492:  03 21         movs      r1, #3
+08000494:  00 e0         b         #0x8000498
+08000496:  04 21         movs      r1, #4
+08000498:  03 23         movs      r3, #3
+0800049a:  03 22         movs      r2, #3
+0800049c:  c1 62         str       r1, [r0, #0x2c]
+0800049e:  0c 92         str       r2, [sp, #0x30]
+080004a0:  cb e9 00 31   strd      r3, r1, [fp]
+080004a4:  84 46         mov       ip, r0
+080004a6:  db f8 0c b0   ldr.w     fp, [fp, #0xc]
+080004aa:  08 94         str       r4, [sp, #0x20]
+080004ac:  4f ea eb 70   asr.w     r0, fp, #0x1f
+080004b0:  bb eb 04 02   subs.w    r2, fp, r4
+080004b4:  0d 90         str       r0, [sp, #0x34]
+080004b6:  60 eb 06 03   sbc.w     r3, r0, r6
+080004ba:  d2 f1 00 40   rsbs.w    r0, r2, #-0x80000000
+080004be:  4f f0 ff 30   mov.w     r0, #-1
+080004c2:  70 eb 03 07   sbcs.w    r7, r0, r3
+080004c6:  16 46         mov       r6, r2
+080004c8:  b4 bf         ite       lt
+080004ca:  18 46         movlt     r0, r3
+080004cc:  4f f0 00 46   movge.w   r6, #-0x80000000
+080004d0:  12 f1 00 42   adds.w    r2, r2, #-0x80000000
+080004d4:  6f f0 00 41   mvn       r1, #0x80000000
+080004d8:  63 f1 00 03   sbc       r3, r3, #0
+080004dc:  72 1a         subs      r2, r6, r1
+080004de:  70 f1 00 02   sbcs      r2, r0, #0
+080004e2:  a8 bf         it        ge
+080004e4:  0e 46         movge     r6, r1
+080004e6:  dd f8 48 e0   ldr.w     lr, [sp, #0x48]
+080004ea:  4f f0 00 01   mov.w     r1, #0
+080004ee:  de f8 08 40   ldr.w     r4, [lr, #8]
+080004f2:  b8 bf         it        lt
+080004f4:  01 21         movlt     r1, #1
+080004f6:  86 fb 04 27   smull     r2, r7, r6, r4
+080004fa:  b7 f1 ff 3f   cmp.w     r7, #-1
+080004fe:  40 f2 00 07   movw      r7, #0
+08000502:  4f f0 ff 32   mov.w     r2, #-1
+08000506:  cf f6 f8 77   movt      r7, #0xfff8
+0800050a:  c8 bf         it        gt
+0800050c:  00 22         movgt     r2, #0
+0800050e:  c8 bf         it        gt
+08000510:  4f f4 00 27   movgt.w   r7, #0x80000
+08000514:  c6 fb 04 72   smlal     r7, r2, r6, r4
+08000518:  d5 17         asrs      r5, r2, #0x1f
+0800051a:  17 eb 15 35   adds.w    r5, r7, r5, lsr #12
+0800051e:  4f f0 ff 39   mov.w     sb, #-1
+08000522:  42 f1 00 0a   adc       sl, r2, #0
+08000526:  4b 45         cmp       r3, sb
+08000528:  40 f2 01 09   movw      sb, #1
+0800052c:  cf f6 f0 79   movt      sb, #0xfff0
+08000530:  03 94         str       r4, [sp, #0xc]
+08000532:  38 bf         it        lo
+08000534:  4f f0 01 08   movlo.w   r8, #1
+08000538:  b7 eb 09 03   subs.w    r3, r7, sb
+0800053c:  a2 f5 00 24   sub.w     r4, r2, #0x80000
+08000540:  6f f4 80 13   mvn       r3, #0x100000
+08000544:  74 eb 03 03   sbcs.w    r3, r4, r3
+08000548:  38 bf         it        lo
+0800054a:  4f f0 01 08   movlo.w   r8, #1
+0800054e:  b7 eb 09 03   subs.w    r3, r7, sb
+08000552:  89 46         mov       sb, r1
+08000554:  4f ea 15 53   lsr.w     r3, r5, #0x14
+08000558:  6f f4 80 11   mvn       r1, #0x100000
+0800055c:  43 ea 0a 34   orr.w     r4, r3, sl, lsl #12
+08000560:  01 f5 00 23   add.w     r3, r1, #0x80000
+08000564:  72 eb 03 03   sbcs.w    r3, r2, r3
+08000568:  cd f8 18 80   str.w     r8, [sp, #0x18]
+0800056c:  b8 bf         it        lt
+0800056e:  4f f0 00 44   movlt.w   r4, #-0x80000000
+08000572:  b9 f1 00 0f   cmp.w     sb, #0
+08000576:  18 bf         it        ne
+08000578:  81 46         movne     sb, r0
+0800057a:  b2 f5 00 2f   cmp.w     r2, #0x80000
+0800057e:  de f8 00 20   ldr.w     r2, [lr]
+08000582:  a8 bf         it        ge
+08000584:  6f f0 00 44   mvnge     r4, #0x80000000
+08000588:  0f 98         ldr       r0, [sp, #0x3c]
+0800058a:  00 27         movs      r7, #0
+0800058c:  01 2a         cmp       r2, #1
+0800058e:  e2 46         mov       sl, ip
+08000590:  cc e9 03 0b   strd      r0, fp, [ip, #0xc]
+08000594:  11 96         str       r6, [sp, #0x44]
+08000596:  cc f8 14 60   str.w     r6, [ip, #0x14]
+0800059a:  cc f8 18 40   str.w     r4, [ip, #0x18]
+0800059e:  cd e9 04 b2   strd      fp, r2, [sp, #0x10]
+080005a2:  22 db         blt       #0x80005ea
+080005a4:  0d 98         ldr       r0, [sp, #0x34]
+080005a6:  00 05         lsls      r0, r0, #0x14
+080005a8:  40 ea 1b 31   orr.w     r1, r0, fp, lsr #12
+080005ac:  5f ea 57 00   lsrs.w    r0, r7, #1
+080005b0:  4f ea 32 05   rrx       r5, r2
+080005b4:  6b 42         rsbs      r3, r5, #0
+080005b6:  67 eb 00 06   sbc.w     r6, r7, r0
+080005ba:  bb f1 00 0f   cmp.w     fp, #0
+080005be:  5c bf         itt       pl
+080005c0:  2b 46         movpl     r3, r5
+080005c2:  06 46         movpl     r6, r0
+080005c4:  13 eb 0b 50   adds.w    r0, r3, fp, lsl #20
+080005c8:  71 41         adcs      r1, r6
+080005ca:  00 23         movs      r3, #0
+080005cc:  00 f0 6c fd   bl        #0x80010a8
+080005d0:  6f f0 00 42   mvn       r2, #0x80000000
+080005d4:  12 1a         subs      r2, r2, r0
+080005d6:  77 eb 01 02   sbcs.w    r2, r7, r1
+080005da:  76 da         bge       #0x80006ca
+080005dc:  dd e9 10 cb   ldrd      ip, fp, [sp, #0x40]
+080005e0:  4f f0 01 08   mov.w     r8, #1
+080005e4:  6f f0 00 47   mvn       r7, #0x80000000
+080005e8:  03 e0         b         #0x80005f2
+080005ea:  dd e9 10 cb   ldrd      ip, fp, [sp, #0x40]
+080005ee:  dd f8 18 80   ldr.w     r8, [sp, #0x18]
+080005f2:  b7 f5 80 1f   cmp.w     r7, #0x100000
+080005f6:  28 bf         it        hs
+080005f8:  4f f4 80 17   movhs.w   r7, #0x100000
+080005fc:  12 98         ldr       r0, [sp, #0x48]
+080005fe:  00 23         movs      r3, #0
+08000600:  02 69         ldr       r2, [r0, #0x10]
+08000602:  cf f6 f8 73   movt      r3, #0xfff8
+08000606:  a2 fb 07 01   umull     r0, r1, r2, r7
+0800060a:  02 92         str       r2, [sp, #8]
+0800060c:  d2 17         asrs      r2, r2, #0x1f
+0800060e:  02 fb 07 11   mla       r1, r2, r7, r1
+08000612:  4f f0 ff 32   mov.w     r2, #-1
+08000616:  b1 f1 ff 3f   cmp.w     r1, #-1
+0800061a:  c8 bf         it        gt
+0800061c:  00 22         movgt     r2, #0
+0800061e:  c8 bf         it        gt
+08000620:  4f f4 00 23   movgt.w   r3, #0x80000
+08000624:  c0 18         adds      r0, r0, r3
+08000626:  51 41         adcs      r1, r2
+08000628:  ca 17         asrs      r2, r1, #0x1f
+0800062a:  10 eb 12 30   adds.w    r0, r0, r2, lsr #12
+0800062e:  41 f1 00 01   adc       r1, r1, #0
+08000632:  00 0d         lsrs      r0, r0, #0x14
+08000634:  40 ea 01 30   orr.w     r0, r0, r1, lsl #12
+08000638:  09 15         asrs      r1, r1, #0x14
+0800063a:  00 19         adds      r0, r0, r4
+0800063c:  41 eb e4 72   adc.w     r2, r1, r4, asr #31
+08000640:  d0 f1 00 41   rsbs.w    r1, r0, #-0x80000000
+08000644:  4f f0 ff 33   mov.w     r3, #-1
+08000648:  73 eb 02 01   sbcs.w    r1, r3, r2
+0800064c:  01 46         mov       r1, r0
+0800064e:  06 94         str       r4, [sp, #0x18]
+08000650:  b4 bf         ite       lt
+08000652:  13 46         movlt     r3, r2
+08000654:  4f f0 00 41   movge.w   r1, #-0x80000000
+08000658:  10 f1 00 40   adds.w    r0, r0, #-0x80000000
+0800065c:  62 f1 00 00   sbc       r0, r2, #0
+08000660:  4f f0 ff 34   mov.w     r4, #-1
+08000664:  a0 42         cmp       r0, r4
+08000666:  6f f0 00 42   mvn       r2, #0x80000000
+0800066a:  01 90         str       r0, [sp, #4]
+0800066c:  38 bf         it        lo
+0800066e:  4f f0 01 08   movlo.w   r8, #1
+08000672:  88 1a         subs      r0, r1, r2
+08000674:  4f f0 00 06   mov.w     r6, #0
+08000678:  73 f1 00 00   sbcs      r0, r3, #0
+0800067c:  a8 bf         it        ge
+0800067e:  11 46         movge     r1, r2
+08000680:  b8 bf         it        lt
+08000682:  01 26         movlt     r6, #1
+08000684:  dc f8 10 e0   ldr.w     lr, [ip, #0x10]
+08000688:  00 2e         cmp       r6, #0
+0800068a:  18 bf         it        ne
+0800068c:  1e 46         movne     r6, r3
+0800068e:  11 eb 0e 07   adds.w    r7, r1, lr
+08000692:  4f f0 00 05   mov.w     r5, #0
+08000696:  46 eb ee 7c   adc.w     ip, r6, lr, asr #31
+0800069a:  d3 1b         subs      r3, r2, r7
+0800069c:  75 eb 0c 03   sbcs.w    r3, r5, ip
+080006a0:  02 da         bge       #0x80006a8
+080006a2:  4f f0 01 08   mov.w     r8, #1
+080006a6:  1e e0         b         #0x80006e6
+080006a8:  b7 f1 00 42   subs.w    r2, r7, #-0x80000000
+080006ac:  7c eb 04 02   sbcs.w    r2, ip, r4
+080006b0:  18 da         bge       #0x80006e4
+080006b2:  12 98         ldr       r0, [sp, #0x48]
+080006b4:  55 46         mov       r5, sl
+080006b6:  83 69         ldr       r3, [r0, #0x18]
+080006b8:  4f f0 00 42   mov.w     r2, #-0x80000000
+080006bc:  4f f0 ff 3a   mov.w     sl, #-1
+080006c0:  aa 60         str       r2, [r5, #8]
+080006c2:  0d 93         str       r3, [sp, #0x34]
+080006c4:  4f f0 01 08   mov.w     r8, #1
+080006c8:  25 e0         b         #0x8000716
+080006ca:  b0 f1 00 42   subs.w    r2, r0, #-0x80000000
+080006ce:  4f f0 ff 32   mov.w     r2, #-1
+080006d2:  dd e9 10 cb   ldrd      ip, fp, [sp, #0x40]
+080006d6:  91 41         sbcs      r1, r2
+080006d8:  80 f2 4b 82   bge.w     #0x8000b72
+080006dc:  00 27         movs      r7, #0
+080006de:  4f f0 01 08   mov.w     r8, #1
+080006e2:  8b e7         b         #0x80005fc
+080006e4:  3a 46         mov       r2, r7
+080006e6:  12 98         ldr       r0, [sp, #0x48]
+080006e8:  0c 9d         ldr       r5, [sp, #0x30]
+080006ea:  80 69         ldr       r0, [r0, #0x18]
+080006ec:  ca f8 08 20   str.w     r2, [sl, #8]
+080006f0:  82 42         cmp       r2, r0
+080006f2:  0d 90         str       r0, [sp, #0x34]
+080006f4:  0b dd         ble       #0x800070e
+080006f6:  58 46         mov       r0, fp
+080006f8:  4f f0 01 0b   mov.w     fp, #1
+080006fc:  00 28         cmp       r0, #0
+080006fe:  8a f8 20 b0   strb.w    fp, [sl, #0x20]
+08000702:  26 d4         bmi       #0x8000752
+08000704:  12 98         ldr       r0, [sp, #0x48]
+08000706:  dd f8 44 b0   ldr.w     fp, [sp, #0x44]
+0800070a:  43 69         ldr       r3, [r0, #0x14]
+0800070c:  0e e0         b         #0x800072c
+0800070e:  12 98         ldr       r0, [sp, #0x48]
+08000710:  55 46         mov       r5, sl
+08000712:  4f f0 ff 3a   mov.w     sl, #-1
+08000716:  43 69         ldr       r3, [r0, #0x14]
+08000718:  00 24         movs      r4, #0
+0800071a:  9a 42         cmp       r2, r3
+0800071c:  b8 bf         it        lt
+0800071e:  01 24         movlt     r4, #1
+08000720:  85 f8 20 40   strb.w    r4, [r5, #0x20]
+08000724:  10 da         bge       #0x8000748
+08000726:  54 46         mov       r4, sl
+08000728:  aa 46         mov       sl, r5
+0800072a:  0c 9d         ldr       r5, [sp, #0x30]
+0800072c:  9a 42         cmp       r2, r3
+0800072e:  4f f0 00 02   mov.w     r2, #0
+08000732:  4f f0 00 03   mov.w     r3, #0
+08000736:  b8 bf         it        lt
+08000738:  01 23         movlt     r3, #1
+0800073a:  bb f1 00 0f   cmp.w     fp, #0
+0800073e:  c8 bf         it        gt
+08000740:  01 22         movgt     r2, #1
+08000742:  03 ea 02 0b   and.w     fp, r3, r2
+08000746:  04 e0         b         #0x8000752
+08000748:  54 46         mov       r4, sl
+0800074a:  aa 46         mov       sl, r5
+0800074c:  0c 9d         ldr       r5, [sp, #0x30]
+0800074e:  4f f0 01 0b   mov.w     fp, #1
+08000752:  02 2d         cmp       r5, #2
+08000754:  8a f8 21 b0   strb.w    fp, [sl, #0x21]
+08000758:  78 d1         bne       #0x800084c
+0800075a:  bb f1 00 0f   cmp.w     fp, #0
+0800075e:  75 d0         beq       #0x800084c
+08000760:  12 98         ldr       r0, [sp, #0x48]
+08000762:  6f f4 80 1b   mvn       fp, #0x100000
+08000766:  c2 68         ldr       r2, [r0, #0xc]
+08000768:  11 98         ldr       r0, [sp, #0x44]
+0800076a:  d5 17         asrs      r5, r2, #0x1f
+0800076c:  a0 fb 02 37   umull     r3, r7, r0, r2
+08000770:  00 fb 05 77   mla       r7, r0, r5, r7
+08000774:  00 20         movs      r0, #0
+08000776:  09 fb 02 72   mla       r2, sb, r2, r7
+0800077a:  cf f6 f8 70   movt      r0, #0xfff8
+0800077e:  b2 f1 ff 3f   cmp.w     r2, #-1
+08000782:  4f f0 ff 37   mov.w     r7, #-1
+08000786:  c8 bf         it        gt
+08000788:  4f f4 00 20   movgt.w   r0, #0x80000
+0800078c:  c8 bf         it        gt
+0800078e:  00 27         movgt     r7, #0
+08000790:  1b 18         adds      r3, r3, r0
+08000792:  7a 41         adcs      r2, r7
+08000794:  d7 17         asrs      r7, r2, #0x1f
+08000796:  40 f2 01 09   movw      sb, #1
+0800079a:  13 eb 17 3c   adds.w    ip, r3, r7, lsr #12
+0800079e:  cf f6 f0 79   movt      sb, #0xfff0
+080007a2:  42 f1 00 05   adc       r5, r2, #0
+080007a6:  27 46         mov       r7, r4
+080007a8:  b3 eb 09 04   subs.w    r4, r3, sb
+080007ac:  a2 f5 00 24   sub.w     r4, r2, #0x80000
+080007b0:  74 eb 0b 04   sbcs.w    r4, r4, fp
+080007b4:  3c 46         mov       r4, r7
+080007b6:  38 bf         it        lo
+080007b8:  4f f0 01 08   movlo.w   r8, #1
+080007bc:  b3 eb 09 03   subs.w    r3, r3, sb
+080007c0:  0b f5 00 27   add.w     r7, fp, #0x80000
+080007c4:  4f ea 1c 53   lsr.w     r3, ip, #0x14
+080007c8:  72 eb 07 07   sbcs.w    r7, r2, r7
+080007cc:  43 ea 05 33   orr.w     r3, r3, r5, lsl #12
+080007d0:  4f f0 ff 37   mov.w     r7, #-1
+080007d4:  a8 bf         it        ge
+080007d6:  45 f3 c0 47   sbfxge    r7, r5, #0x13, #1
+080007da:  0c 9d         ldr       r5, [sp, #0x30]
+080007dc:  b8 bf         it        lt
+080007de:  4f f0 00 43   movlt.w   r3, #-0x80000000
+080007e2:  b2 f5 00 2f   cmp.w     r2, #0x80000
+080007e6:  a4 bf         itt       ge
+080007e8:  00 27         movge     r7, #0
+080007ea:  6f f0 00 43   mvnge     r3, #0x80000000
+080007ee:  13 eb 0e 02   adds.w    r2, r3, lr
+080007f2:  47 eb ee 73   adc.w     r3, r7, lr, asr #31
+080007f6:  d2 f1 00 40   rsbs.w    r0, r2, #-0x80000000
+080007fa:  4f f0 ff 37   mov.w     r7, #-1
+080007fe:  77 eb 03 00   sbcs.w    r0, r7, r3
+08000802:  96 46         mov       lr, r2
+08000804:  b4 bf         ite       lt
+08000806:  1f 46         movlt     r7, r3
+08000808:  4f f0 00 4e   movge.w   lr, #-0x80000000
+0800080c:  12 f1 00 42   adds.w    r2, r2, #-0x80000000
+08000810:  63 f1 00 02   sbc       r2, r3, #0
+08000814:  a2 42         cmp       r2, r4
+08000816:  6f f0 00 42   mvn       r2, #0x80000000
+0800081a:  38 bf         it        lo
+0800081c:  4f f0 01 08   movlo.w   r8, #1
+08000820:  be eb 02 03   subs.w    r3, lr, r2
+08000824:  77 f1 00 03   sbcs      r3, r7, #0
+08000828:  a8 bf         it        ge
+0800082a:  96 46         movge     lr, r2
+0800082c:  4f f0 00 02   mov.w     r2, #0
+08000830:  b8 bf         it        lt
+08000832:  01 22         movlt     r2, #1
+08000834:  00 2a         cmp       r2, #0
+08000836:  18 bf         it        ne
+08000838:  3a 46         movne     r2, r7
+0800083a:  11 eb 0e 07   adds.w    r7, r1, lr
+0800083e:  46 eb 02 0c   adc.w     ip, r6, r2
+08000842:  12 9e         ldr       r6, [sp, #0x48]
+08000844:  10 98         ldr       r0, [sp, #0x40]
+08000846:  c0 f8 10 e0   str.w     lr, [r0, #0x10]
+0800084a:  00 e0         b         #0x800084e
+0800084c:  12 9e         ldr       r6, [sp, #0x48]
+0800084e:  d7 f1 00 41   rsbs.w    r1, r7, #-0x80000000
+08000852:  4f f0 ff 31   mov.w     r1, #-1
+08000856:  71 eb 0c 02   sbcs.w    r2, r1, ip
+0800085a:  3a 46         mov       r2, r7
+0800085c:  b4 bf         ite       lt
+0800085e:  61 46         movlt     r1, ip
+08000860:  4f f0 00 42   movge.w   r2, #-0x80000000
+08000864:  01 98         ldr       r0, [sp, #4]
+08000866:  17 f1 00 43   adds.w    r3, r7, #-0x80000000
+0800086a:  6c f1 00 03   sbc       r3, ip, #0
+0800086e:  a0 42         cmp       r0, r4
+08000870:  38 bf         it        lo
+08000872:  4f f0 01 08   movlo.w   r8, #1
+08000876:  a3 42         cmp       r3, r4
+08000878:  6f f0 00 43   mvn       r3, #0x80000000
+0800087c:  38 bf         it        lo
+0800087e:  4f f0 01 08   movlo.w   r8, #1
+08000882:  d7 1a         subs      r7, r2, r3
+08000884:  71 f1 00 01   sbcs      r1, r1, #0
+08000888:  a8 bf         it        ge
+0800088a:  1a 46         movge     r2, r3
+0800088c:  0d 9b         ldr       r3, [sp, #0x34]
+0800088e:  71 69         ldr       r1, [r6, #0x14]
+08000890:  9a 42         cmp       r2, r3
+08000892:  b8 bf         it        lt
+08000894:  13 46         movlt     r3, r2
+08000896:  91 42         cmp       r1, r2
+08000898:  c8 bf         it        gt
+0800089a:  0b 46         movgt     r3, r1
+0800089c:  ca e9 01 32   strd      r3, r2, [sl, #4]
+080008a0:  9b 1a         subs      r3, r3, r2
+080008a2:  18 bf         it        ne
+080008a4:  01 23         movne     r3, #1
+080008a6:  6f 1e         subs      r7, r5, #1
+080008a8:  dd f8 28 90   ldr.w     sb, [sp, #0x28]
+080008ac:  01 2f         cmp       r7, #1
+080008ae:  8a f8 20 30   strb.w    r3, [sl, #0x20]
+080008b2:  0b d8         bhi       #0x80008cc
+080008b4:  10 98         ldr       r0, [sp, #0x40]
+080008b6:  0e 9c         ldr       r4, [sp, #0x38]
+080008b8:  43 68         ldr       r3, [r0, #4]
+080008ba:  dd f8 44 b0   ldr.w     fp, [sp, #0x44]
+080008be:  b3 fa 83 f7   clz       r7, r3
+080008c2:  7f 09         lsrs      r7, r7, #5
+080008c4:  8a f8 00 70   strb.w    r7, [sl]
+080008c8:  33 b9         cbnz      r3, #0x80008d8
+080008ca:  08 e0         b         #0x80008de
+080008cc:  0e 9c         ldr       r4, [sp, #0x38]
+080008ce:  dd e9 10 0b   ldrd      r0, fp, [sp, #0x40]
+080008d2:  00 23         movs      r3, #0
+080008d4:  8a f8 00 30   strb.w    r3, [sl]
+080008d8:  00 23         movs      r3, #0
+080008da:  ca f8 04 30   str.w     r3, [sl, #4]
+080008de:  c3 69         ldr       r3, [r0, #0x1c]
+080008e0:  b8 f1 00 0f   cmp.w     r8, #0
+080008e4:  c0 f8 14 b0   str.w     fp, [r0, #0x14]
+080008e8:  1c bf         itt       ne
+080008ea:  01 33         addne     r3, #1
+080008ec:  c3 61         strne     r3, [r0, #0x1c]
+080008ee:  47 68         ldr       r7, [r0, #4]
+080008f0:  8a f8 30 80   strb.w    r8, [sl, #0x30]
+080008f4:  dd f8 14 80   ldr.w     r8, [sp, #0x14]
+080008f8:  ca e9 09 57   strd      r5, r7, [sl, #0x24]
+080008fc:  47 46         mov       r7, r8
+080008fe:  ca f8 1c e0   str.w     lr, [sl, #0x1c]
+08000902:  ca f8 34 30   str.w     r3, [sl, #0x34]
+08000906:  b8 f1 00 0f   cmp.w     r8, #0
+0800090a:  48 bf         it        mi
+0800090c:  c8 f1 00 07   rsbmi.w   r7, r8, #0
+08000910:  12 98         ldr       r0, [sp, #0x48]
+08000912:  d0 f8 04 c0   ldr.w     ip, [r0, #4]
+08000916:  63 46         mov       r3, ip
+08000918:  bc f1 00 0f   cmp.w     ip, #0
+0800091c:  48 bf         it        mi
+0800091e:  cc f1 00 03   rsbmi.w   r3, ip, #0
+08000922:  c6 68         ldr       r6, [r0, #0xc]
+08000924:  bb 42         cmp       r3, r7
+08000926:  88 bf         it        hi
+08000928:  1f 46         movhi     r7, r3
+0800092a:  03 9b         ldr       r3, [sp, #0xc]
+0800092c:  00 2b         cmp       r3, #0
+0800092e:  1d 46         mov       r5, r3
+08000930:  00 d5         bpl       #0x8000934
+08000932:  5d 42         rsbs      r5, r3, #0
+08000934:  b3 f1 00 4f   cmp.w     r3, #-0x80000000
+08000938:  08 bf         it        eq
+0800093a:  6f f0 00 45   mvneq     r5, #0x80000000
+0800093e:  bd 42         cmp       r5, r7
+08000940:  98 bf         it        ls
+08000942:  3d 46         movls     r5, r7
+08000944:  00 2e         cmp       r6, #0
+08000946:  37 46         mov       r7, r6
+08000948:  00 d5         bpl       #0x800094c
+0800094a:  77 42         rsbs      r7, r6, #0
+0800094c:  b6 f1 00 4f   cmp.w     r6, #-0x80000000
+08000950:  08 bf         it        eq
+08000952:  6f f0 00 47   mvneq     r7, #0x80000000
+08000956:  af 42         cmp       r7, r5
+08000958:  98 bf         it        ls
+0800095a:  2f 46         movls     r7, r5
+0800095c:  02 9b         ldr       r3, [sp, #8]
+0800095e:  00 2b         cmp       r3, #0
+08000960:  1d 46         mov       r5, r3
+08000962:  00 d5         bpl       #0x8000966
+08000964:  5d 42         rsbs      r5, r3, #0
+08000966:  b3 f1 00 4f   cmp.w     r3, #-0x80000000
+0800096a:  08 bf         it        eq
+0800096c:  6f f0 00 45   mvneq     r5, #0x80000000
+08000970:  bd 42         cmp       r5, r7
+08000972:  98 bf         it        ls
+08000974:  3d 46         movls     r5, r7
+08000976:  00 29         cmp       r1, #0
+08000978:  0e 46         mov       r6, r1
+0800097a:  00 d5         bpl       #0x800097e
+0800097c:  4e 42         rsbs      r6, r1, #0
+0800097e:  b1 f1 00 4f   cmp.w     r1, #-0x80000000
+08000982:  08 bf         it        eq
+08000984:  6f f0 00 46   mvneq     r6, #0x80000000
+08000988:  ae 42         cmp       r6, r5
+0800098a:  98 bf         it        ls
+0800098c:  2e 46         movls     r6, r5
+0800098e:  0d 99         ldr       r1, [sp, #0x34]
+08000990:  00 29         cmp       r1, #0
+08000992:  0b 46         mov       r3, r1
+08000994:  00 d5         bpl       #0x8000998
+08000996:  4b 42         rsbs      r3, r1, #0
+08000998:  b1 f1 00 4f   cmp.w     r1, #-0x80000000
+0800099c:  08 bf         it        eq
+0800099e:  6f f0 00 43   mvneq     r3, #0x80000000
+080009a2:  b3 42         cmp       r3, r6
+080009a4:  98 bf         it        ls
+080009a6:  33 46         movls     r3, r6
+080009a8:  07 9e         ldr       r6, [sp, #0x1c]
+080009aa:  0f 9d         ldr       r5, [sp, #0x3c]
+080009ac:  00 2e         cmp       r6, #0
+080009ae:  31 46         mov       r1, r6
+080009b0:  00 d5         bpl       #0x80009b4
+080009b2:  71 42         rsbs      r1, r6, #0
+080009b4:  b6 f1 00 4f   cmp.w     r6, #-0x80000000
+080009b8:  47 6a         ldr       r7, [r0, #0x24]
+080009ba:  08 bf         it        eq
+080009bc:  6f f0 00 41   mvneq     r1, #0x80000000
+080009c0:  99 42         cmp       r1, r3
+080009c2:  98 bf         it        ls
+080009c4:  19 46         movls     r1, r3
+080009c6:  00 2c         cmp       r4, #0
+080009c8:  23 46         mov       r3, r4
+080009ca:  00 d5         bpl       #0x80009ce
+080009cc:  63 42         rsbs      r3, r4, #0
+080009ce:  b4 f1 00 4f   cmp.w     r4, #-0x80000000
+080009d2:  86 6a         ldr       r6, [r0, #0x28]
+080009d4:  08 bf         it        eq
+080009d6:  6f f0 00 43   mvneq     r3, #0x80000000
+080009da:  8b 42         cmp       r3, r1
+080009dc:  98 bf         it        ls
+080009de:  0b 46         movls     r3, r1
+080009e0:  00 2f         cmp       r7, #0
+080009e2:  39 46         mov       r1, r7
+080009e4:  00 d5         bpl       #0x80009e8
+080009e6:  79 42         rsbs      r1, r7, #0
+080009e8:  b7 f1 00 4f   cmp.w     r7, #-0x80000000
+080009ec:  08 bf         it        eq
+080009ee:  6f f0 00 41   mvneq     r1, #0x80000000
+080009f2:  99 42         cmp       r1, r3
+080009f4:  98 bf         it        ls
+080009f6:  19 46         movls     r1, r3
+080009f8:  04 9c         ldr       r4, [sp, #0x10]
+080009fa:  00 2e         cmp       r6, #0
+080009fc:  33 46         mov       r3, r6
+080009fe:  00 d5         bpl       #0x8000a02
+08000a00:  73 42         rsbs      r3, r6, #0
+08000a02:  b6 f1 00 4f   cmp.w     r6, #-0x80000000
+08000a06:  08 bf         it        eq
+08000a08:  6f f0 00 43   mvneq     r3, #0x80000000
+08000a0c:  c7 6a         ldr       r7, [r0, #0x2c]
+08000a0e:  8b 42         cmp       r3, r1
+08000a10:  98 bf         it        ls
+08000a12:  0b 46         movls     r3, r1
+08000a14:  00 2f         cmp       r7, #0
+08000a16:  39 46         mov       r1, r7
+08000a18:  00 d5         bpl       #0x8000a1c
+08000a1a:  79 42         rsbs      r1, r7, #0
+08000a1c:  b7 f1 00 4f   cmp.w     r7, #-0x80000000
+08000a20:  08 bf         it        eq
+08000a22:  6f f0 00 41   mvneq     r1, #0x80000000
+08000a26:  0b 9e         ldr       r6, [sp, #0x2c]
+08000a28:  99 42         cmp       r1, r3
+08000a2a:  77 68         ldr       r7, [r6, #4]
+08000a2c:  98 bf         it        ls
+08000a2e:  19 46         movls     r1, r3
+08000a30:  09 98         ldr       r0, [sp, #0x24]
+08000a32:  00 2f         cmp       r7, #0
+08000a34:  3b 46         mov       r3, r7
+08000a36:  00 d5         bpl       #0x8000a3a
+08000a38:  7b 42         rsbs      r3, r7, #0
+08000a3a:  b7 f1 00 4f   cmp.w     r7, #-0x80000000
+08000a3e:  08 bf         it        eq
+08000a40:  6f f0 00 43   mvneq     r3, #0x80000000
+08000a44:  8b 42         cmp       r3, r1
+08000a46:  98 bf         it        ls
+08000a48:  0b 46         movls     r3, r1
+08000a4a:  00 28         cmp       r0, #0
+08000a4c:  07 46         mov       r7, r0
+08000a4e:  00 d5         bpl       #0x8000a52
+08000a50:  47 42         rsbs      r7, r0, #0
+08000a52:  36 69         ldr       r6, [r6, #0x10]
+08000a54:  b0 f1 00 4f   cmp.w     r0, #-0x80000000
+08000a58:  08 bf         it        eq
+08000a5a:  6f f0 00 47   mvneq     r7, #0x80000000
+08000a5e:  9f 42         cmp       r7, r3
+08000a60:  98 bf         it        ls
+08000a62:  1f 46         movls     r7, r3
+08000a64:  4b 46         mov       r3, sb
+08000a66:  b9 f1 00 0f   cmp.w     sb, #0
+08000a6a:  48 bf         it        mi
+08000a6c:  c9 f1 00 03   rsbmi.w   r3, sb, #0
+08000a70:  b9 f1 00 4f   cmp.w     sb, #-0x80000000
+08000a74:  08 bf         it        eq
+08000a76:  6f f0 00 43   mvneq     r3, #0x80000000
+08000a7a:  bb 42         cmp       r3, r7
+08000a7c:  98 bf         it        ls
+08000a7e:  3b 46         movls     r3, r7
+08000a80:  08 98         ldr       r0, [sp, #0x20]
+08000a82:  00 2e         cmp       r6, #0
+08000a84:  31 46         mov       r1, r6
+08000a86:  00 d5         bpl       #0x8000a8a
+08000a88:  71 42         rsbs      r1, r6, #0
+08000a8a:  b6 f1 00 4f   cmp.w     r6, #-0x80000000
+08000a8e:  08 bf         it        eq
+08000a90:  6f f0 00 41   mvneq     r1, #0x80000000
+08000a94:  99 42         cmp       r1, r3
+08000a96:  98 bf         it        ls
+08000a98:  19 46         movls     r1, r3
+08000a9a:  00 28         cmp       r0, #0
+08000a9c:  00 d5         bpl       #0x8000aa0
+08000a9e:  45 42         rsbs      r5, r0, #0
+08000aa0:  b0 f1 00 4f   cmp.w     r0, #-0x80000000
+08000aa4:  08 bf         it        eq
+08000aa6:  6f f0 00 45   mvneq     r5, #0x80000000
+08000aaa:  8d 42         cmp       r5, r1
+08000aac:  98 bf         it        ls
+08000aae:  0d 46         movls     r5, r1
+08000ab0:  00 2c         cmp       r4, #0
+08000ab2:  23 46         mov       r3, r4
+08000ab4:  00 d5         bpl       #0x8000ab8
+08000ab6:  63 42         rsbs      r3, r4, #0
+08000ab8:  b4 f1 00 4f   cmp.w     r4, #-0x80000000
+08000abc:  08 bf         it        eq
+08000abe:  6f f0 00 43   mvneq     r3, #0x80000000
+08000ac2:  ab 42         cmp       r3, r5
+08000ac4:  98 bf         it        ls
+08000ac6:  2b 46         movls     r3, r5
+08000ac8:  be f1 00 0f   cmp.w     lr, #0
+08000acc:  71 46         mov       r1, lr
+08000ace:  48 bf         it        mi
+08000ad0:  ce f1 00 01   rsbmi.w   r1, lr, #0
+08000ad4:  be f1 00 4f   cmp.w     lr, #-0x80000000
+08000ad8:  08 bf         it        eq
+08000ada:  6f f0 00 41   mvneq     r1, #0x80000000
+08000ade:  99 42         cmp       r1, r3
+08000ae0:  98 bf         it        ls
+08000ae2:  19 46         movls     r1, r3
+08000ae4:  bb f1 00 0f   cmp.w     fp, #0
+08000ae8:  58 46         mov       r0, fp
+08000aea:  06 9f         ldr       r7, [sp, #0x18]
+08000aec:  48 bf         it        mi
+08000aee:  cb f1 00 00   rsbmi.w   r0, fp, #0
+08000af2:  bb f1 00 4f   cmp.w     fp, #-0x80000000
+08000af6:  08 bf         it        eq
+08000af8:  6f f0 00 40   mvneq     r0, #0x80000000
+08000afc:  88 42         cmp       r0, r1
+08000afe:  88 bf         it        hi
+08000b00:  01 46         movhi     r1, r0
+08000b02:  00 2a         cmp       r2, #0
+08000b04:  13 46         mov       r3, r2
+08000b06:  00 d5         bpl       #0x8000b0a
+08000b08:  53 42         rsbs      r3, r2, #0
+08000b0a:  b2 f1 00 4f   cmp.w     r2, #-0x80000000
+08000b0e:  08 bf         it        eq
+08000b10:  6f f0 00 43   mvneq     r3, #0x80000000
+08000b14:  da f8 04 20   ldr.w     r2, [sl, #4]
+08000b18:  8b 42         cmp       r3, r1
+08000b1a:  98 bf         it        ls
+08000b1c:  0b 46         movls     r3, r1
+08000b1e:  00 2a         cmp       r2, #0
+08000b20:  11 46         mov       r1, r2
+08000b22:  00 d5         bpl       #0x8000b26
+08000b24:  51 42         rsbs      r1, r2, #0
+08000b26:  b2 f1 00 4f   cmp.w     r2, #-0x80000000
+08000b2a:  08 bf         it        eq
+08000b2c:  6f f0 00 41   mvneq     r1, #0x80000000
+08000b30:  99 42         cmp       r1, r3
+08000b32:  98 bf         it        ls
+08000b34:  19 46         movls     r1, r3
+08000b36:  88 42         cmp       r0, r1
+08000b38:  88 bf         it        hi
+08000b3a:  01 46         movhi     r1, r0
+08000b3c:  00 2f         cmp       r7, #0
+08000b3e:  38 46         mov       r0, r7
+08000b40:  00 d5         bpl       #0x8000b44
+08000b42:  78 42         rsbs      r0, r7, #0
+08000b44:  b7 f1 00 4f   cmp.w     r7, #-0x80000000
+08000b48:  08 bf         it        eq
+08000b4a:  6f f0 00 40   mvneq     r0, #0x80000000
+08000b4e:  88 42         cmp       r0, r1
+08000b50:  98 bf         it        ls
+08000b52:  08 46         movls     r0, r1
+08000b54:  bc f1 00 4f   cmp.w     ip, #-0x80000000
+08000b58:  08 bf         it        eq
+08000b5a:  6f f0 00 40   mvneq     r0, #0x80000000
+08000b5e:  b8 f1 00 4f   cmp.w     r8, #-0x80000000
+08000b62:  08 bf         it        eq
+08000b64:  6f f0 00 40   mvneq     r0, #0x80000000
+08000b68:  ca f8 38 00   str.w     r0, [sl, #0x38]
+08000b6c:  13 b0         add       sp, #0x4c
+08000b6e:  bd e8 f0 8f   pop.w     {r4, r5, r6, r7, r8, sb, sl, fp, pc}
+08000b72:  20 ea e0 77   bic.w     r7, r0, r0, asr #31
+08000b76:  b7 f5 80 1f   cmp.w     r7, #0x100000
+08000b7a:  a8 bf         it        ge
+08000b7c:  4f f4 80 17   movge.w   r7, #0x100000
+08000b80:  dd f8 18 80   ldr.w     r8, [sp, #0x18]
+08000b84:  3a e5         b         #0x80005fc
+08000b86:  19 78         ldrb      r1, [r3]
+08000b88:  f1 b1         cbz       r1, #0x8000bc8
+08000b8a:  01 2a         cmp       r2, #1
+08000b8c:  03 d0         beq       #0x8000b96
+08000b8e:  6a b9         cbnz      r2, #0x8000bac
+08000b90:  01 21         movs      r1, #1
+08000b92:  cb f8 00 10   str.w     r1, [fp]
+08000b96:  12 99         ldr       r1, [sp, #0x48]
+08000b98:  db f8 0c 20   ldr.w     r2, [fp, #0xc]
+08000b9c:  09 68         ldr       r1, [r1]
+08000b9e:  8a 42         cmp       r2, r1
+08000ba0:  1b db         blt       #0x8000bda
+08000ba2:  02 22         movs      r2, #2
+08000ba4:  84 46         mov       ip, r0
+08000ba6:  cb f8 00 20   str.w     r2, [fp]
+08000baa:  06 e0         b         #0x8000bba
+08000bac:  01 2a         cmp       r2, #1
+08000bae:  14 d0         beq       #0x8000bda
+08000bb0:  02 2a         cmp       r2, #2
+08000bb2:  25 d1         bne       #0x8000c00
+08000bb4:  12 99         ldr       r1, [sp, #0x48]
+08000bb6:  84 46         mov       ip, r0
+08000bb8:  09 68         ldr       r1, [r1]
+08000bba:  cb f8 0c 10   str.w     r1, [fp, #0xc]
+08000bbe:  02 21         movs      r1, #2
+08000bc0:  0c 91         str       r1, [sp, #0x30]
+08000bc2:  70 e4         b         #0x80004a6
+08000bc4:  03 21         movs      r1, #3
+08000bc6:  34 e0         b         #0x8000c32
+08000bc8:  00 21         movs      r1, #0
+08000bca:  cb f8 00 10   str.w     r1, [fp]
+08000bce:  cb f8 0c 10   str.w     r1, [fp, #0xc]
+08000bd2:  0c 91         str       r1, [sp, #0x30]
+08000bd4:  cb f8 10 10   str.w     r1, [fp, #0x10]
+08000bd8:  64 e4         b         #0x80004a4
+08000bda:  dd f8 48 c0   ldr.w     ip, [sp, #0x48]
+08000bde:  db f8 0c 70   ldr.w     r7, [fp, #0xc]
+08000be2:  dc f8 04 10   ldr.w     r1, [ip, #4]
+08000be6:  4f ea e1 79   asr.w     sb, r1, #0x1f
+08000bea:  ca 19         adds      r2, r1, r7
+08000bec:  49 eb e7 71   adc.w     r1, sb, r7, asr #31
+08000bf0:  b2 f1 00 47   subs.w    r7, r2, #-0x80000000
+08000bf4:  71 f1 00 07   sbcs      r7, r1, #0
+08000bf8:  04 db         blt       #0x8000c04
+08000bfa:  dc f8 00 10   ldr.w     r1, [ip]
+08000bfe:  08 e0         b         #0x8000c12
+08000c00:  0c 92         str       r2, [sp, #0x30]
+08000c02:  4f e4         b         #0x80004a4
+08000c04:  b2 f1 00 43   subs.w    r3, r2, #-0x80000000
+08000c08:  4f f0 ff 33   mov.w     r3, #-1
+08000c0c:  99 41         sbcs      r1, r3
+08000c0e:  03 da         bge       #0x8000c18
+08000c10:  00 21         movs      r1, #0
+08000c12:  4f f0 01 08   mov.w     r8, #1
+08000c16:  07 e0         b         #0x8000c28
+08000c18:  12 99         ldr       r1, [sp, #0x48]
+08000c1a:  09 68         ldr       r1, [r1]
+08000c1c:  8a 42         cmp       r2, r1
+08000c1e:  b8 bf         it        lt
+08000c20:  11 46         movlt     r1, r2
+08000c22:  00 2a         cmp       r2, #0
+08000c24:  48 bf         it        mi
+08000c26:  00 21         movmi     r1, #0
+08000c28:  dd f8 40 b0   ldr.w     fp, [sp, #0x40]
+08000c2c:  cb f8 0c 10   str.w     r1, [fp, #0xc]
+08000c30:  01 21         movs      r1, #1
+08000c32:  0c 91         str       r1, [sp, #0x30]
+08000c34:  ff f7 36 bc   b.w       #0x80004a4
+
+DpPwmMap_DefaultConfig:
+08000c38:  10 b5         push      {r4, lr}
+08000c3a:  4f f6 80 61   movw      r1, #0xfe80
+08000c3e:  c0 f6 21 21   movt      r1, #0xa21
+08000c42:  40 f6 40 52   movw      r2, #0xd40
+08000c46:  46 f2 66 64   movw      r4, #0x6666
+08000c4a:  c0 f2 03 02   movt      r2, #3
+08000c4e:  40 f2 a9 13   movw      r3, #0x1a9
+08000c52:  c0 f2 0a 04   movt      r4, #0xa
+08000c56:  80 e8 0e 00   stm.w     r0, {r1, r2, r3}
+08000c5a:  00 f1 0c 01   add.w     r1, r0, #0xc
+08000c5e:  4f f0 11 0c   mov.w     ip, #0x11
+08000c62:  4f f0 00 0e   mov.w     lr, #0
+08000c66:  81 e8 08 50   stm.w     r1, {r3, ip, lr}
+08000c6a:  84 61         str       r4, [r0, #0x18]
+08000c6c:  10 bd         pop       {r4, pc}
+
+DpPwmMap_Init:
+08000c6e:  00 21         movs      r1, #0
+08000c70:  c0 e9 00 11   strd      r1, r1, [r0]
+08000c74:  01 81         strh      r1, [r0, #8]
+08000c76:  81 72         strb      r1, [r0, #0xa]
+08000c78:  70 47         bx        lr
+
+DpPwmMap_Queue:
+08000c7a:  2d e9 f0 43   push.w    {r4, r5, r6, r7, r8, sb, lr}
+08000c7e:  d2 e9 05 ec   ldrd      lr, ip, [r2, #0x14]
+08000c82:  92 68         ldr       r2, [r2, #8]
+08000c84:  64 46         mov       r4, ip
+08000c86:  63 45         cmp       r3, ip
+08000c88:  b8 bf         it        lt
+08000c8a:  1c 46         movlt     r4, r3
+08000c8c:  73 45         cmp       r3, lr
+08000c8e:  b8 bf         it        lt
+08000c90:  74 46         movlt     r4, lr
+08000c92:  e5 17         asrs      r5, r4, #0x1f
+08000c94:  55 43         muls      r5, r2, r5
+08000c96:  4f f4 00 26   mov.w     r6, #0x80000
+08000c9a:  e2 fb 04 65   umlal     r6, r5, r2, r4
+08000c9e:  c0 e9 00 34   strd      r3, r4, [r0]
+08000ca2:  ec 17         asrs      r4, r5, #0x1f
+08000ca4:  16 eb 14 34   adds.w    r4, r6, r4, lsr #12
+08000ca8:  45 f1 00 07   adc       r7, r5, #0
+08000cac:  24 0d         lsrs      r4, r4, #0x14
+08000cae:  44 ea 07 36   orr.w     r6, r4, r7, lsl #12
+08000cb2:  4f ea 27 59   asr.w     sb, r7, #0x14
+08000cb6:  b9 f1 00 0f   cmp.w     sb, #0
+08000cba:  35 46         mov       r5, r6
+08000cbc:  48 bf         it        mi
+08000cbe:  00 25         movmi     r5, #0
+08000cc0:  94 1b         subs      r4, r2, r6
+08000cc2:  dd f8 1c 80   ldr.w     r8, [sp, #0x1c]
+08000cc6:  4f f0 00 04   mov.w     r4, #0
+08000cca:  74 eb 27 57   sbcs.w    r7, r4, r7, asr #20
+08000cce:  b8 bf         it        lt
+08000cd0:  15 46         movlt     r5, r2
+08000cd2:  85 60         str       r5, [r0, #8]
+08000cd4:  b8 f1 00 0f   cmp.w     r8, #0
+08000cd8:  08 bf         it        eq
+08000cda:  45 46         moveq     r5, r8
+08000cdc:  4d 60         str       r5, [r1, #4]
+08000cde:  4f f0 01 05   mov.w     r5, #1
+08000ce2:  81 f8 09 80   strb.w    r8, [r1, #9]
+08000ce6:  8d 72         strb      r5, [r1, #0xa]
+08000ce8:  08 bf         it        eq
+08000cea:  0c 72         strbeq    r4, [r1, #8]
+08000cec:  91 1b         subs      r1, r2, r6
+08000cee:  74 eb 09 01   sbcs.w    r1, r4, sb
+08000cf2:  4f f0 00 01   mov.w     r1, #0
+08000cf6:  4f f0 00 02   mov.w     r2, #0
+08000cfa:  b8 bf         it        lt
+08000cfc:  01 21         movlt     r1, #1
+08000cfe:  73 45         cmp       r3, lr
+08000d00:  b8 bf         it        lt
+08000d02:  01 22         movlt     r2, #1
+08000d04:  63 45         cmp       r3, ip
+08000d06:  c8 bf         it        gt
+08000d08:  01 24         movgt     r4, #1
+08000d0a:  22 43         orrs      r2, r4
+08000d0c:  02 73         strb      r2, [r0, #0xc]
+08000d0e:  41 73         strb      r1, [r0, #0xd]
+08000d10:  bd e8 f0 83   pop.w     {r4, r5, r6, r7, r8, sb, pc}
+
+DpPwmMap_ApplyUpdateEvent:
+08000d14:  81 7a         ldrb      r1, [r0, #0xa]
+08000d16:  01 29         cmp       r1, #1
+08000d18:  18 bf         it        ne
+08000d1a:  70 47         bxne      lr
+08000d1c:  41 68         ldr       r1, [r0, #4]
+08000d1e:  42 7a         ldrb      r2, [r0, #9]
+08000d20:  01 60         str       r1, [r0]
+08000d22:  00 21         movs      r1, #0
+08000d24:  02 72         strb      r2, [r0, #8]
+08000d26:  81 72         strb      r1, [r0, #0xa]
+08000d28:  70 47         bx        lr
+
+DpControlIsr_DefaultConfig:
+08000d2a:  10 b5         push      {r4, lr}
+08000d2c:  04 46         mov       r4, r0
+08000d2e:  ff f7 89 f9   bl        #0x8000044
+08000d32:  04 f1 38 00   add.w     r0, r4, #0x38
+08000d36:  ff f7 e2 fa   bl        #0x80002fe
+08000d3a:  04 f1 68 00   add.w     r0, r4, #0x68
+08000d3e:  bd e8 10 40   pop.w     {r4, lr}
+08000d42:  ff f7 79 bf   b.w       #0x8000c38
+
+DpControlIsr_Init:
+08000d46:  10 b5         push      {r4, lr}
+08000d48:  38 31         adds      r1, #0x38
+08000d4a:  04 46         mov       r4, r0
+08000d4c:  ff f7 fb fa   bl        #0x8000346
+08000d50:  04 f1 20 00   add.w     r0, r4, #0x20
+08000d54:  ff f7 8b ff   bl        #0x8000c6e
+08000d58:  00 20         movs      r0, #0
+08000d5a:  e0 62         str       r0, [r4, #0x2c]
+08000d5c:  10 bd         pop       {r4, pc}
+
+DpControlIsr_OnPwmUpdate:
+08000d5e:  2d e9 f0 4f   push.w    {r4, r5, r6, r7, r8, sb, sl, fp, lr}
+08000d62:  97 b0         sub       sp, #0x5c
+08000d64:  05 46         mov       r5, r0
+08000d66:  c0 6a         ldr       r0, [r0, #0x2c]
+08000d68:  2e 46         mov       r6, r5
+08000d6a:  01 30         adds      r0, #1
+08000d6c:  e8 62         str       r0, [r5, #0x2c]
+08000d6e:  18 60         str       r0, [r3]
+08000d70:  56 f8 20 0f   ldr       r0, [r6, #0x20]!
+08000d74:  1c 46         mov       r4, r3
+08000d76:  58 60         str       r0, [r3, #4]
+08000d78:  30 46         mov       r0, r6
+08000d7a:  90 46         mov       r8, r2
+08000d7c:  0f 46         mov       r7, r1
+08000d7e:  ff f7 c9 ff   bl        #0x8000d14
+08000d82:  30 68         ldr       r0, [r6]
+08000d84:  0d f1 44 09   add.w     sb, sp, #0x44
+08000d88:  a0 60         str       r0, [r4, #8]
+08000d8a:  48 46         mov       r0, sb
+08000d8c:  39 46         mov       r1, r7
+08000d8e:  42 46         mov       r2, r8
+08000d90:  ff f7 88 f9   bl        #0x80000a4
+08000d94:  07 f1 38 02   add.w     r2, r7, #0x38
+08000d98:  02 a8         add       r0, sp, #8
+08000d9a:  29 46         mov       r1, r5
+08000d9c:  4b 46         mov       r3, sb
+08000d9e:  ff f7 dd fa   bl        #0x800035c
+08000da2:  9d f8 08 00   ldrb.w    r0, [sp, #8]
+08000da6:  dd f8 0c 80   ldr.w     r8, [sp, #0xc]
+08000daa:  9d f8 38 10   ldrb.w    r1, [sp, #0x38]
+08000dae:  dd e9 0b ba   ldrd      fp, sl, [sp, #0x2c]
+08000db2:  dd f8 34 90   ldr.w     sb, [sp, #0x34]
+08000db6:  01 91         str       r1, [sp, #4]
+08000db8:  07 f1 68 02   add.w     r2, r7, #0x68
+08000dbc:  00 f0 01 07   and       r7, r0, #1
+08000dc0:  02 a8         add       r0, sp, #8
+08000dc2:  31 46         mov       r1, r6
+08000dc4:  43 46         mov       r3, r8
+08000dc6:  00 97         str       r7, [sp]
+08000dc8:  ff f7 57 ff   bl        #0x8000c7a
+08000dcc:  04 99         ldr       r1, [sp, #0x10]
+08000dce:  12 ae         add       r6, sp, #0x48
+08000dd0:  15 98         ldr       r0, [sp, #0x54]
+08000dd2:  04 f1 0c 0e   add.w     lr, r4, #0xc
+08000dd6:  4c ce         ldm       r6, {r2, r3, r6}
+08000dd8:  8e e8 4e 00   stm.w     lr, {r1, r2, r3, r6}
+08000ddc:  04 f1 1c 01   add.w     r1, r4, #0x1c
+08000de0:  81 e8 01 09   stm.w     r1, {r0, r8, fp}
+08000de4:  c4 e9 0a 9a   strd      sb, sl, [r4, #0x28]
+08000de8:  84 f8 30 70   strb.w    r7, [r4, #0x30]
+08000dec:  95 f8 28 00   ldrb.w    r0, [r5, #0x28]
+08000df0:  9d f8 58 10   ldrb.w    r1, [sp, #0x58]
+08000df4:  84 f8 31 00   strb.w    r0, [r4, #0x31]
+08000df8:  84 f8 32 10   strb.w    r1, [r4, #0x32]
+08000dfc:  9d f8 59 00   ldrb.w    r0, [sp, #0x59]
+08000e00:  9d f8 5a 10   ldrb.w    r1, [sp, #0x5a]
+08000e04:  84 f8 33 00   strb.w    r0, [r4, #0x33]
+08000e08:  00 29         cmp       r1, #0
+08000e0a:  4f f0 01 01   mov.w     r1, #1
+08000e0e:  9d f8 15 c0   ldrb.w    ip, [sp, #0x15]
+08000e12:  02 bf         ittt      eq
+08000e14:  01 98         ldreq     r0, [sp, #4]
+08000e16:  5f ea c0 70   lslseq.w  r0, r0, #0x1f
+08000e1a:  61 46         moveq     r1, ip
+08000e1c:  01 f0 01 00   and       r0, r1, #1
+08000e20:  84 f8 34 00   strb.w    r0, [r4, #0x34]
+08000e24:  17 b0         add       sp, #0x5c
+08000e26:  bd e8 f0 8f   pop.w     {r4, r5, r6, r7, r8, sb, sl, fp, pc}
+08000e2a:  d4 d4         bmi       #0x8000dd6
+
+DpFirmware_Init:
+08000e2c:  10 b5         push      {r4, lr}
+08000e2e:  04 46         mov       r4, r0
+08000e30:  ff f7 89 ff   bl        #0x8000d46
+08000e34:  00 20         movs      r0, #0
+08000e36:  04 f1 38 01   add.w     r1, r4, #0x38
+08000e3a:  00 22         movs      r2, #0
+08000e3c:  20 63         str       r0, [r4, #0x30]
+08000e3e:  84 f8 34 00   strb.w    r0, [r4, #0x34]
+08000e42:  00 bf         nop
+08000e44:  88 54         strb      r0, [r1, r2]
+08000e46:  01 32         adds      r2, #1
+08000e48:  34 2a         cmp       r2, #0x34
+08000e4a:  fb d1         bne       #0x8000e44
+08000e4c:  00 20         movs      r0, #0
+08000e4e:  84 f8 6c 00   strb.w    r0, [r4, #0x6c]
+08000e52:  10 bd         pop       {r4, pc}
+
+DpFirmware_RequestCommand:
+08000e54:  70 b5         push      {r4, r5, r6, lr}
+08000e56:  0c 46         mov       r4, r1
+08000e58:  d1 e9 00 31   ldrd      r3, r1, [r1]
+08000e5c:  15 46         mov       r5, r2
+08000e5e:  1a 69         ldr       r2, [r3, #0x10]
+08000e60:  06 46         mov       r6, r0
+08000e62:  08 46         mov       r0, r1
+08000e64:  90 47         blx       r2
+08000e66:  2a 88         ldrh      r2, [r5]
+08000e68:  01 46         mov       r1, r0
+08000e6a:  72 86         strh      r2, [r6, #0x32]
+08000e6c:  d4 e9 00 20   ldrd      r2, r0, [r4]
+08000e70:  01 23         movs      r3, #1
+08000e72:  52 69         ldr       r2, [r2, #0x14]
+08000e74:  86 f8 34 30   strb.w    r3, [r6, #0x34]
+08000e78:  bd e8 70 40   pop.w     {r4, r5, r6, lr}
+08000e7c:  10 47         bx        r2
+08000e7e:  d4 d4         bmi       #0x8000e2a
+
+DpFirmware_ControlIsr:
+08000e80:  2d e9 f0 41   push.w    {r4, r5, r6, r7, r8, lr}
+08000e84:  94 b0         sub       sp, #0x50
+08000e86:  15 46         mov       r5, r2
+08000e88:  d2 e9 00 32   ldrd      r3, r2, [r2]
+08000e8c:  0f 46         mov       r7, r1
+08000e8e:  19 68         ldr       r1, [r3]
+08000e90:  04 46         mov       r4, r0
+08000e92:  10 46         mov       r0, r2
+08000e94:  88 47         blx       r1
+08000e96:  00 20         movs      r0, #0
+08000e98:  0f a9         add       r1, sp, #0x3c
+08000e9a:  00 22         movs      r2, #0
+08000e9c:  88 54         strb      r0, [r1, r2]
+08000e9e:  01 32         adds      r2, #1
+08000ea0:  14 2a         cmp       r2, #0x14
+08000ea2:  fb d1         bne       #0x8000e9c
+08000ea4:  d5 e9 00 10   ldrd      r1, r0, [r5]
+08000ea8:  4a 68         ldr       r2, [r1, #4]
+08000eaa:  0f a9         add       r1, sp, #0x3c
+08000eac:  90 47         blx       r2
+08000eae:  94 f8 34 10   ldrb.w    r1, [r4, #0x34]
+08000eb2:  06 46         mov       r6, r0
+08000eb4:  01 29         cmp       r1, #1
+08000eb6:  04 d1         bne       #0x8000ec2
+08000eb8:  60 8e         ldrh      r0, [r4, #0x32]
+08000eba:  20 86         strh      r0, [r4, #0x30]
+08000ebc:  00 20         movs      r0, #0
+08000ebe:  84 f8 34 00   strb.w    r0, [r4, #0x34]
+08000ec2:  4f f0 00 08   mov.w     r8, #0
+08000ec6:  26 b1         cbz       r6, #0x8000ed2
+08000ec8:  94 f8 30 00   ldrb.w    r0, [r4, #0x30]
+08000ecc:  94 f8 31 10   ldrb.w    r1, [r4, #0x31]
+08000ed0:  01 e0         b         #0x8000ed6
+08000ed2:  00 20         movs      r0, #0
+08000ed4:  00 21         movs      r1, #0
+08000ed6:  8d f8 4c 00   strb.w    r0, [sp, #0x4c]
+08000eda:  01 f0 01 00   and       r0, r1, #1
+08000ede:  8d f8 4d 00   strb.w    r0, [sp, #0x4d]
+08000ee2:  0f aa         add       r2, sp, #0x3c
+08000ee4:  01 ab         add       r3, sp, #4
+08000ee6:  20 46         mov       r0, r4
+08000ee8:  39 46         mov       r1, r7
+08000eea:  ff f7 38 ff   bl        #0x8000d5e
+08000eee:  9d f8 34 00   ldrb.w    r0, [sp, #0x34]
+08000ef2:  84 f8 31 80   strb.w    r8, [r4, #0x31]
+08000ef6:  4f f0 01 08   mov.w     r8, #1
+08000efa:  06 42         tst       r6, r0
+08000efc:  4f f0 01 02   mov.w     r2, #1
+08000f00:  05 d1         bne       #0x8000f0e
+08000f02:  d5 e9 00 10   ldrd      r1, r0, [r5]
+08000f06:  c9 68         ldr       r1, [r1, #0xc]
+08000f08:  88 47         blx       r1
+08000f0a:  9d f8 34 20   ldrb.w    r2, [sp, #0x34]
+08000f0e:  d5 e9 00 10   ldrd      r1, r0, [r5]
+08000f12:  32 40         ands      r2, r6
+08000f14:  8b 68         ldr       r3, [r1, #8]
+08000f16:  04 99         ldr       r1, [sp, #0x10]
+08000f18:  98 47         blx       r3
+08000f1a:  01 98         ldr       r0, [sp, #4]
+08000f1c:  84 f8 3c 60   strb.w    r6, [r4, #0x3c]
+08000f20:  a0 63         str       r0, [r4, #0x38]
+08000f22:  dd e9 0a 06   ldrd      r0, r6, [sp, #0x28]
+08000f26:  dd e9 05 c2   ldrd      ip, r2, [sp, #0x14]
+08000f2a:  c4 e9 10 06   strd      r0, r6, [r4, #0x40]
+08000f2e:  04 f1 50 00   add.w     r0, r4, #0x50
+08000f32:  07 9b         ldr       r3, [sp, #0x1c]
+08000f34:  dd e9 08 71   ldrd      r7, r1, [sp, #0x20]
+08000f38:  8c c0         stm       r0!, {r2, r3, r7}
+08000f3a:  dd e9 03 02   ldrd      r0, r2, [sp, #0xc]
+08000f3e:  0c 9d         ldr       r5, [sp, #0x30]
+08000f40:  e1 65         str       r1, [r4, #0x5c]
+08000f42:  c4 e9 18 02   strd      r0, r2, [r4, #0x60]
+08000f46:  bd f8 34 00   ldrh.w    r0, [sp, #0x34]
+08000f4a:  9d f8 38 10   ldrb.w    r1, [sp, #0x38]
+08000f4e:  c4 e9 12 5c   strd      r5, ip, [r4, #0x48]
+08000f52:  a4 f8 68 00   strh.w    r0, [r4, #0x68]
+08000f56:  84 f8 6a 10   strb.w    r1, [r4, #0x6a]
+08000f5a:  84 f8 6c 80   strb.w    r8, [r4, #0x6c]
+08000f5e:  14 b0         add       sp, #0x50
+08000f60:  bd e8 f0 81   pop.w     {r4, r5, r6, r7, r8, pc}
+
+DpFirmware_BackgroundStep:
+08000f64:  10 b5         push      {r4, lr}
+08000f66:  04 46         mov       r4, r0
+08000f68:  00 68         ldr       r0, [r0]
+08000f6a:  81 69         ldr       r1, [r0, #0x18]
+08000f6c:  11 b1         cbz       r1, #0x8000f74
+08000f6e:  60 68         ldr       r0, [r4, #4]
+08000f70:  88 47         blx       r1
+08000f72:  20 68         ldr       r0, [r4]
+08000f74:  c1 69         ldr       r1, [r0, #0x1c]
+08000f76:  19 b1         cbz       r1, #0x8000f80
+08000f78:  60 68         ldr       r0, [r4, #4]
+08000f7a:  bd e8 10 40   pop.w     {r4, lr}
+08000f7e:  08 47         bx        r1
+08000f80:  10 bd         pop       {r4, pc}
+08000f82:  d4 d4         bmi       #0x8000f2e
+
+Reset_Handler:
+08000f84:  80 b5         push      {r7, lr}
+08000f86:  40 f2 24 00   movw      r0, #0x24
+08000f8a:  40 f2 00 01   movw      r1, #0
+08000f8e:  c2 f2 00 00   movt      r0, #0x2000
+08000f92:  c2 f2 00 01   movt      r1, #0x2000
+08000f96:  81 42         cmp       r1, r0
+08000f98:  0e d2         bhs       #0x8000fb8
+08000f9a:  41 f2 d4 31   movw      r1, #0x13d4
+08000f9e:  40 f2 00 02   movw      r2, #0
+08000fa2:  c0 f6 00 01   movt      r1, #0x800
+08000fa6:  c2 f2 00 02   movt      r2, #0x2000
+08000faa:  00 bf         nop
+08000fac:  51 f8 04 3b   ldr       r3, [r1], #4
+08000fb0:  42 f8 04 3b   str       r3, [r2], #4
+08000fb4:  82 42         cmp       r2, r0
+08000fb6:  f9 d3         blo       #0x8000fac
+08000fb8:  40 f2 18 10   movw      r0, #0x118
+08000fbc:  40 f2 24 01   movw      r1, #0x24
+08000fc0:  c2 f2 00 00   movt      r0, #0x2000
+08000fc4:  c2 f2 00 01   movt      r1, #0x2000
+08000fc8:  81 42         cmp       r1, r0
+08000fca:  05 d2         bhs       #0x8000fd8
+08000fcc:  00 22         movs      r2, #0
+08000fce:  00 bf         nop
+08000fd0:  41 f8 04 2b   str       r2, [r1], #4
+08000fd4:  81 42         cmp       r1, r0
+08000fd6:  fb d3         blo       #0x8000fd0
+08000fd8:  00 f0 12 f8   bl        #0x8001000
+08000fdc:  fe e7         b         #0x8000fdc
+08000fde:  d4 d4         bmi       #0x8000f8a
+
+Default_Handler:
+08000fe0:  fe e7         b         #0x8000fe0
+
+Control_IRQHandler:
+08000fe2:  40 f2 24 00   movw      r0, #0x24
+08000fe6:  40 f2 94 01   movw      r1, #0x94
+08000fea:  41 f2 dc 22   movw      r2, #0x12dc
+08000fee:  c2 f2 00 00   movt      r0, #0x2000
+08000ff2:  c2 f2 00 01   movt      r1, #0x2000
+08000ff6:  c0 f6 00 02   movt      r2, #0x800
+08000ffa:  ff f7 41 bf   b.w       #0x8000e80
+08000ffe:  d4 d4         bmi       #0x8000faa
+
+main:
+08001000:  b0 b5         push      {r4, r5, r7, lr}
+08001002:  82 b0         sub       sp, #8
+08001004:  40 f2 94 04   movw      r4, #0x94
+08001008:  c2 f2 00 04   movt      r4, #0x2000
+0800100c:  20 46         mov       r0, r4
+0800100e:  ff f7 8c fe   bl        #0x8000d2a
+08001012:  40 f2 24 05   movw      r5, #0x24
+08001016:  c2 f2 00 05   movt      r5, #0x2000
+0800101a:  28 46         mov       r0, r5
+0800101c:  21 46         mov       r1, r4
+0800101e:  ff f7 05 ff   bl        #0x8000e2c
+08001022:  41 f2 dc 24   movw      r4, #0x12dc
+08001026:  01 20         movs      r0, #1
+08001028:  c0 f6 00 04   movt      r4, #0x800
+0800102c:  ad f8 06 00   strh.w    r0, [sp, #6]
+08001030:  0d f1 06 02   add.w     r2, sp, #6
+08001034:  28 46         mov       r0, r5
+08001036:  21 46         mov       r1, r4
+08001038:  ff f7 0c ff   bl        #0x8000e54
+0800103c:  20 46         mov       r0, r4
+0800103e:  ff f7 91 ff   bl        #0x8000f64
+08001042:  30 bf         wfi
+08001044:  fa e7         b         #0x800103c
+
+target_pwm_update_event:
+08001046:  41 69         ldr       r1, [r0, #0x14]
+08001048:  01 61         str       r1, [r0, #0x10]
+0800104a:  41 7e         ldrb      r1, [r0, #0x19]
+0800104c:  01 76         strb      r1, [r0, #0x18]
+0800104e:  70 47         bx        lr
+
+target_read_adc_sample:
+08001050:  02 68         ldr       r2, [r0]
+08001052:  0a 60         str       r2, [r1]
+08001054:  42 68         ldr       r2, [r0, #4]
+08001056:  4a 60         str       r2, [r1, #4]
+08001058:  82 68         ldr       r2, [r0, #8]
+0800105a:  8a 60         str       r2, [r1, #8]
+0800105c:  c2 68         ldr       r2, [r0, #0xc]
+0800105e:  01 20         movs      r0, #1
+08001060:  ca 60         str       r2, [r1, #0xc]
+08001062:  70 47         bx        lr
+
+target_write_pwm_preload:
+08001064:  41 61         str       r1, [r0, #0x14]
+08001066:  42 76         strb      r2, [r0, #0x19]
+08001068:  70 47         bx        lr
+
+target_disable_pwm_immediate:
+0800106a:  00 21         movs      r1, #0
+0800106c:  01 76         strb      r1, [r0, #0x18]
+0800106e:  70 47         bx        lr
+
+target_enter_critical:
+08001070:  ef f3 10 80   mrs       r0, primask
+08001074:  72 b6         cpsid     i
+08001076:  70 47         bx        lr
+
+target_exit_critical:
+08001078:  c8 07         lsls      r0, r1, #0x1f
+0800107a:  18 bf         it        ne
+0800107c:  70 47         bxne      lr
+0800107e:  62 b6         cpsie     i
+08001080:  70 47         bx        lr
+
+target_service_communication:
+08001082:  c1 69         ldr       r1, [r0, #0x1c]
+08001084:  01 31         adds      r1, #1
+08001086:  c1 61         str       r1, [r0, #0x1c]
+08001088:  70 47         bx        lr
+
+target_service_storage:
+0800108a:  01 6a         ldr       r1, [r0, #0x20]
+0800108c:  01 31         adds      r1, #1
+0800108e:  01 62         str       r1, [r0, #0x20]
+08001090:  70 47         bx        lr
+
+compiler_rt.arm.__aeabi_unwind_cpp_pr0:
+
+__aeabi_unwind_cpp_pr0:
+
+__aeabi_unwind_cpp_pr1:
+
+__aeabi_unwind_cpp_pr2:
+08001092:  70 47         bx        lr
+
+compiler_rt.arm.__aeabi_uldivmod:
+
+__aeabi_uldivmod:
+08001094:  10 b5         push      {r4, lr}
+08001096:  84 b0         sub       sp, #0x10
+08001098:  02 ac         add       r4, sp, #8
+0800109a:  00 94         str       r4, [sp]
+0800109c:  00 f0 0e f8   bl        #0x80010bc
+080010a0:  02 9a         ldr       r2, [sp, #8]
+080010a2:  03 9b         ldr       r3, [sp, #0xc]
+080010a4:  04 b0         add       sp, #0x10
+080010a6:  10 bd         pop       {r4, pc}
+
+compiler_rt.arm.__aeabi_ldivmod:
+
+__aeabi_ldivmod:
+080010a8:  10 b5         push      {r4, lr}
+080010aa:  84 b0         sub       sp, #0x10
+080010ac:  02 ac         add       r4, sp, #8
+080010ae:  00 94         str       r4, [sp]
+080010b0:  00 f0 85 f8   bl        #0x80011be
+080010b4:  02 9a         ldr       r2, [sp, #8]
+080010b6:  03 9b         ldr       r3, [sp, #0xc]
+080010b8:  04 b0         add       sp, #0x10
+080010ba:  10 bd         pop       {r4, pc}
+
+compiler_rt.int.__udivmoddi4:
+
+__udivmoddi4:
+080010bc:  2d e9 f0 41   push.w    {r4, r5, r6, r7, r8, lr}
+080010c0:  86 b0         sub       sp, #0x18
+080010c2:  05 46         mov       r5, r0
+080010c4:  80 1a         subs      r0, r0, r2
+080010c6:  dd f8 30 80   ldr.w     r8, [sp, #0x30]
+080010ca:  0c 46         mov       r4, r1
+080010cc:  71 eb 03 00   sbcs.w    r0, r1, r3
+080010d0:  0a d2         bhs       #0x80010e8
+080010d2:  b8 f1 00 0f   cmp.w     r8, #0
+080010d6:  18 bf         it        ne
+080010d8:  c8 e9 00 54   strdne    r5, r4, [r8]
+080010dc:  00 20         movs      r0, #0
+080010de:  00 27         movs      r7, #0
+080010e0:  39 46         mov       r1, r7
+080010e2:  06 b0         add       sp, #0x18
+080010e4:  bd e8 f0 81   pop.w     {r4, r5, r6, r7, r8, pc}
+080010e8:  1f 46         mov       r7, r3
+080010ea:  16 46         mov       r6, r2
+080010ec:  00 2b         cmp       r3, #0
+080010ee:  46 d0         beq       #0x800117e
+080010f0:  b7 fa 87 f0   clz       r0, r7
+080010f4:  00 28         cmp       r0, #0
+080010f6:  57 d0         beq       #0x80011a8
+080010f8:  42 42         rsbs      r2, r0, #0
+080010fa:  04 fa 00 f1   lsl.w     r1, r4, r0
+080010fe:  07 fa 00 f0   lsl.w     r0, r7, r0
+08001102:  02 f0 1f 03   and       r3, r2, #0x1f
+08001106:  25 fa 03 f2   lsr.w     r2, r5, r3
+0800110a:  11 43         orrs      r1, r2
+0800110c:  26 fa 03 f2   lsr.w     r2, r6, r3
+08001110:  02 43         orrs      r2, r0
+08001112:  24 fa 03 f0   lsr.w     r0, r4, r3
+08001116:  02 ab         add       r3, sp, #8
+08001118:  00 f0 86 f8   bl        #0x8001228
+0800111c:  a6 fb 00 e1   umull     lr, r1, r6, r0
+08001120:  a7 fb 00 32   umull     r3, r2, r7, r0
+08001124:  4f f0 00 0c   mov.w     ip, #0
+08001128:  c9 18         adds      r1, r1, r3
+0800112a:  4c f1 00 03   adc       r3, ip, #0
+0800112e:  1a 43         orrs      r2, r3
+08001130:  8d f8 0c 30   strb.w    r3, [sp, #0xc]
+08001134:  04 d1         bne       #0x8001140
+08001136:  a1 42         cmp       r1, r4
+08001138:  02 d8         bhi       #0x8001140
+0800113a:  0c d1         bne       #0x8001156
+0800113c:  ae 45         cmp       lr, r5
+0800113e:  0a d9         bls       #0x8001156
+08001140:  be eb 06 0e   subs.w    lr, lr, r6
+08001144:  4c f1 00 02   adc       r2, ip, #0
+08001148:  01 38         subs      r0, #1
+0800114a:  82 f0 01 02   eor       r2, r2, #1
+0800114e:  8d f8 10 20   strb.w    r2, [sp, #0x10]
+08001152:  3a 44         add       r2, r7
+08001154:  89 1a         subs      r1, r1, r2
+08001156:  b8 f1 00 0f   cmp.w     r8, #0
+0800115a:  c0 d0         beq       #0x80010de
+0800115c:  b5 eb 0e 02   subs.w    r2, r5, lr
+08001160:  4f f0 00 03   mov.w     r3, #0
+08001164:  43 f1 00 03   adc       r3, r3, #0
+08001168:  83 f0 01 03   eor       r3, r3, #1
+0800116c:  19 44         add       r1, r3
+0800116e:  8d f8 14 30   strb.w    r3, [sp, #0x14]
+08001172:  61 1a         subs      r1, r4, r1
+08001174:  c8 e9 00 21   strd      r2, r1, [r8]
+08001178:  cd e9 00 21   strd      r2, r1, [sp]
+0800117c:  af e7         b         #0x80010de
+0800117e:  00 27         movs      r7, #0
+08001180:  b4 42         cmp       r4, r6
+08001182:  01 97         str       r7, [sp, #4]
+08001184:  03 d3         blo       #0x800118e
+08001186:  b4 fb f6 f7   udiv      r7, r4, r6
+0800118a:  07 fb 16 44   mls       r4, r7, r6, r4
+0800118e:  6b 46         mov       r3, sp
+08001190:  00 f0 9b f8   bl        #0x80012ca
+08001194:  00 f0 48 f8   bl        #0x8001228
+08001198:  b8 f1 00 0f   cmp.w     r8, #0
+0800119c:  a0 d0         beq       #0x80010e0
+0800119e:  dd e9 00 12   ldrd      r1, r2, [sp]
+080011a2:  c8 e9 00 12   strd      r1, r2, [r8]
+080011a6:  9b e7         b         #0x80010e0
+080011a8:  b8 f1 00 0f   cmp.w     r8, #0
+080011ac:  04 d0         beq       #0x80011b8
+080011ae:  a8 1b         subs      r0, r5, r6
+080011b0:  64 eb 07 01   sbc.w     r1, r4, r7
+080011b4:  c8 e9 00 01   strd      r0, r1, [r8]
+080011b8:  00 27         movs      r7, #0
+080011ba:  01 20         movs      r0, #1
+080011bc:  90 e7         b         #0x80010e0
+
+compiler_rt.int.__divmoddi4:
+
+__divmoddi4:
+080011be:  f8 b5         push      {r3, r4, r5, r6, r7, lr}
+080011c0:  00 f0 87 f8   bl        #0x80012d2
+080011c4:  00 f0 0e f8   bl        #0x80011e4
+080011c8:  a0 fb 05 23   umull     r2, r3, r0, r5
+080011cc:  dd f8 18 c0   ldr.w     ip, [sp, #0x18]
+080011d0:  00 fb 04 33   mla       r3, r0, r4, r3
+080011d4:  ba 1a         subs      r2, r7, r2
+080011d6:  01 fb 05 33   mla       r3, r1, r5, r3
+080011da:  66 eb 03 03   sbc.w     r3, r6, r3
+080011de:  cc e9 00 23   strd      r2, r3, [ip]
+080011e2:  f8 bd         pop       {r3, r4, r5, r6, r7, pc}
+
+compiler_rt.int.__divdi3:
+
+__divdi3:
+080011e4:  bc b5         push      {r2, r3, r4, r5, r7, lr}
+080011e6:  0d 46         mov       r5, r1
+080011e8:  00 21         movs      r1, #0
+080011ea:  1c 46         mov       r4, r3
+080011ec:  82 ea e3 72   eor.w     r2, r2, r3, asr #31
+080011f0:  83 ea e3 73   eor.w     r3, r3, r3, asr #31
+080011f4:  80 ea e5 70   eor.w     r0, r0, r5, asr #31
+080011f8:  00 91         str       r1, [sp]
+080011fa:  85 ea e5 71   eor.w     r1, r5, r5, asr #31
+080011fe:  b0 eb e5 70   subs.w    r0, r0, r5, asr #31
+08001202:  61 eb e5 71   sbc.w     r1, r1, r5, asr #31
+08001206:  b2 eb e4 72   subs.w    r2, r2, r4, asr #31
+0800120a:  63 eb e4 73   sbc.w     r3, r3, r4, asr #31
+0800120e:  ff f7 55 ff   bl        #0x80010bc
+08001212:  84 ea 05 02   eor.w     r2, r4, r5
+08001216:  80 ea e2 70   eor.w     r0, r0, r2, asr #31
+0800121a:  81 ea e2 71   eor.w     r1, r1, r2, asr #31
+0800121e:  b0 eb e2 70   subs.w    r0, r0, r2, asr #31
+08001222:  61 eb e2 71   sbc.w     r1, r1, r2, asr #31
+08001226:  bc bd         pop       {r2, r3, r4, r5, r7, pc}
+
+compiler_rt.udivmod.divwide__anon_2760:
+08001228:  2d e9 f0 47   push.w    {r4, r5, r6, r7, r8, sb, sl, lr}
+0800122c:  b2 fa 82 f4   clz       r4, r2
+08001230:  14 f0 1f 0c   ands      ip, r4, #0x1f
+08001234:  0b d0         beq       #0x800124e
+08001236:  64 42         rsbs      r4, r4, #0
+08001238:  00 fa 0c f0   lsl.w     r0, r0, ip
+0800123c:  02 fa 0c f2   lsl.w     r2, r2, ip
+08001240:  04 f0 1f 04   and       r4, r4, #0x1f
+08001244:  21 fa 04 f4   lsr.w     r4, r1, r4
+08001248:  01 fa 0c f1   lsl.w     r1, r1, ip
+0800124c:  20 43         orrs      r0, r4
+0800124e:  17 0c         lsrs      r7, r2, #0x10
+08001250:  1f fa 81 fe   uxth.w    lr, r1
+08001254:  4f ea 11 48   lsr.w     r8, r1, #0x10
+08001258:  1f fa 82 f9   uxth.w    sb, r2
+0800125c:  4f f0 00 0a   mov.w     sl, #0
+08001260:  b0 fb f7 f5   udiv      r5, r0, r7
+08001264:  05 fb 17 06   mls       r6, r5, r7, r0
+08001268:  ba eb 15 4f   cmp.w     sl, r5, lsr #16
+0800126c:  05 d1         bne       #0x800127a
+0800126e:  48 ea 06 41   orr.w     r1, r8, r6, lsl #16
+08001272:  05 fb 09 f4   mul       r4, r5, sb
+08001276:  8c 42         cmp       r4, r1
+08001278:  04 d9         bls       #0x8001284
+0800127a:  3e 44         add       r6, r7
+0800127c:  01 3d         subs      r5, #1
+0800127e:  ba eb 16 4f   cmp.w     sl, r6, lsr #16
+08001282:  f1 d0         beq       #0x8001268
+08001284:  48 ea 00 40   orr.w     r0, r8, r0, lsl #16
+08001288:  4f f0 00 0a   mov.w     sl, #0
+0800128c:  05 fb 12 08   mls       r8, r5, r2, r0
+08001290:  b8 fb f7 f0   udiv      r0, r8, r7
+08001294:  00 fb 17 86   mls       r6, r0, r7, r8
+08001298:  ba eb 10 4f   cmp.w     sl, r0, lsr #16
+0800129c:  05 d1         bne       #0x80012aa
+0800129e:  4e ea 06 41   orr.w     r1, lr, r6, lsl #16
+080012a2:  00 fb 09 f4   mul       r4, r0, sb
+080012a6:  8c 42         cmp       r4, r1
+080012a8:  04 d9         bls       #0x80012b4
+080012aa:  3e 44         add       r6, r7
+080012ac:  01 38         subs      r0, #1
+080012ae:  b6 f5 80 3f   cmp.w     r6, #0x10000
+080012b2:  f1 d3         blo       #0x8001298
+080012b4:  4e ea 08 41   orr.w     r1, lr, r8, lsl #16
+080012b8:  00 fb 12 11   mls       r1, r0, r2, r1
+080012bc:  00 eb 05 40   add.w     r0, r0, r5, lsl #16
+080012c0:  21 fa 0c f1   lsr.w     r1, r1, ip
+080012c4:  19 60         str       r1, [r3]
+080012c6:  bd e8 f0 87   pop.w     {r4, r5, r6, r7, r8, sb, sl, pc}
+
+OUTLINED_FUNCTION_148:
+080012ca:  20 46         mov       r0, r4
+080012cc:  29 46         mov       r1, r5
+080012ce:  32 46         mov       r2, r6
+080012d0:  70 47         bx        lr
+
+OUTLINED_FUNCTION_309:
+080012d2:  1c 46         mov       r4, r3
+080012d4:  15 46         mov       r5, r2
+080012d6:  0e 46         mov       r6, r1
+080012d8:  07 46         mov       r7, r0
+080012da:  70 47         bx        lr
+080012dc:  e4 12         asrs      r4, r4, #0xb
+080012de:  00 08         lsrs      r0, r0, #0x20
+080012e0:  00 00         movs      r0, r0
+080012e2:  00 20         movs      r0, #0
+080012e4:  47 10         asrs      r7, r0, #1
+080012e6:  00 08         lsrs      r0, r0, #0x20
+080012e8:  51 10         asrs      r1, r2, #1
+080012ea:  00 08         lsrs      r0, r0, #0x20
+080012ec:  65 10         asrs      r5, r4, #1
+080012ee:  00 08         lsrs      r0, r0, #0x20
+080012f0:  6b 10         asrs      r3, r5, #1
+080012f2:  00 08         lsrs      r0, r0, #0x20
+080012f4:  71 10         asrs      r1, r6, #1
+080012f6:  00 08         lsrs      r0, r0, #0x20
+080012f8:  79 10         asrs      r1, r7, #1
+080012fa:  00 08         lsrs      r0, r0, #0x20
+080012fc:  83 10         asrs      r3, r0, #2
+080012fe:  00 08         lsrs      r0, r0, #0x20
+08001300:  8b 10         asrs      r3, r1, #2
+08001302:  00 08         lsrs      r0, r0, #0x20

@@ -1,0 +1,15 @@
+case,metric,value,limit,status,note
+toolchain,zig_target_build,1.0,1.0,PASS,Zig 真实生成 thumb-freestanding-eabihf ELF
+elf,arm_elf32_little_endian,1.0,1.0,PASS,目标必须是 32 位小端 ARM ELF
+elf,entry_matches_reset_handler,1.0,1.0,PASS,ELF 入口必须指向 Reset_Handler
+elf,vector_table_at_flash_origin,1.0,1.0,PASS,向量表必须位于 0x08000000 且包含控制 IRQ 槽
+elf,release_text_matches_audit,1.0,1.0,PASS,发布 ELF 与带符号审计 ELF 的 .text 必须逐字节相同
+symbols,required_symbol_count,4.0,4.0,PASS,Reset/main/Control IRQ/固件 ISR 编排符号必须存在
+symbols,undefined_symbol_count,0.0,0.0,PASS,最终 ELF 不得保留未解析符号
+memory,flash_image_bytes,5112.0,524288.0,PASS,BIN 覆盖的 Flash 映像大小
+memory,ram_static_plus_stack_bytes,4376.0,131072.0,PASS,data+bss 加 4KB 栈保留
+instructions,soft_float_symbol_count,0.0,0.0,PASS,定点固件不应链接浮点运行库助手
+instructions,floating_instruction_count,0.0,0.0,PASS,控制映像不应出现 VFP 浮点指令
+instructions,int64_division_helper_count,2.0,0.0,INFO,64 位整数除法助手需要在目标板测量最坏执行时间
+artifacts,elf_nonzero_bytes,131652.0,1.0,PASS,ELF 文件必须非空
+artifacts,bin_nonzero_bytes,5112.0,1.0,PASS,BIN 文件必须非空
