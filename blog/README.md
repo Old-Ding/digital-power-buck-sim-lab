@@ -16,8 +16,9 @@
 | 08 | `08-load-transient.md` | 负载突变测试 |
 | 09 | `09-adc-noise-duty-jitter.md` | ADC 噪声和 duty 抖动 |
 | 10 | `10-controller-to-c.md` | 仿真控制器整理成 C 风格代码 |
-| 11 | `11-host-build-test-gate.md` | 给 C 控制器搭建 Host 编译与单元测试门禁 |
+| 11 | `11-host-build-test-gate.md` | 为什么上板前要先做 C 语言单元测试 |
+| 12 | `12-c-python-parity.md` | C 控制器编译通过后，怎么确认结果没有改错 |
 
 ## 后续主题
 
-后续内容会在源码、测试、报告和文章完成后再加入。第二季会继续扩展到 C 编译工具链补齐、host 单元测试、定点化、ADC/PWM 映射、ISR 分层、HAL 适配、CI/HIL 和实机闭环。
+后续内容会在源码、测试、报告和文章完成后再加入。第二季下一步将以第 12 章的浮点对照结果为基准，验证控制器定点化后的量化误差、饱和和溢出边界。

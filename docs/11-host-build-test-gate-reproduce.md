@@ -2,7 +2,18 @@
 
 本说明对应文章：`blog/11-host-build-test-gate.md`
 
-本章目标是复现第二季入口检查：检测 C 编译器、尝试编译第十章控制器、运行电脑端单元测试，并生成 CSV、PNG 和 Markdown 报告。
+本章目标是复现一条上板前的软件检查流程：检测 C 编译器、编译第十章控制器、运行电脑端基础测试，并生成 CSV、PNG 和 Markdown 报告。
+
+## 各文件的职责
+
+| 角色 | 文件或工具 | 职责 |
+| --- | --- | --- |
+| 被测代码 | `src/digital_power_control.c` | 实现控制器状态和输出逻辑 |
+| 测试程序 | `tests/test_digital_power_control_host.c` | 准备输入、调用控制器、判断 PASS/FAIL |
+| C 编译器 | Zig、GCC、Clang 或 MSVC | 把两个 C 文件编译成电脑端测试程序 |
+| 自动化脚本 | `scripts/run_host_build_tests.py` | 查找编译器、编译、运行测试并生成报告 |
+
+`run_host_build_tests.py` 是本仓库为第十一章配套编写的脚本，不是 Windows、Zig、MATLAB 或 PLECS 自带文件。控制行为是否通过由 C 测试程序中的 `expect_true()` 和 `expect_close()` 决定，Python 脚本只负责执行和记录。
 
 ## 复现边界
 
@@ -40,7 +51,31 @@ winget install --id zig.zig -e --scope user --accept-source-agreements --accept-
 
 如果没有 C 编译器，脚本仍会生成报告，但 `toolchain` 会是 `BLOCKED`，`build` 和 `unit_tests` 会是 `SKIPPED`。这表示构建还没有开始，不表示 C 源码已经失败。
 
-## 运行命令
+## 先手动编译和运行
+
+如果 Zig 已经加入 `PATH`，在仓库根目录运行：
+
+```powershell
+New-Item -ItemType Directory -Force artifacts\host-build\chapter11 | Out-Null
+
+zig cc -std=c99 -Wall -Wextra -Werror `
+  -I src `
+  src\digital_power_control.c `
+  tests\test_digital_power_control_host.c `
+  -o artifacts\host-build\chapter11\digital_power_control_host_tests.exe
+
+.\artifacts\host-build\chapter11\digital_power_control_host_tests.exe
+```
+
+最后一行应为：
+
+```text
+SUMMARY,PASS,failures=0
+```
+
+这两条命令分别对应“编译测试程序”和“运行测试程序”。如果 Zig 没有加入 `PATH`，可以使用完整的 `zig.exe` 路径，或者直接使用下一节的一键脚本自动查找。
+
+## 一键运行
 
 在仓库根目录运行：
 
@@ -53,7 +88,7 @@ python scripts\run_host_build_tests.py
 ```text
 已生成第 11 章电脑端编译测试检查报告。
 summary,pass=4,blocked=0,skipped=0,fail=0
-toolchain,zig,Zig 0.16.0 detected
+toolchain,zig,zig 0.16.0
 ```
 
 完整编译器路径和实际编译命令记录在 `reports/11-host-build-test-report.md`。
@@ -121,3 +156,7 @@ SUMMARY,PASS,failures=0
 ### 5. 编译临时文件为什么不提交
 
 `artifacts/host-build/chapter11/` 是本机生成目录，已经由 `.gitignore` 忽略。公开仓库只提交源码、脚本、报告和可复现图表。
+
+### 6. Python 脚本是从哪里来的
+
+它是本仓库为第十一章编写的自动化辅助文件，用来替代手动查找编译器、拼接编译命令、运行测试和整理报告。它不替代 C 测试程序中的预期条件，也不参与控制算法计算。

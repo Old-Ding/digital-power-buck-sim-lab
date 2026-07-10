@@ -288,7 +288,7 @@ python scripts\export_controller_c_style_tests.py
 
 | 不覆盖内容 | 原因 |
 | --- | --- |
-| C 代码已经在 MCU 上编译通过 | 本机没有 C 编译器，本章没有跑交叉编译 |
+| C 代码已经在 MCU 上编译通过 | 第 10 章没有执行 C 编译；第 11 章只补充了 Windows 电脑端编译 |
 | 定点化不会溢出 | 当前源码使用 `float`，没有做 Q 格式 |
 | PWM/ADC 驱动时序正确 | 本章没有接 MCU 寄存器 |
 | HIL 和硬件闭环合格 | 本章使用 Python 平均模型测试台 |

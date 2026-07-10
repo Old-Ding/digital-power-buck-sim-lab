@@ -1,0 +1,56 @@
+case,metric,value,tolerance,status,note
+steady_12v,max_abs_vout_meas_v_error,0.0,1e-06,PASS,C float 与 Python 参考实现的 vout_meas_v 最大绝对误差
+steady_12v,max_abs_vref_cmd_v_error,0.0,0.0015,PASS,C float 与 Python 参考实现的 vref_cmd_v 最大绝对误差
+steady_12v,max_abs_error_v_error,0.0,0.0015,PASS,C float 与 Python 参考实现的 error_v 最大绝对误差
+steady_12v,max_abs_p_term_error,0.0,7.5e-05,PASS,C float 与 Python 参考实现的 p_term 最大绝对误差
+steady_12v,max_abs_integrator_error,2.1333334838252727e-10,1e-06,PASS,C float 与 Python 参考实现的 integrator 最大绝对误差
+steady_12v,max_abs_duty_raw_error,3.6666666369811196e-09,0.00015,PASS,C float 与 Python 参考实现的 duty_raw 最大绝对误差
+steady_12v,max_abs_duty_cmd_error,3.6666666369811196e-09,0.00015,PASS,C float 与 Python 参考实现的 duty_cmd 最大绝对误差
+steady_12v,state_mismatch_count,0.0,0.0,PASS,控制状态必须逐周期一致
+steady_12v,fault_mismatch_count,0.0,0.0,PASS,active_fault 与 latched_fault 必须逐周期一致
+steady_12v,pwm_mismatch_count,0.0,0.0,PASS,PWM 使能必须逐周期一致
+steady_12v,logic_flag_mismatch_count,0.0,0.0,PASS,饱和与积分允许标志必须逐周期一致
+soft_start_40ms,max_abs_vout_meas_v_error,5.228513053623374e-07,1e-06,PASS,C float 与 Python 参考实现的 vout_meas_v 最大绝对误差
+soft_start_40ms,max_abs_vref_cmd_v_error,0.0005586999996030073,0.0015,PASS,C float 与 Python 参考实现的 vref_cmd_v 最大绝对误差
+soft_start_40ms,max_abs_error_v_error,0.0005585242798071821,0.0015,PASS,C float 与 Python 参考实现的 error_v 最大绝对误差
+soft_start_40ms,max_abs_p_term_error,2.79261689903592e-05,7.5e-05,PASS,C float 与 Python 参考实现的 p_term 最大绝对误差
+soft_start_40ms,max_abs_integrator_error,2.954103599413227e-08,1e-06,PASS,C float 与 Python 参考实现的 integrator 最大绝对误差
+soft_start_40ms,max_abs_duty_raw_error,5.1213637841773796e-05,0.00015,PASS,C float 与 Python 参考实现的 duty_raw 最大绝对误差
+soft_start_40ms,max_abs_duty_cmd_error,5.1213637841773796e-05,0.00015,PASS,C float 与 Python 参考实现的 duty_cmd 最大绝对误差
+soft_start_40ms,state_mismatch_count,0.0,0.0,PASS,控制状态必须逐周期一致
+soft_start_40ms,fault_mismatch_count,0.0,0.0,PASS,active_fault 与 latched_fault 必须逐周期一致
+soft_start_40ms,pwm_mismatch_count,0.0,0.0,PASS,PWM 使能必须逐周期一致
+soft_start_40ms,logic_flag_mismatch_count,0.0,0.0,PASS,饱和与积分允许标志必须逐周期一致
+load_step_50_100_50,max_abs_vout_meas_v_error,5.238280724739752e-07,1e-06,PASS,C float 与 Python 参考实现的 vout_meas_v 最大绝对误差
+load_step_50_100_50,max_abs_vref_cmd_v_error,0.0,0.0015,PASS,C float 与 Python 参考实现的 vref_cmd_v 最大绝对误差
+load_step_50_100_50,max_abs_error_v_error,4.770479823112961e-07,0.0015,PASS,C float 与 Python 参考实现的 error_v 最大绝对误差
+load_step_50_100_50,max_abs_p_term_error,2.5025898284236625e-08,7.5e-05,PASS,C float 与 Python 参考实现的 p_term 最大绝对误差
+load_step_50_100_50,max_abs_integrator_error,1.2168319836990127e-08,1e-06,PASS,C float 与 Python 参考实现的 integrator 最大绝对误差
+load_step_50_100_50,max_abs_duty_raw_error,7.927771861204747e-08,0.00015,PASS,C float 与 Python 参考实现的 duty_raw 最大绝对误差
+load_step_50_100_50,max_abs_duty_cmd_error,7.927771861204747e-08,0.00015,PASS,C float 与 Python 参考实现的 duty_cmd 最大绝对误差
+load_step_50_100_50,state_mismatch_count,0.0,0.0,PASS,控制状态必须逐周期一致
+load_step_50_100_50,fault_mismatch_count,0.0,0.0,PASS,active_fault 与 latched_fault 必须逐周期一致
+load_step_50_100_50,pwm_mismatch_count,0.0,0.0,PASS,PWM 使能必须逐周期一致
+load_step_50_100_50,logic_flag_mismatch_count,0.0,0.0,PASS,饱和与积分允许标志必须逐周期一致
+ocp_latch_clear,max_abs_vout_meas_v_error,4.5395674241888173e-07,1e-06,PASS,C float 与 Python 参考实现的 vout_meas_v 最大绝对误差
+ocp_latch_clear,max_abs_vref_cmd_v_error,0.00019568999976016244,0.0015,PASS,C float 与 Python 参考实现的 vref_cmd_v 最大绝对误差
+ocp_latch_clear,max_abs_error_v_error,0.00019565600622802048,0.0015,PASS,C float 与 Python 参考实现的 error_v 最大绝对误差
+ocp_latch_clear,max_abs_p_term_error,9.782820311400901e-06,7.5e-05,PASS,C float 与 Python 参考实现的 p_term 最大绝对误差
+ocp_latch_clear,max_abs_integrator_error,2.1333334838252727e-10,1e-06,PASS,C float 与 Python 参考实现的 integrator 最大绝对误差
+ocp_latch_clear,max_abs_duty_raw_error,1.7942430301398637e-05,0.00015,PASS,C float 与 Python 参考实现的 duty_raw 最大绝对误差
+ocp_latch_clear,max_abs_duty_cmd_error,1.7942430301398637e-05,0.00015,PASS,C float 与 Python 参考实现的 duty_cmd 最大绝对误差
+ocp_latch_clear,state_mismatch_count,0.0,0.0,PASS,控制状态必须逐周期一致
+ocp_latch_clear,fault_mismatch_count,0.0,0.0,PASS,active_fault 与 latched_fault 必须逐周期一致
+ocp_latch_clear,pwm_mismatch_count,0.0,0.0,PASS,PWM 使能必须逐周期一致
+ocp_latch_clear,logic_flag_mismatch_count,0.0,0.0,PASS,饱和与积分允许标志必须逐周期一致
+uvlo_blocks_pwm,max_abs_vout_meas_v_error,4.5395674241888173e-07,1e-06,PASS,C float 与 Python 参考实现的 vout_meas_v 最大绝对误差
+uvlo_blocks_pwm,max_abs_vref_cmd_v_error,0.00013297000009604432,0.0015,PASS,C float 与 Python 参考实现的 vref_cmd_v 最大绝对误差
+uvlo_blocks_pwm,max_abs_error_v_error,0.00013298866790275796,0.0015,PASS,C float 与 Python 参考实现的 error_v 最大绝对误差
+uvlo_blocks_pwm,max_abs_p_term_error,6.649399395138012e-06,7.5e-05,PASS,C float 与 Python 参考实现的 p_term 最大绝对误差
+uvlo_blocks_pwm,max_abs_integrator_error,2.1333334838252727e-10,1e-06,PASS,C float 与 Python 参考实现的 integrator 最大绝对误差
+uvlo_blocks_pwm,max_abs_duty_raw_error,1.2190758399116541e-05,0.00015,PASS,C float 与 Python 参考实现的 duty_raw 最大绝对误差
+uvlo_blocks_pwm,max_abs_duty_cmd_error,1.2190758399116541e-05,0.00015,PASS,C float 与 Python 参考实现的 duty_cmd 最大绝对误差
+uvlo_blocks_pwm,state_mismatch_count,0.0,0.0,PASS,控制状态必须逐周期一致
+uvlo_blocks_pwm,fault_mismatch_count,0.0,0.0,PASS,active_fault 与 latched_fault 必须逐周期一致
+uvlo_blocks_pwm,pwm_mismatch_count,0.0,0.0,PASS,PWM 使能必须逐周期一致
+uvlo_blocks_pwm,logic_flag_mismatch_count,0.0,0.0,PASS,饱和与积分允许标志必须逐周期一致
