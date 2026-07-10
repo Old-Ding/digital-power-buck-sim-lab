@@ -5,6 +5,9 @@ Thumbs.db
 *.bak
 *.swp
 
+# Python generated cache
+__pycache__/
+
 # MATLAB/Simulink generated files
 *.asv
 *.m~

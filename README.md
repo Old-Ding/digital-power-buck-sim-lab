@@ -12,7 +12,7 @@
 | 输出电流 | 5 A |
 | 输出功率 | 60 W |
 | 开关频率 | 200 kHz |
-| 当前阶段 | 第二季：C 控制器电脑端编译与单元测试检查 |
+| 当前阶段 | 第二季：Python 参考实现与真实 C 控制器逐周期对照 |
 
 第一阶段只做低压 DC-DC，不涉及市电输入和隔离拓扑。
 
@@ -30,7 +30,8 @@
 | 08 | 负载突变测试 | 已完成，可复现 |
 | 09 | ADC 噪声和 duty 抖动 | 已完成，可复现 |
 | 10 | 仿真控制器整理成 C 风格代码 | 已完成，可复现 |
-| 11 | C 控制器电脑端编译与单元测试检查 | 已完成，可复现 |
+| 11 | 为什么上板前要先做 C 语言单元测试 | 已完成，可复现 |
+| 12 | C 控制器编译通过后，怎么确认结果没有改错 | 已完成，可复现 |
 
 第二章对应的核心文件：
 
@@ -170,6 +171,19 @@
 | 测试报告 | `reports/11-host-build-test-report.md` |
 | 检查结果图 | `waveforms/11-host-build-gate.png` |
 
+第十二章对应的核心文件：
+
+| 类型 | 文件 |
+| --- | --- |
+| 教程文章 | `blog/12-c-python-parity.md` |
+| 复现说明 | `docs/12-c-python-parity-reproduce.md` |
+| C 回放程序 | `tests/replay_digital_power_control.c` |
+| Python/C 对照脚本 | `scripts/run_c_python_parity.py` |
+| 指标汇总 | `waveforms/12-c-python-parity-summary.csv` |
+| 抽样数据 | `waveforms/12-c-python-parity-samples.csv` |
+| 测试报告 | `reports/12-c-python-parity-report.md` |
+| 正文图表 | `waveforms/12-c-python-parity-*.png` |
+
 ## 复现方式
 
 在仓库根目录运行：
@@ -301,6 +315,14 @@ python scripts\run_host_build_tests.py
 ```
 
 第 11 章进入第二季固件工程化。该章先检测本机 C 编译器，再尝试编译 `src/digital_power_control.c` 和 `tests/test_digital_power_control_host.c`，并生成 CSV、PNG 和 Markdown 报告。当前本机已检测到 Zig 0.16.0，电脑端编译和电脑端单元测试均为 PASS。
+
+第 12 章的 Python 参考实现与真实 C 控制器逐周期对照运行：
+
+```powershell
+python scripts\run_c_python_parity.py
+```
+
+该章复用第 10 章五个场景生成固定逐周期输入，编译并运行真实 C 控制器，再比较 80,400 个控制周期的连续数值和离散状态。当前 55 项指标全部 PASS，状态、故障、PWM 和逻辑标志错位均为 0。
 
 ## 第二章结果
 
@@ -475,6 +497,20 @@ python scripts\run_host_build_tests.py
 
 第 11 章建立第二季入口检查：先证明电脑端工具链、编译命令、单元测试和报告链路是否成立。当前结论只覆盖电脑端编译和电脑端单元测试，不等于目标 MCU 工具链、定点化、HAL、ISR、HIL 或实机闭环已经完成。
 
+## 第十二章结果
+
+| 检查项 | 当前结果 |
+| --- | --- |
+| 对照场景 | 5 |
+| 逐周期比较行数 | 80,400 |
+| 指标结果 | PASS 55 / FAIL 0 |
+| 最大 `duty_cmd` 误差 | `5.12136e-05` |
+| 最大 `vref_cmd_v` 误差 | `0.0005587 V` |
+| 状态、故障、PWM 和逻辑标志错位 | 0 |
+| 电脑端 C 编译器 | Zig 0.16.0 |
+
+第 12 章把第 10 章 Python 参考实现产生的相同输入送给编译后的 C 控制器，验证五个场景中的参数、执行顺序、状态迁移和输出行为没有因改写成 C 而发生可观测偏差。该结论仍不覆盖目标 MCU、定点化、外设时序或硬件闭环。
+
 ## 仓库结构
 
 ```text
@@ -486,7 +522,7 @@ models/simulink/    Simulink 平均模型
 reports/            场景测试报告
 scripts/            可复现脚本
 src/                C 风格控制器源码
-tests/              Host 单元测试
+tests/              电脑端单元测试和 C 回放入口
 waveforms/          仿真原始数据、指标和波形图
 ```
 
@@ -494,7 +530,7 @@ waveforms/          仿真原始数据、指标和波形图
 
 ## 后续计划
 
-第 11 章之后，第二季会继续推进电脑端单元测试扩展、定点化、ADC/PWM 映射、ISR 分层、HAL 适配、CI/HIL 和实机闭环。后续主题会在完成模型、数据、波形和说明后加入本仓库。
+第 12 章之后，第二季将使用当前浮点对照结果作为基准，继续推进定点化、ADC/PWM 映射、ISR 分层、HAL 适配、CI/HIL 和实机闭环。后续主题会在完成源码、测试、数据、图表和说明后加入本仓库。
 
 ## 技术交流
 

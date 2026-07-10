@@ -9,6 +9,7 @@ from dataclasses import dataclass
 from pathlib import Path
 
 import matplotlib.pyplot as plt
+from matplotlib.patches import Rectangle
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -169,28 +170,64 @@ def write_summary(path: Path, rows: list[StepResult]) -> None:
 def plot_gate(path: Path, rows: list[StepResult]) -> None:
     status_color = {"PASS": "#2e8b57", "BLOCKED": "#d9480f", "SKIPPED": "#868e96", "FAIL": "#c92a2a"}
     gate_labels = {
-        "toolchain": "工具链",
-        "build": "编译",
-        "unit_tests": "单元测试",
-        "report": "报告",
+        "toolchain": "检测编译器",
+        "build": "C 代码编译",
+        "unit_tests": "基础测试",
+        "report": "结果报告",
     }
-    labels = [gate_labels.get(row.gate, row.gate) for row in rows]
-    values = [1.0 for _ in rows]
-    colors = [status_color.get(row.status, "#868e96") for row in rows]
 
     plt.rcParams["font.sans-serif"] = ["Microsoft YaHei", "SimHei", "Arial Unicode MS", "DejaVu Sans"]
     plt.rcParams["axes.unicode_minus"] = False
-    fig, ax = plt.subplots(figsize=(9.2, 4.8))
-    ax.barh(labels, values, color=colors)
-    ax.set_xlim(0.0, 1.05)
-    ax.set_title("第 11 章 电脑端编译测试检查")
-    ax.set_xticks([])
-    ax.spines["top"].set_visible(False)
-    ax.spines["right"].set_visible(False)
-    ax.spines["bottom"].set_visible(False)
+    fig, ax = plt.subplots(figsize=(9.2, 3.4))
+    ax.set_xlim(-0.55, len(rows) - 0.45)
+    ax.set_ylim(0.0, 1.0)
+    ax.axis("off")
+
+    for idx in range(len(rows) - 1):
+        ax.annotate(
+            "",
+            xy=(idx + 0.62, 0.54),
+            xytext=(idx + 0.40, 0.54),
+            arrowprops={"arrowstyle": "-|>", "color": "#94a3b8", "lw": 1.4},
+        )
+
     for idx, row in enumerate(rows):
-        ax.text(0.5, idx, row.status, va="center", ha="center", color="white", fontweight="bold")
-    fig.tight_layout()
+        color = status_color.get(row.status, "#868e96")
+        ax.add_patch(
+            Rectangle(
+                (idx - 0.36, 0.34),
+                0.72,
+                0.40,
+                facecolor="#f8fafc",
+                edgecolor="#cbd5e1",
+                linewidth=1.2,
+            )
+        )
+        ax.add_patch(Rectangle((idx - 0.36, 0.34), 0.72, 0.05, facecolor=color, edgecolor="none"))
+        ax.text(idx, 0.61, gate_labels.get(row.gate, row.gate), ha="center", va="center", color="#172033", fontsize=12)
+        ax.text(idx, 0.47, row.status, ha="center", va="center", color=color, fontsize=12, fontweight="bold")
+
+    counts = {status: sum(row.status == status for row in rows) for status in status_color}
+    ax.text(
+        (len(rows) - 1) / 2,
+        0.88,
+        "第 11 章：C 控制器电脑端检查结果",
+        ha="center",
+        va="center",
+        color="#111827",
+        fontsize=16,
+        fontweight="bold",
+    )
+    ax.text(
+        (len(rows) - 1) / 2,
+        0.14,
+        f"结果汇总：通过 {counts['PASS']} / 失败 {counts['FAIL']} / 阻塞 {counts['BLOCKED']} / 跳过 {counts['SKIPPED']}",
+        ha="center",
+        va="center",
+        color="#475569",
+        fontsize=10.5,
+    )
+    fig.tight_layout(pad=1.0)
     fig.savefig(path, dpi=180)
     plt.close(fig)
 
@@ -241,8 +278,9 @@ def write_report(
             "读这份报告时，先看 `toolchain`、`build`、`unit_tests` 三个检查项。它们对应的是电脑端证据；不要把这个结果误读成定点化安全、MCU 寄存器适配、ISR 时序、HIL 或硬件闭环已经完成。",
         ]
     )
+    report_text = "\n".join(lines).replace("\r\n", "\n").replace("\r", "\n")
     with path.open("w", encoding="utf-8", newline="") as f:
-        f.write("\r\n".join(lines) + "\r\n")
+        f.write(report_text.replace("\n", "\r\n") + "\r\n")
 
 
 def main() -> int:
@@ -301,7 +339,7 @@ def main() -> int:
     print("已生成第 11 章电脑端编译测试检查报告。")
     print(f"summary,pass={pass_count},blocked={blocked_count},skipped={skipped_count},fail={fail_count}")
     if compiler:
-        print(f"toolchain,{hint},{compiler}")
+        print(f"toolchain,{hint},{compiler_display or hint}")
     else:
         print("toolchain,none,未找到 C 编译器")
 
