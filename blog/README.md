@@ -16,7 +16,7 @@
 | 08 | `08-load-transient.md` | 负载突变测试 |
 | 09 | `09-adc-noise-duty-jitter.md` | ADC 噪声和 duty 抖动 |
 | 10 | `10-controller-to-c.md` | 仿真控制器整理成 C 风格代码 |
-| 11 | `11-host-build-test-gate.md` | 第二季先建立 C 编译和单元测试门禁 |
+| 11 | `11-host-build-test-gate.md` | 给 C 控制器搭建 Host 编译与单元测试门禁 |
 
 ## 后续主题
 
