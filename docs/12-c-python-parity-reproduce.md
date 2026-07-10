@@ -104,7 +104,7 @@ zig cc -std=c99 -Wall -Wextra -Werror `
 SUMMARY,OK,rows=80400
 ```
 
-这里的 PASS 只表示输入已成功解析并完成 80,400 次 C 控制器调用，不表示 Python/C 对照已经通过。
+这里的 `OK` 只表示输入已成功解析并完成 80,400 次 C 控制器调用，不表示 Python/C 对照已经通过。
 
 ### 4. 运行完整对照
 

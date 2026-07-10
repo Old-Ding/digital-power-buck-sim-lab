@@ -1,0 +1,75 @@
+case,metric,value,tolerance,status,note
+steady_12v,max_abs_vout_meas_v_error,0.0,1e-06,PASS,定点 C 与浮点 C 的 vout_meas_v 最大绝对误差
+steady_12v,max_abs_vref_cmd_v_error,0.0,0.0011,PASS,定点 C 与浮点 C 的 vref_cmd_v 最大绝对误差
+steady_12v,max_abs_error_v_error,0.0,0.0011,PASS,定点 C 与浮点 C 的 error_v 最大绝对误差
+steady_12v,max_abs_p_term_error,0.0,6e-05,PASS,定点 C 与浮点 C 的 p_term 最大绝对误差
+steady_12v,max_abs_integrator_error,6.379162000025307e-08,0.0001,PASS,定点 C 与浮点 C 的 integrator 最大绝对误差
+steady_12v,max_abs_duty_raw_error,5.991200002775088e-08,0.00015,PASS,定点 C 与浮点 C 的 duty_raw 最大绝对误差
+steady_12v,max_abs_duty_cmd_error,5.991200002775088e-08,0.00015,PASS,定点 C 与浮点 C 的 duty_cmd 最大绝对误差
+steady_12v,state_mismatch_count,0,0.0,PASS,状态必须逐周期一致
+steady_12v,fault_mismatch_count,0,0.0,PASS,活动与锁存故障必须逐周期一致
+steady_12v,pwm_mismatch_count,0,0.0,PASS,PWM 使能必须逐周期一致
+steady_12v,logic_flag_mismatch_count,0,0.0,PASS,限幅与积分允许标志必须逐周期一致
+steady_12v,arithmetic_overflow_count,0,0.0,PASS,定点加减乘除不得触发 32 位饱和
+steady_12v,input_conversion_overflow_count,0,0.0,PASS,回放输入转换不得超出 Q20 范围
+steady_12v,max_raw_utilization_pct,4.882812502273737,10.0,PASS,配置、输入、状态和输出 raw 值占 int32 正量程比例
+soft_start_40ms,max_abs_vout_meas_v_error,4.818299998987641e-07,1e-06,PASS,定点 C 与浮点 C 的 vout_meas_v 最大绝对误差
+soft_start_40ms,max_abs_vref_cmd_v_error,0.0004787945000011007,0.0011,PASS,定点 C 与浮点 C 的 vref_cmd_v 最大绝对误差
+soft_start_40ms,max_abs_error_v_error,0.0004789829526000017,0.0011,PASS,定点 C 与浮点 C 的 error_v 最大绝对误差
+soft_start_40ms,max_abs_p_term_error,2.4414044179999882e-05,6e-05,PASS,定点 C 与浮点 C 的 p_term 最大绝对误差
+soft_start_40ms,max_abs_integrator_error,7.062126103999939e-05,0.0001,PASS,定点 C 与浮点 C 的 integrator 最大绝对误差
+soft_start_40ms,max_abs_duty_raw_error,7.069081099997376e-05,0.00015,PASS,定点 C 与浮点 C 的 duty_raw 最大绝对误差
+soft_start_40ms,max_abs_duty_cmd_error,7.069081099997376e-05,0.00015,PASS,定点 C 与浮点 C 的 duty_cmd 最大绝对误差
+soft_start_40ms,state_mismatch_count,0,0.0,PASS,状态必须逐周期一致
+soft_start_40ms,fault_mismatch_count,0,0.0,PASS,活动与锁存故障必须逐周期一致
+soft_start_40ms,pwm_mismatch_count,0,0.0,PASS,PWM 使能必须逐周期一致
+soft_start_40ms,logic_flag_mismatch_count,0,0.0,PASS,限幅与积分允许标志必须逐周期一致
+soft_start_40ms,arithmetic_overflow_count,0,0.0,PASS,定点加减乘除不得触发 32 位饱和
+soft_start_40ms,input_conversion_overflow_count,0,0.0,PASS,回放输入转换不得超出 Q20 范围
+soft_start_40ms,max_raw_utilization_pct,4.882812502273737,10.0,PASS,配置、输入、状态和输出 raw 值占 int32 正量程比例
+load_step_50_100_50,max_abs_vout_meas_v_error,5.000000058430487e-08,1e-06,PASS,定点 C 与浮点 C 的 vout_meas_v 最大绝对误差
+load_step_50_100_50,max_abs_vref_cmd_v_error,0.0,0.0011,PASS,定点 C 与浮点 C 的 vref_cmd_v 最大绝对误差
+load_step_50_100_50,max_abs_error_v_error,5.000000413701855e-10,0.0011,PASS,定点 C 与浮点 C 的 error_v 最大绝对误差
+load_step_50_100_50,max_abs_p_term_error,5.718746000013541e-07,6e-05,PASS,定点 C 与浮点 C 的 p_term 最大绝对误差
+load_step_50_100_50,max_abs_integrator_error,2.7899394040000348e-05,0.0001,PASS,定点 C 与浮点 C 的 integrator 最大绝对误差
+load_step_50_100_50,max_abs_duty_raw_error,2.7894977000064713e-05,0.00015,PASS,定点 C 与浮点 C 的 duty_raw 最大绝对误差
+load_step_50_100_50,max_abs_duty_cmd_error,2.7894977000064713e-05,0.00015,PASS,定点 C 与浮点 C 的 duty_cmd 最大绝对误差
+load_step_50_100_50,state_mismatch_count,0,0.0,PASS,状态必须逐周期一致
+load_step_50_100_50,fault_mismatch_count,0,0.0,PASS,活动与锁存故障必须逐周期一致
+load_step_50_100_50,pwm_mismatch_count,0,0.0,PASS,PWM 使能必须逐周期一致
+load_step_50_100_50,logic_flag_mismatch_count,0,0.0,PASS,限幅与积分允许标志必须逐周期一致
+load_step_50_100_50,arithmetic_overflow_count,0,0.0,PASS,定点加减乘除不得触发 32 位饱和
+load_step_50_100_50,input_conversion_overflow_count,0,0.0,PASS,回放输入转换不得超出 Q20 范围
+load_step_50_100_50,max_raw_utilization_pct,4.882812502273737,10.0,PASS,配置、输入、状态和输出 raw 值占 int32 正量程比例
+ocp_latch_clear,max_abs_vout_meas_v_error,4.818299998987641e-07,1e-06,PASS,定点 C 与浮点 C 的 vout_meas_v 最大绝对误差
+ocp_latch_clear,max_abs_vref_cmd_v_error,0.0004787495000000419,0.0011,PASS,定点 C 与浮点 C 的 vref_cmd_v 最大绝对误差
+ocp_latch_clear,max_abs_error_v_error,0.0004789829526000017,0.0011,PASS,定点 C 与浮点 C 的 error_v 最大绝对误差
+ocp_latch_clear,max_abs_p_term_error,2.441404301000002e-05,6e-05,PASS,定点 C 与浮点 C 的 p_term 最大绝对误差
+ocp_latch_clear,max_abs_integrator_error,6.379162000025307e-08,0.0001,PASS,定点 C 与浮点 C 的 integrator 最大绝对误差
+ocp_latch_clear,max_abs_duty_raw_error,4.503180200002288e-05,0.00015,PASS,定点 C 与浮点 C 的 duty_raw 最大绝对误差
+ocp_latch_clear,max_abs_duty_cmd_error,4.503180200002288e-05,0.00015,PASS,定点 C 与浮点 C 的 duty_cmd 最大绝对误差
+ocp_latch_clear,state_mismatch_count,0,0.0,PASS,状态必须逐周期一致
+ocp_latch_clear,fault_mismatch_count,0,0.0,PASS,活动与锁存故障必须逐周期一致
+ocp_latch_clear,pwm_mismatch_count,0,0.0,PASS,PWM 使能必须逐周期一致
+ocp_latch_clear,logic_flag_mismatch_count,0,0.0,PASS,限幅与积分允许标志必须逐周期一致
+ocp_latch_clear,arithmetic_overflow_count,0,0.0,PASS,定点加减乘除不得触发 32 位饱和
+ocp_latch_clear,input_conversion_overflow_count,0,0.0,PASS,回放输入转换不得超出 Q20 范围
+ocp_latch_clear,max_raw_utilization_pct,4.882812502273737,10.0,PASS,配置、输入、状态和输出 raw 值占 int32 正量程比例
+uvlo_blocks_pwm,max_abs_vout_meas_v_error,4.818299998987641e-07,1e-06,PASS,定点 C 与浮点 C 的 vout_meas_v 最大绝对误差
+uvlo_blocks_pwm,max_abs_vref_cmd_v_error,0.0004787494900000411,0.0011,PASS,定点 C 与浮点 C 的 vref_cmd_v 最大绝对误差
+uvlo_blocks_pwm,max_abs_error_v_error,0.0004789829526000017,0.0011,PASS,定点 C 与浮点 C 的 error_v 最大绝对误差
+uvlo_blocks_pwm,max_abs_p_term_error,2.4414042269999946e-05,6e-05,PASS,定点 C 与浮点 C 的 p_term 最大绝对误差
+uvlo_blocks_pwm,max_abs_integrator_error,6.379162000025307e-08,0.0001,PASS,定点 C 与浮点 C 的 integrator 最大绝对误差
+uvlo_blocks_pwm,max_abs_duty_raw_error,4.503180200002288e-05,0.00015,PASS,定点 C 与浮点 C 的 duty_raw 最大绝对误差
+uvlo_blocks_pwm,max_abs_duty_cmd_error,4.503180200002288e-05,0.00015,PASS,定点 C 与浮点 C 的 duty_cmd 最大绝对误差
+uvlo_blocks_pwm,state_mismatch_count,0,0.0,PASS,状态必须逐周期一致
+uvlo_blocks_pwm,fault_mismatch_count,0,0.0,PASS,活动与锁存故障必须逐周期一致
+uvlo_blocks_pwm,pwm_mismatch_count,0,0.0,PASS,PWM 使能必须逐周期一致
+uvlo_blocks_pwm,logic_flag_mismatch_count,0,0.0,PASS,限幅与积分允许标志必须逐周期一致
+uvlo_blocks_pwm,arithmetic_overflow_count,0,0.0,PASS,定点加减乘除不得触发 32 位饱和
+uvlo_blocks_pwm,input_conversion_overflow_count,0,0.0,PASS,回放输入转换不得超出 Q20 范围
+uvlo_blocks_pwm,max_raw_utilization_pct,4.882812502273737,10.0,PASS,配置、输入、状态和输出 raw 值占 int32 正量程比例
+fixed_unit_tests,q20_scale_and_soft_start_constant,1.0,1.0,PASS,定点格式、正常步进或溢出边界单元测试
+fixed_unit_tests,soft_start_first_step_without_overflow,1.0,1.0,PASS,定点格式、正常步进或溢出边界单元测试
+fixed_unit_tests,positive_overflow_saturates_and_counts,1.0,1.0,PASS,定点格式、正常步进或溢出边界单元测试
+fixed_unit_tests,negative_overflow_saturates_and_counts,1.0,1.0,PASS,定点格式、正常步进或溢出边界单元测试

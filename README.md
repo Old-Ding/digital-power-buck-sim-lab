@@ -12,7 +12,7 @@
 | 输出电流 | 5 A |
 | 输出功率 | 60 W |
 | 开关频率 | 200 kHz |
-| 当前阶段 | 第二季：Python 参考实现与真实 C 控制器逐周期对照 |
+| 当前阶段 | 第二季：Q20 定点控制器与浮点 C 逐周期对照 |
 
 第一阶段只做低压 DC-DC，不涉及市电输入和隔离拓扑。
 
@@ -32,6 +32,7 @@
 | 10 | 仿真控制器整理成 C 风格代码 | 已完成，可复现 |
 | 11 | 为什么上板前要先做 C 语言单元测试 | 已完成，可复现 |
 | 12 | C 控制器编译通过后，怎么确认结果没有改错 | 已完成，可复现 |
+| 13 | 浮点控制器怎么改成定点数并验证不会溢出 | 已完成，可复现 |
 
 第二章对应的核心文件：
 
@@ -184,6 +185,20 @@
 | 测试报告 | `reports/12-c-python-parity-report.md` |
 | 正文图表 | `waveforms/12-c-python-parity-*.png` |
 
+第十三章对应的核心文件：
+
+| 类型 | 文件 |
+| --- | --- |
+| 教程文章 | `blog/13-fixed-point-controller.md` |
+| 复现说明 | `docs/13-fixed-point-controller-reproduce.md` |
+| Q20 定点控制器 | `src/digital_power_control_fixed.c`、`src/digital_power_control_fixed.h` |
+| 定点边界测试 | `tests/test_digital_power_control_fixed.c` |
+| 双实现回放入口 | `tests/replay_digital_power_control_fixed.c` |
+| 自动对照脚本 | `scripts/run_fixed_point_parity.py` |
+| 测试报告 | `reports/13-fixed-point-parity-report.md` |
+| 指标与格式数据 | `waveforms/13-fixed-point-*.csv` |
+| 正文图表 | `waveforms/13-fixed-point-*.png` |
+
 ## 复现方式
 
 在仓库根目录运行：
@@ -323,6 +338,14 @@ python scripts\run_c_python_parity.py
 ```
 
 该章复用第 10 章五个场景生成固定逐周期输入，编译并运行真实 C 控制器，再比较 80,400 个控制周期的连续数值和离散状态。当前 55 项指标全部 PASS，状态、故障、PWM 和逻辑标志错位均为 0。
+
+第 13 章的浮点 C 与 Q20 定点 C 对照运行：
+
+```powershell
+python scripts\run_fixed_point_parity.py
+```
+
+该章比较 Q16、Q20、Q24 的精度与范围，采用有符号 32 位、20 个小数位的统一格式；随后编译定点单元测试和浮点/定点双实现回放程序。当前 4 个定点单元测试和 80,400 周期对照共 74 项指标全部 PASS，正常场景算术溢出和离散行为错位均为 0。
 
 ## 第二章结果
 
@@ -511,6 +534,24 @@ python scripts\run_c_python_parity.py
 
 第 12 章把第 10 章 Python 参考实现产生的相同输入送给编译后的 C 控制器，验证五个场景中的参数、执行顺序、状态迁移和输出行为没有因改写成 C 而发生可观测偏差。该结论仍不覆盖目标 MCU、定点化、外设时序或硬件闭环。
 
+## 第十三章结果
+
+| 检查项 | 当前结果 |
+| --- | --- |
+| 定点格式 | 有符号 32 位，20 个小数位 |
+| 缩放因子 | 1,048,576 |
+| 定点单元测试 | 4/4 PASS |
+| 对照场景与周期 | 5 / 80,400 |
+| 指标结果 | PASS 74 / FAIL 0 |
+| 最大 `duty_cmd` 误差 | `7.06908e-05` |
+| 最大 `vref_cmd_v` 误差 | `0.000478795 V` |
+| 最大积分器误差 | `7.06213e-05` |
+| 离散行为错位 | 0 |
+| 正常回放算术溢出 | 0 |
+| 最大 raw 正量程占用 | `4.88281%` |
+
+第 13 章建立了定点格式选择、统一舍入与饱和、溢出观测和浮点基准回放链路。当前结果覆盖电脑端 Q20 控制算法，不覆盖 ADC 原始码值、PWM 寄存器、目标 MCU 执行时间或硬件闭环。
+
 ## 仓库结构
 
 ```text
@@ -521,8 +562,8 @@ models/plecs/       PLECS 模型
 models/simulink/    Simulink 平均模型
 reports/            场景测试报告
 scripts/            可复现脚本
-src/                C 风格控制器源码
-tests/              电脑端单元测试和 C 回放入口
+src/                浮点与 Q20 定点控制器源码
+tests/              电脑端单元测试、边界测试和 C 回放入口
 waveforms/          仿真原始数据、指标和波形图
 ```
 
@@ -530,7 +571,7 @@ waveforms/          仿真原始数据、指标和波形图
 
 ## 后续计划
 
-第 12 章之后，第二季将使用当前浮点对照结果作为基准，继续推进定点化、ADC/PWM 映射、ISR 分层、HAL 适配、CI/HIL 和实机闭环。后续主题会在完成源码、测试、数据、图表和说明后加入本仓库。
+第 13 章之后，第二季将把 ADC 码值、分压比、电流采样增益和零点偏置映射到当前 Q20 输入，再继续推进 PWM 映射、ISR 分层、HAL 适配、CI/HIL 和实机闭环。后续主题会在完成源码、测试、数据、图表和说明后加入本仓库。
 
 ## 技术交流
 
