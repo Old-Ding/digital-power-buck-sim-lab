@@ -241,6 +241,10 @@ def write_report(
     build_output: str,
     test_output: str,
 ) -> None:
+    public_compile_cmd: list[str] | None = None
+    if compile_cmd:
+        public_compile_cmd = [Path(compile_cmd[0]).stem]
+        public_compile_cmd.extend(argument.replace(str(ROOT), ".") for argument in compile_cmd[1:])
     lines = [
         "# 第 11 章报告：电脑端编译和单元测试检查",
         "",
@@ -257,12 +261,11 @@ def write_report(
     lines.extend(["", "## 工具链", ""])
     if compiler:
         lines.append(f"- 检测到的编译器：`{compiler_display or 'unknown'}`")
-        lines.append(f"- 编译器路径：`{compiler}`")
     else:
         lines.append("- 检测到的编译器：`未找到`")
 
-    if compile_cmd:
-        lines.extend(["", "## 编译命令", "", "```powershell", " ".join(compile_cmd), "```"])
+    if public_compile_cmd:
+        lines.extend(["", "## 编译命令", "", "```powershell", " ".join(public_compile_cmd), "```"])
 
     if build_output:
         lines.extend(["", "## 编译输出", "", "```text", build_output, "```"])
@@ -302,7 +305,7 @@ def main() -> int:
     else:
         version = compiler_version(compiler, hint)
         compiler_display = f"{hint} {version}" if version else hint
-        rows.append(StepResult("toolchain", "PASS", f"检测到 {compiler_display}: {compiler}"))
+        rows.append(StepResult("toolchain", "PASS", f"检测到 {compiler_display}"))
         exe_path = BUILD_DIR / ("digital_power_control_host_tests.exe" if os.name == "nt" else "digital_power_control_host_tests")
         compile_cmd = build_command(compiler, hint, exe_path)
         code, build_output = run_command(compile_cmd, BUILD_DIR)
@@ -310,7 +313,7 @@ def main() -> int:
             rows.append(StepResult("build", "FAIL", f"编译失败，退出码 {code}"))
             rows.append(StepResult("unit_tests", "SKIPPED", "编译失败，未运行测试"))
         else:
-            rows.append(StepResult("build", "PASS", f"生成 {exe_path}"))
+            rows.append(StepResult("build", "PASS", f"生成 {exe_path.relative_to(ROOT)}"))
             test_code, test_output = run_command([str(exe_path)], BUILD_DIR)
             if test_code == 0 and "SUMMARY,PASS" in test_output:
                 rows.append(StepResult("unit_tests", "PASS", "电脑端单元测试通过"))

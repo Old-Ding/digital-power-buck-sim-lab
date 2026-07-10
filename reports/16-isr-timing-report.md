@@ -35,10 +35,10 @@ SUMMARY,OK,batches=200,iterations_per_batch=10000,checksum=552552099
 | `normal` | `mapping_and_arithmetic_clean` | 1 | 1 | PASS | 正常输入无钳位和整数溢出 |
 | `target_budget` | `allocated_isr_ns` | 3500 | 3500 | PASS | 目标 MCU 的中断执行预算，不是主机实测值 |
 | `target_budget` | `reserve_ns` | 1500 | 1500 | PASS | 为中断延迟、抖动和高优先级抢占保留的余量 |
-| `host_benchmark` | `host_batch_p50_ns_per_call` | 45.395 | 5000 | INFO | 主机批次均摊耗时，仅用于回归，不判定 MCU 5us 截止时间 |
-| `host_benchmark` | `host_batch_p95_ns_per_call` | 50.0575 | 5000 | INFO | 主机批次均摊耗时，仅用于回归，不判定 MCU 5us 截止时间 |
-| `host_benchmark` | `host_batch_p99_ns_per_call` | 59.3644 | 5000 | INFO | 主机批次均摊耗时，仅用于回归，不判定 MCU 5us 截止时间 |
-| `host_benchmark` | `host_batch_max_ns_per_call` | 60.57 | 5000 | INFO | 主机批次均摊耗时，仅用于回归，不判定 MCU 5us 截止时间 |
+| `host_benchmark` | `host_batch_p50_ns_per_call` | 44.71 | 5000 | INFO | 主机批次均摊耗时，仅用于回归，不判定 MCU 5us 截止时间 |
+| `host_benchmark` | `host_batch_p95_ns_per_call` | 55.3295 | 5000 | INFO | 主机批次均摊耗时，仅用于回归，不判定 MCU 5us 截止时间 |
+| `host_benchmark` | `host_batch_p99_ns_per_call` | 60.0179 | 5000 | INFO | 主机批次均摊耗时，仅用于回归，不判定 MCU 5us 截止时间 |
+| `host_benchmark` | `host_batch_max_ns_per_call` | 63.48 | 5000 | INFO | 主机批次均摊耗时，仅用于回归，不判定 MCU 5us 截止时间 |
 | `isr_unit_tests` | `previous_compare_applies_at_isr_entry` | 1 | 1 | PASS | C 中断编排单元测试 |
 | `isr_unit_tests` | `new_compare_waits_for_next_update` | 1 | 1 | PASS | C 中断编排单元测试 |
 | `isr_unit_tests` | `queued_compare_has_one_cycle_latency` | 1 | 1 | PASS | C 中断编排单元测试 |

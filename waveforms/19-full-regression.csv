@@ -1,0 +1,10 @@
+step,label,status,exit_code,duration_s,summary,command
+repository_quality,仓库质量门禁,PASS,0,0.934,"summary,pass=9,fail=0,checks=9",python scripts/check_repository_quality.py
+chapter11_host_build,第 11 章主机编译与单元测试,PASS,0,1.432,"summary,pass=4,blocked=0,skipped=0,fail=0",python scripts/run_host_build_tests.py
+chapter12_c_python,第 12 章 C/Python 逐周期对照,PASS,0,4.89,"summary,pass=55,fail=0,scenarios=5,rows=80400",python scripts/run_c_python_parity.py
+chapter13_fixed_point,第 13 章 Q20 定点对照,PASS,0,6.186,"summary,pass=74,fail=0,scenarios=5,rows=80400",python scripts/run_fixed_point_parity.py
+chapter14_adc_map,第 14 章 ADC 映射,PASS,0,2.676,"summary,pass=22,fail=0,info=4,rows=607",python scripts/run_adc_mapping_tests.py
+chapter15_pwm_map,第 15 章 PWM 映射,PASS,0,2.287,"summary,pass=15,fail=0,rows=640",python scripts/run_pwm_mapping_tests.py
+chapter16_isr,第 16 章 ISR 顺序与预算,PASS,0,2.829,"summary,pass=13,fail=0,info=4,cycles=6,batches=200",python scripts/run_isr_timing_tests.py
+chapter17_layering,第 17 章固件分层与 HAL,PASS,0,2.323,"summary,pass=21,fail=0,phases=12,events=34",python scripts/run_firmware_layering_tests.py
+chapter18_target,第 18 章 Cortex-M4F 构建,PASS,0,2.28,"summary,pass=13,fail=0,info=1,sections=5,symbols=107,instructions=1695",python scripts/build_cortex_m4f_firmware.py

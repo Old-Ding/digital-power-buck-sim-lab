@@ -24,7 +24,8 @@
 | 16 | `16-control-isr-timing.md` | 5 us 控制中断里 ADC、控制器和 PWM 应该按什么顺序执行 |
 | 17 | `17-firmware-layering-hal.md` | 哪些代码放 5 us 中断，哪些放后台，HAL 接口怎么拆 |
 | 18 | `18-cortex-m4f-target-build.md` | 如何把控制固件交叉编译成 Cortex-M4F 的 ELF 和 BIN |
+| 19 | `19-ci-full-regression.md` | 如何用 GitHub Actions 持续回归第 11～18 章 |
 
 ## 后续主题
 
-后续内容会在源码、测试、报告和文章完成后再加入。第二季下一步将把第二季全部主机测试和 Cortex-M4F 构建接入同一套持续回归。
+后续内容会在源码、测试、报告和文章完成后再加入。第二季下一步是低压 HIL/实物最终验收；没有硬件证据时不会标记硬件 PASS。

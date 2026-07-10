@@ -144,16 +144,16 @@ Tcontrol = 1 / 200 kHz = 5 us
 
 | 指标 | 当前主机结果 |
 | --- | ---: |
-| 批次均摊 P50 | 45.40 ns/call |
-| 批次均摊 P95 | 50.06 ns/call |
-| 批次均摊 P99 | 59.36 ns/call |
-| 批次均摊最大值 | 60.57 ns/call |
+| 批次均摊 P50 | 44.71 ns/call |
+| 批次均摊 P95 | 55.33 ns/call |
+| 批次均摊 P99 | 60.02 ns/call |
+| 批次均摊最大值 | 63.48 ns/call |
 
 ![目标预算与主机回归基准](../waveforms/16-isr-budget-and-host-timing.png)
 
 左图是目标 MCU 的设计预算，右图是当前电脑的批次均摊耗时。两者使用不同 CPU、时钟、缓存、编译目标和外设路径，不能直接比较。
 
-主机基准的用途是回归：以后代码改动后若 P99 从约 59 ns 明显增加到数百 ns，应检查是否在中断链路加入了不必要的计算。它不能替代目标 MCU 周期计数器、GPIO 翻转或示波器测量。
+主机基准的用途是回归：以后代码改动后若 P99 从约 60 ns 明显增加到数百 ns，应检查是否在中断链路加入了不必要的计算。它不能替代目标 MCU 周期计数器、GPIO 翻转或示波器测量。
 
 ## 手动编译并运行顺序测试
 
@@ -200,7 +200,7 @@ python scripts\run_isr_timing_tests.py
 summary,pass=13,fail=0,info=4,cycles=6,batches=200
 toolchain,zig,zig 0.16.0
 target,period_ns=5000,isr_budget_ns=3500,reserve_ns=1500
-host,p50_ns=45.395,p99_ns=59.364,max_ns=60.570
+host,p50_ns=44.710,p99_ns=60.018,max_ns=63.480
 ```
 
 ## 不要误读本章结果
@@ -211,7 +211,7 @@ host,p50_ns=45.395,p99_ns=59.364,max_ns=60.570
 | compare 具有确定的一周期生效延迟 | 控制算法不存在相位裕度问题 |
 | OCP 软件路径在同一次调用中关闭 active enable | 功率级短路保护延迟已经实测 |
 | 3.5 us ISR + 1.5 us 余量完成预算分配 | 170 MHz MCU 最坏执行时间已经小于 3.5 us |
-| Windows 主机基准可用于代码回归 | 主机的 59 ns P99 可以换算为 MCU 时间 |
+| Windows 主机基准可用于代码回归 | 主机的 60 ns P99 可以换算为 MCU 时间 |
 
 ## 配套文件
 

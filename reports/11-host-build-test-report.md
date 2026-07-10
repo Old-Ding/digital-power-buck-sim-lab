@@ -6,20 +6,19 @@
 
 | Gate | Status | Detail |
 | --- | --- | --- |
-| `toolchain` | PASS | 检测到 zig 0.16.0: C:\Users\ww\AppData\Local\Microsoft\WinGet\Packages\zig.zig_Microsoft.Winget.Source_8wekyb3d8bbwe\zig-x86_64-windows-0.16.0\zig.exe |
-| `build` | PASS | 生成 D:\codex\digital-power-buck-sim-lab\artifacts\host-build\chapter11\digital_power_control_host_tests.exe |
+| `toolchain` | PASS | 检测到 zig 0.16.0 |
+| `build` | PASS | 生成 artifacts\host-build\chapter11\digital_power_control_host_tests.exe |
 | `unit_tests` | PASS | 电脑端单元测试通过 |
 | `report` | PASS | 已生成 CSV、PNG 和 Markdown 报告 |
 
 ## 工具链
 
 - 检测到的编译器：`zig 0.16.0`
-- 编译器路径：`C:\Users\ww\AppData\Local\Microsoft\WinGet\Packages\zig.zig_Microsoft.Winget.Source_8wekyb3d8bbwe\zig-x86_64-windows-0.16.0\zig.exe`
 
 ## 编译命令
 
 ```powershell
-C:\Users\ww\AppData\Local\Microsoft\WinGet\Packages\zig.zig_Microsoft.Winget.Source_8wekyb3d8bbwe\zig-x86_64-windows-0.16.0\zig.exe cc -std=c99 -Wall -Wextra -Werror -I D:\codex\digital-power-buck-sim-lab\src D:\codex\digital-power-buck-sim-lab\src\digital_power_control.c D:\codex\digital-power-buck-sim-lab\tests\test_digital_power_control_host.c -o D:\codex\digital-power-buck-sim-lab\artifacts\host-build\chapter11\digital_power_control_host_tests.exe
+zig cc -std=c99 -Wall -Wextra -Werror -I .\src .\src\digital_power_control.c .\tests\test_digital_power_control_host.c -o .\artifacts\host-build\chapter11\digital_power_control_host_tests.exe
 ```
 
 ## 测试输出

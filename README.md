@@ -12,7 +12,7 @@
 | 输出电流 | 5 A |
 | 输出功率 | 60 W |
 | 开关频率 | 200 kHz |
-| 当前阶段 | 第二季：Cortex-M4F 交叉构建与固件映像审计 |
+| 当前阶段 | 第二季：GitHub Actions 与第 11～18 章全链路回归 |
 
 第一阶段只做低压 DC-DC，不涉及市电输入和隔离拓扑。
 
@@ -38,6 +38,7 @@
 | 16 | 5 us 控制中断里 ADC、控制器和 PWM 应该按什么顺序执行 | 已完成，可复现 |
 | 17 | 哪些代码放 5 us 中断，哪些放后台，HAL 接口怎么拆 | 已完成，可复现 |
 | 18 | 如何把控制固件交叉编译成 Cortex-M4F 的 ELF 和 BIN | 已完成，可复现 |
+| 19 | 如何用 GitHub Actions 持续回归第 11～18 章 | 已完成，可复现 |
 
 第二章对应的核心文件：
 
@@ -272,6 +273,18 @@
 | 测试报告 | `reports/18-target-build-report.md` |
 | 数据与图表 | `waveforms/18-*.csv`、`waveforms/18-*.png` |
 
+第十九章对应的核心文件：
+
+| 类型 | 文件 |
+| --- | --- |
+| 教程文章 | `blog/19-ci-full-regression.md` |
+| 复现说明 | `docs/19-ci-full-regression-reproduce.md` |
+| 仓库质量门禁 | `scripts/check_repository_quality.py` |
+| 全回归入口 | `scripts/run_full_regression.py` |
+| GitHub Actions | `.github/workflows/firmware-regression.yml` |
+| 测试报告 | `reports/19-full-regression-report.md` |
+| 数据与图表 | `waveforms/19-*.csv`、`waveforms/19-*.png` |
+
 ## 复现方式
 
 在仓库根目录运行：
@@ -459,6 +472,14 @@ python scripts\build_cortex_m4f_firmware.py
 ```
 
 该章使用 Zig 0.16.0 真实生成 Cortex-M4F ELF/BIN，并用 pyelftools 和 Capstone 检查入口、向量表、段、符号和 Thumb 指令。当前发布 ELF 为 131652 B、BIN 为 5112 B，13 项 PASS、0 项 FAIL、1 项整数除法助手 INFO。
+
+第 19 章的仓库质量与第 11～18 章全回归运行：
+
+```powershell
+python scripts\run_full_regression.py
+```
+
+该章先检查公开文件、图片、机器路径、证据包和 Python 语法，再真实运行第二季前八章全部入口。当前 9 个顶层步骤全部 PASS，本机总耗时 25.837 s；GitHub Actions 使用相同入口。
 
 ## 第二章结果
 
@@ -707,7 +728,7 @@ python scripts\build_cortex_m4f_firmware.py
 | 清故障同步重启 | PASS |
 | 正常映射钳位 / 溢出 | 0 / 0 |
 | 指标结果 | PASS 13 / FAIL 0 / INFO 4 |
-| 当前主机 P50 / P99 | 45.40 ns / 59.36 ns（INFO） |
+| 当前主机 P50 / P99 | 44.71 ns / 60.02 ns（INFO） |
 
 第 16 章固定更新事件、ADC、控制器和 PWM 的调用顺序，并建立目标 MCU 的时间预算验收线。Windows 主机基准只用于代码回归，不作为目标 MCU 5 us 截止时间证据。
 
@@ -743,6 +764,21 @@ python scripts\build_cortex_m4f_firmware.py
 
 第 18 章证明平台无关固件可以生成可审计的 Cortex-M4F 裸机映像。目标 HAL 仍使用可编译寄存器模型，不包含具体 STM32G4 外设初始化或实物执行时间证据。
 
+## 第十九章结果
+
+| 检查项 | 当前结果 |
+| --- | --- |
+| 仓库质量门禁 | PASS 9 / FAIL 0 |
+| 公开文本/数据扫描 | 98 个文件 |
+| 博客本地图片检查 | 66 个引用 |
+| 全回归顶层步骤 | PASS 9 / FAIL 0 |
+| 第 12/13 章回放 | 80400 / 80400 周期 |
+| 第 17 章 HAL 事件 | 34 |
+| 第 18 章目标构建 | PASS 13 / INFO 1 |
+| 本机总耗时 | 25.837 s |
+
+第 19 章把仓库质量和第 11～18 章技术入口统一到 `scripts/run_full_regression.py`，GitHub Actions 只负责在干净环境调用该入口并上传证据。该结果仍不包含 HIL 或实物闭环。
+
 ## 仓库结构
 
 ```text
@@ -756,6 +792,7 @@ scripts/            可复现脚本
 src/                浮点/定点控制器、ADC 与 PWM 映射源码
 target/cortex-m4f/  Cortex-M4F 启动、链接和目标入口源码
 firmware/cortex-m4f/ 已生成的 ELF、BIN、map 和反汇编
+.github/workflows/  GitHub Actions 持续回归入口
 tests/              电脑端单元测试、边界测试和 C 回放入口
 waveforms/          仿真原始数据、指标和波形图
 ```
@@ -764,7 +801,7 @@ waveforms/          仿真原始数据、指标和波形图
 
 ## 后续计划
 
-第 18 章之后，第二季将把主机单元测试、数值对照、定点/映射检查、固件分层和 Cortex-M4F 构建接入同一套持续回归。后续主题会在完成源码、测试、数据、图表和说明后加入本仓库。
+第 19 章之后，第二季只剩最终验收：准备低压开发板/HIL 接线、测试矩阵、仪器记录和 v1.0 发布边界。没有实物时，软件与目标构建可以完成，但 HIL/硬件 PASS 必须保持未验收。
 
 ## 技术交流
 

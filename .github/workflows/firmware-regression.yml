@@ -1,0 +1,46 @@
+name: firmware-regression
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  host-and-cortex-m4f:
+    runs-on: windows-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+          cache: pip
+
+      - name: Set up Zig
+        uses: mlugg/setup-zig@v2
+        with:
+          version: "0.16.0"
+
+      - name: Install Python dependencies
+        shell: pwsh
+        run: python -m pip install --disable-pip-version-check matplotlib pyelftools capstone
+
+      - name: Run repository quality and Chapters 11-18 regression
+        shell: pwsh
+        run: python scripts\run_full_regression.py
+
+      - name: Upload regression evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: firmware-regression-evidence
+          path: |
+            reports/19-*.md
+            waveforms/19-*.csv
+            waveforms/19-*.png
+          if-no-files-found: warn
